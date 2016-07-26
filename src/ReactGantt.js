@@ -67,19 +67,26 @@ export default class ReactGantt extends Component {
 
 	renderRows() {
 		var rows = [];
+		var labelWidth = '80px';
+		if (this.props.options && this.props.options.labelWidth) {
+			labelWidth = this.props.options.labelWidth;
+		}
 		var titleStyle = {
 			border: '1px solid black'
 		};
 		var timelineStyle = {
 			border: '1px solid black',
-			width: '100%'
+			width: '50%'
+		};
+		var labelStyle = {
+			width: labelWidth
 		};
 		for(var i = 0; i < this.props.rows.length; i++) {
 			var rowObject = this.props.rows[i];
 			var row = (
 				<tr key={rowObject.title}>
 					<td style={titleStyle}>
-						{rowObject.title}
+						<div style={labelStyle}>{rowObject.title}</div>
 					</td>
 					<td key={rowObject.title} style={timelineStyle}>
 						{this.renderBar(rowObject)}
@@ -134,23 +141,11 @@ export default class ReactGantt extends Component {
 		var table = document.querySelector('#' + this.state.tableId + ' > thead td:nth-child(2)');
 		var widthByPixels = table.offsetWidth;
 		var markersCount = Math.round(widthByPixels / 100);
-		var intervalByTime = 0;
-		var intervalByPixels = 0;
-		switch (type) {
-			case 'years':
-				intervalByTime = Math.floor(Math.floor(count) / markersCount);
-				intervalByPixels = widthByPixels / count * intervalByTime;
-				break;
-			case 'months':
-				intervalByTime = Math.floor(Math.floor(count) / markersCount);
-				intervalByPixels = widthByPixels / count * intervalByTime;
-				break;
-			case 'days':
-				intervalByTime = Math.floor(Math.floor(count) / markersCount);
-				intervalByPixels = widthByPixels / count * intervalByTime;
-				break;
-			default:
-		}
+		var unitByPixels = widthByPixels / count;
+		var maxIntervalWidth = 100;
+		var unitsPerInterval = Math.floor(maxIntervalWidth / unitByPixels);
+		var intervalByPixels = unitsPerInterval * unitByPixels;
+		var markersCount = Math.floor(widthByPixels / intervalByPixels);
 		var markers = [];
 		var style = {
 			margin: '0px',
@@ -165,13 +160,13 @@ export default class ReactGantt extends Component {
 			var date = moment(difference * 1000);
 			switch (type) {
 				case 'years':
-					date.add(i * intervalByTime, 'years');
+					date.add(i * unitsPerInterval, 'years');
 					break;
 				case 'months':
-					date.add(i * intervalByTime, 'years');
+					date.add(i * unitsPerInterval, 'months');
 					break;
 				case 'days':
-					date.add(i * intervalByTime, 'years');
+					date.add(i * unitsPerInterval, 'days');
 					break;
 				default:
 			}
