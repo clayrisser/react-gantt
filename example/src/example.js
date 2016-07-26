@@ -22,8 +22,8 @@ var App = React.createClass({
 			}
 		];
 		var options = {
-			leftBound: moment().set({date: 1, month: 8, year: 2016}).toDate(),
-			rightBound: moment().set({date: 30, month: 8, year: 2016}).toDate()
+			leftBound: moment().set({hour: 0, date: 1, month: 8, year: 2016}).toDate(),
+			rightBound: moment().set({hour: 23, date: 29, month: 8, year: 2016}).toDate()
 		};
 		var groups = [
 			{
