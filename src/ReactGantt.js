@@ -107,15 +107,29 @@ export default class ReactGantt extends Component {
 		var labelStyle = {
 			width: labelWidth
 		};
-		for(var i = 0; i < this.props.rows.length; i++) {
-			var rowObject = this.props.rows[i];
+		if (this.props.rows.length > 0) {
+			for(var i = 0; i < this.props.rows.length; i++) {
+				var rowObject = this.props.rows[i];
+				var row = (
+					<tr key={i}>
+						<td style={titleStyle}>
+							<div style={labelStyle}>{rowObject.title}</div>
+						</td>
+						<td style={timelineStyle}>
+							{this.renderBar(rowObject)}
+						</td>
+					</tr>
+				);
+				rows.push(row);
+			}
+		} else {
 			var row = (
-				<tr key={i}>
+				<tr key={0}>
 					<td style={titleStyle}>
-						<div style={labelStyle}>{rowObject.title}</div>
+						<div style={labelStyle}></div>
 					</td>
 					<td style={timelineStyle}>
-						{this.renderBar(rowObject)}
+						<span>No Data</span>
 					</td>
 				</tr>
 			);
