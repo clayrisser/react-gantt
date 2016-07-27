@@ -24,7 +24,10 @@ var App = React.createClass({
 		var options = {
 			leftBound: moment().set({hour: 0, date: 1, month: 8, year: 2016}).toDate(),
 			rightBound: moment().set({hour: 23, date: 29, month: 8, year: 2016}).toDate(),
-			labelWidth: '120px'
+			labelWidth: '120px',
+			bootstraped: true,
+			maxIntervalWidth: 150,
+			showBorders: false
 		};
 		var groups = [
 			{

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import moment from 'moment';
 import _ from 'underscore';
+import Table from 'react-bootstrap/lib/Table';
 
 export default class ReactGantt extends Component {
 	constructor() {
@@ -72,12 +73,17 @@ export default class ReactGantt extends Component {
 			labelWidth = this.props.options.labelWidth;
 		}
 		var titleStyle = {
-			border: '1px solid black'
+			textAlign: 'right',
+			paddingRight: '10px',
+			fontWeight: 'bold'
 		};
 		var timelineStyle = {
-			border: '1px solid black',
 			width: '50%'
 		};
+		if (this.props.options.showBorders !== false) {
+			titleStyle.border = '1px solid black';
+			timelineStyle.border = '1px solid black';
+		}
 		var labelStyle = {
 			width: labelWidth
 		};
@@ -110,23 +116,18 @@ export default class ReactGantt extends Component {
 		if (years < 2) {
 			var months = moment(rightBound).diff(moment(leftBound), 'months');
 			if (months < 2) {
-	//			var weeks = moment(rightBound).diff(moment(leftBound), 'weeks');
-	//			if (weeks < 1) {
-					var days = (moment(rightBound).unix() - moment(leftBound).unix()) / 24 / 60 / 60;
-					if (days < 2) {
-						var hours = moment(rightBound).diff(moment(leftBound), 'hours');
-						if (hours < 1) {
-							var minutes = moment(rightBound).diff(moment(leftBound), 'minutes');
-							this.setState({scale: this.calculateScale(minutes, 'minutes')});
-						} else {
-							this.setState({scale: this.calculateScale(hours, 'hours')});
-						}
+				var days = (moment(rightBound).unix() - moment(leftBound).unix()) / 24 / 60 / 60;
+				if (days < 2) {
+					var hours = moment(rightBound).diff(moment(leftBound), 'hours');
+					if (hours < 1) {
+						var minutes = moment(rightBound).diff(moment(leftBound), 'minutes');
+						this.setState({scale: this.calculateScale(minutes, 'minutes')});
 					} else {
-						this.setState({scale: this.calculateScale(days, 'days')});
+						this.setState({scale: this.calculateScale(hours, 'hours')});
 					}
-	//			} else {
-	//				this.setState({scale: this.calculateScale(weeks, 'weeks')});
-	//			}
+				} else {
+					this.setState({scale: this.calculateScale(days, 'days')});
+				}
 			} else {
 				this.setState({scale: this.calculateScale(months, 'months')});
 			}
@@ -143,6 +144,9 @@ export default class ReactGantt extends Component {
 		var markersCount = Math.round(widthByPixels / 100);
 		var unitByPixels = widthByPixels / count;
 		var maxIntervalWidth = 100;
+		if (this.props.options.maxIntervalWidth) {
+			maxIntervalWidth = this.props.options.maxIntervalWidth;
+		}
 		var unitsPerInterval = Math.floor(maxIntervalWidth / unitByPixels);
 		var intervalByPixels = unitsPerInterval * unitByPixels;
 		var markersCount = Math.floor(widthByPixels / intervalByPixels);
@@ -151,7 +155,10 @@ export default class ReactGantt extends Component {
 			margin: '0px',
 			padding: '0px',
 			width: intervalByPixels + 'px',
-			float: 'left'
+			float: 'left',
+			borderLeft: 'solid',
+			borderWidth: '1px',
+			paddingLeft: '5px'
 		};
 		for (var i = 0; i < markersCount; i++) {
 			if (i + 1 === markersCount) {
@@ -184,6 +191,13 @@ export default class ReactGantt extends Component {
 		);
 	}
 
+	componentWillMount() {
+		this.bootstraped = false;
+		if (this.props.options.bootstraped) {
+			this.bootstraped = this.props.options.bootstraped;
+		}
+	}
+
 	componentDidMount() {
 		if (this.state.scaleDrawn === false) { // prevents infinite loop
 			this.drawScale();
@@ -194,26 +208,43 @@ export default class ReactGantt extends Component {
 	render() {
 		this.renderRows();
 		var tableStyle = {
-			border: '1px solid black',
 			width: '100%'
 		};
 		var scaleStyle = {
 			width: '100%'
+		};
+		if (this.bootstraped) {
+			return (
+				<div>
+					<Table id={this.state.tableId} style={tableStyle}>
+						<thead>
+							<tr>
+								<td></td>
+								<td style={scaleStyle}>{this.state.scale}</td>
+							</tr>
+						</thead>
+						<tbody>
+							{this.renderRows()}
+						</tbody>
+					</Table>
+				</div>
+			);
+		} else {
+			return (
+				<div>
+					<table id={this.state.tableId} style={tableStyle}>
+						<thead>
+							<tr>
+								<td></td>
+								<td style={scaleStyle}>{this.state.scale}</td>
+							</tr>
+						</thead>
+						<tbody>
+							{this.renderRows()}
+						</tbody>
+					</table>
+				</div>
+			);
 		}
-		return (
-			<div>
-				<table id={this.state.tableId} style={tableStyle}>
-					<thead>
-						<tr>
-							<td>Title</td>
-							<td style={scaleStyle}>{this.state.scale}</td>
-						</tr>
-					</thead>
-					<tbody>
-						{this.renderRows()}
-					</tbody>
-				</table>
-			</div>
-		);
 	}
 }
