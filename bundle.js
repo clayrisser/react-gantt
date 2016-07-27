@@ -7213,6 +7213,9 @@ var ReactGantt = (function (_Component) {
 			if (this.props.options && this.props.options.labelWidth) {
 				labelWidth = this.props.options.labelWidth;
 			}
+			var rowStyle = {
+				cursor: 'pointer'
+			};
 			var titleStyle = {
 				textAlign: 'right',
 				verticalAlign: 'middle',
@@ -7220,7 +7223,7 @@ var ReactGantt = (function (_Component) {
 				fontWeight: 'bold'
 			};
 			var timelineStyle = {
-				width: '50%'
+				width: '100%'
 			};
 			if (this.props.options.showBorders !== false) {
 				titleStyle.border = 'solid';
@@ -7234,7 +7237,7 @@ var ReactGantt = (function (_Component) {
 					var rowObject = this.props.rows[i];
 					var row = _react2['default'].createElement(
 						'tr',
-						{ key: i },
+						{ key: i, style: rowStyle, onClick: rowObject.action, onMouseOver: this.showPopup.bind(this, rowObject), onMouseOut: this.hidePopup.bind(this) },
 						_react2['default'].createElement(
 							'td',
 							{ style: titleStyle },
@@ -7276,6 +7279,23 @@ var ReactGantt = (function (_Component) {
 			return rows;
 		}
 	}, {
+		key: 'showPopup',
+		value: function showPopup(row) {
+			if (this.bootstraped) {
+				var popover = document.querySelector('#' + this.state.tableId + ' .popover');
+				popover.innerHTML = '<div class="card-block">\n\t\t\t    <h3 class="card-title">' + row.title + '</h3>\n\t\t\t\t\t<h6><b>Start Date</b>: ' + (0, _moment2['default'])(row.startDate).format('MMMM D') + '</h6>\n\t\t\t\t\t<h6><b>End Date</b>: ' + (0, _moment2['default'])(row.endDate).format('MMMM D') + '</h6>\n\t\t\t  </div>';
+				popover.style.left = this.mouseX + 10 + 'px';
+				popover.style.top = this.mouseY + 20 + 'px';
+				popover.style.display = 'inline';
+			}
+		}
+	}, {
+		key: 'hidePopup',
+		value: function hidePopup() {
+			var popover = document.querySelector('#' + this.state.tableId + ' .popover');
+			popover.style.display = 'none';
+		}
+	}, {
 		key: 'drawScale',
 		value: function drawScale() {
 			var leftBound = this.props.options.leftBound;
@@ -7313,7 +7333,7 @@ var ReactGantt = (function (_Component) {
 		value: function calculateScale(count, type) {
 			var difference = (0, _moment2['default'])(this.props.options.leftBound).unix();
 			var widthByTime = (0, _moment2['default'])(this.props.options.rightBound).unix() - difference;
-			var scale = document.querySelector('#' + this.state.tableId + ' > thead td:nth-child(2)');
+			var scale = document.querySelector('#' + this.state.tableId + ' thead td:nth-child(2)');
 			var widthByPixels = scale.offsetWidth;
 			var markersCount = Math.round(widthByPixels / 100);
 			var unitByPixels = widthByPixels / count;
@@ -7376,8 +7396,14 @@ var ReactGantt = (function (_Component) {
 	}, {
 		key: 'componentDidMount',
 		value: function componentDidMount() {
+			var _this = this;
+
 			this.previousProps = this.props;
 			this.drawScale();
+			document.onmousemove = function (e) {
+				_this.mouseX = e.pageX;
+				_this.mouseY = e.pageY;
+			};
 		}
 	}, {
 		key: 'componentDidUpdate',
@@ -7391,7 +7417,7 @@ var ReactGantt = (function (_Component) {
 	}, {
 		key: 'render',
 		value: function render() {
-			var _this = this;
+			var _this2 = this;
 
 			var tableStyle = {
 				width: '100%'
@@ -7399,13 +7425,18 @@ var ReactGantt = (function (_Component) {
 			var scaleStyle = {
 				width: '100%'
 			};
+			var popoverStyle = {
+				position: 'absolute',
+				display: 'none'
+			};
 			if (this.bootstraped) {
 				return _react2['default'].createElement(
 					'div',
-					null,
+					{ id: this.state.tableId },
+					_react2['default'].createElement('div', { className: 'popover card', style: popoverStyle }),
 					_react2['default'].createElement(
 						_reactBootstrapLibTable2['default'],
-						{ id: this.state.tableId, style: tableStyle, striped: true, bordered: true, condensed: true, hover: true },
+						{ style: tableStyle, striped: true, bordered: true, condensed: true, hover: true },
 						_react2['default'].createElement(
 							'thead',
 							null,
@@ -7427,16 +7458,17 @@ var ReactGantt = (function (_Component) {
 						)
 					),
 					_react2['default'].createElement(_reactWindowResizeListener.WindowResizeListener, { onResize: function (windowSize) {
-							_this.drawScale();
+							_this2.drawScale();
 						} })
 				);
 			} else {
 				return _react2['default'].createElement(
 					'div',
-					null,
+					{ id: this.state.tableId },
+					_react2['default'].createElement('div', { className: 'popover', style: popoverStyle }),
 					_react2['default'].createElement(
 						'table',
-						{ id: this.state.tableId, style: tableStyle },
+						{ style: tableStyle },
 						_react2['default'].createElement(
 							'thead',
 							null,
@@ -7458,7 +7490,7 @@ var ReactGantt = (function (_Component) {
 						)
 					),
 					_react2['default'].createElement(_reactWindowResizeListener.WindowResizeListener, { onResize: function (windowSize) {
-							_this.drawScale();
+							_this2.drawScale();
 						} })
 				);
 			}
