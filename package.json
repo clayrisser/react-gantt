@@ -1,6 +1,6 @@
 {
   "name": "react-gantt",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "ReactGantt",
   "main": "lib/ReactGantt.js",
   "author": "Jam Risser",

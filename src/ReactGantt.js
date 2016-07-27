@@ -105,7 +105,6 @@ export default class ReactGantt extends Component {
 	}
 
 	drawScale() {
-		console.warn('redrawing');
 		var leftBound = this.props.options.leftBound;
 		var rightBound = this.props.options.rightBound;
 		var minutes = 0;
@@ -148,7 +147,10 @@ export default class ReactGantt extends Component {
 		if (this.props.options.maxIntervalWidth) {
 			maxIntervalWidth = this.props.options.maxIntervalWidth;
 		}
-		var unitsPerInterval = Math.floor(maxIntervalWidth / unitByPixels);
+		var unitsPerInterval = 1;
+		if (maxIntervalWidth > unitByPixels) {
+			unitsPerInterval = Math.floor(maxIntervalWidth / unitByPixels);
+		}
 		var intervalByPixels = unitsPerInterval * unitByPixels;
 		var markersCount = Math.floor(widthByPixels / intervalByPixels);
 		var markers = [];
