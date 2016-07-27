@@ -8,22 +8,22 @@ var App = React.createClass({
 		var rows = [
 			{
 				title: 'Task 1',
-				startDate: moment().set({date: 15, month: 8, year: 2016}).toDate(),
-				climaxDate: moment().set({date: 20, month: 8, year: 2016}).toDate(),
-				endDate: moment().set({date: 28, month: 8, year: 2016}).toDate(),
+				startDate: moment().set({hour: 0, date: 16, month: 8, year: 2016}).toDate(),
+				climaxDate: moment().set({hour: 0, date: 20, month: 8, year: 2016}).toDate(),
+				endDate: moment().set({hour: 0, date: 28, month: 8, year: 2016}).toDate(),
 				group: 'myTasks'
 			},
 			{
 				title: 'Task 2',
-				startDate: moment().set({date: 8, month: 8, year: 2016}).toDate(),
-				climaxDate: moment().set({date: 13, month: 8, year: 2016}).toDate(),
-				endDate: moment().set({date: 19, month: 8, year: 2016}).toDate(),
+				startDate: moment().set({hour: 0, date: 11, month: 8, year: 2016}).toDate(),
+				climaxDate: moment().set({hour: 0, date: 13, month: 8, year: 2016}).toDate(),
+				endDate: moment().set({hour: 0, date: 19, month: 8, year: 2016}).toDate(),
 				group: 'myTasks'
 			}
 		];
 		var options = {
 			leftBound: moment().set({hour: 0, date: 1, month: 8, year: 2016}).toDate(),
-			rightBound: moment().set({hour: 23, date: 29, month: 8, year: 2016}).toDate(),
+			rightBound: moment().set({hour: 0, date: 29, month: 8, year: 2016}).toDate(),
 			labelWidth: '120px',
 			bootstraped: true,
 			maxIntervalWidth: 150,

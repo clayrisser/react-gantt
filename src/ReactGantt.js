@@ -81,8 +81,8 @@ export default class ReactGantt extends Component {
 			width: '50%'
 		};
 		if (this.props.options.showBorders !== false) {
-			titleStyle.border = '1px solid black';
-			timelineStyle.border = '1px solid black';
+			titleStyle.border = 'solid';
+			timelineStyle.border = 'solid';
 		}
 		var labelStyle = {
 			width: labelWidth
@@ -158,12 +158,10 @@ export default class ReactGantt extends Component {
 			float: 'left',
 			borderLeft: 'solid',
 			borderWidth: '1px',
-			paddingLeft: '5px'
+			paddingLeft: '5px',
+			width: intervalByPixels + 'px'
 		};
 		for (var i = 0; i < markersCount; i++) {
-			if (i + 1 === markersCount) {
-				style.width = (intervalByPixels - 1) + 'px';
-			}
 			var date = moment(difference * 1000);
 			switch (type) {
 				case 'years':
@@ -199,10 +197,11 @@ export default class ReactGantt extends Component {
 	}
 
 	componentDidMount() {
-		if (this.state.scaleDrawn === false) { // prevents infinite loop
-			this.drawScale();
-			this.setState({scaleDrawn: true});
-		}
+		this.drawScale();
+	}
+
+	componentDidUpdate() {
+	//	this.drawScale();
 	}
 
 	render() {
