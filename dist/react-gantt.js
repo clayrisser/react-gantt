@@ -6742,7 +6742,7 @@ var ReactGantt = (function (_Component) {
 				var rowObject = this.props.rows[i];
 				var row = _react2['default'].createElement(
 					'tr',
-					{ key: rowObject.title },
+					{ key: i },
 					_react2['default'].createElement(
 						'td',
 						{ style: titleStyle },
@@ -6754,7 +6754,7 @@ var ReactGantt = (function (_Component) {
 					),
 					_react2['default'].createElement(
 						'td',
-						{ key: rowObject.title, style: timelineStyle },
+						{ style: timelineStyle },
 						this.renderBar(rowObject)
 					)
 				);
@@ -6860,12 +6860,17 @@ var ReactGantt = (function (_Component) {
 	}, {
 		key: 'componentDidMount',
 		value: function componentDidMount() {
+			this.previousProps = this.props;
 			this.drawScale();
 		}
 	}, {
 		key: 'componentDidUpdate',
 		value: function componentDidUpdate() {
-			//	this.drawScale();
+			this.previousProps = this.props;
+			if (this.previousProps !== this.props) {
+				// prevents infinite loop
+				this.drawScale();
+			}
 		}
 	}, {
 		key: 'render',
