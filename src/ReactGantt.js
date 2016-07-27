@@ -38,25 +38,43 @@ export default class ReactGantt extends Component {
 		var div1Width = ((climaxDate - startDate) / rightBound * 100) + '%';
 		var div2Width = ((endDate - climaxDate) / rightBound * 100) + '%';
 		var rightPadWidth = ((rightBound - endDate) / rightBound * 100) + '%';
+    var div1BackgroundColor = 'blue';
+    if (row.beforeClimaxColor) {
+      div1BackgroundColor = row.beforeClimaxColor;
+    } else if (this.props.options.beforeClimaxColor) {
+      div1BackgroundColor = this.props.options.beforeClimaxColor;
+    }
+    var div2BackgroundColor = 'red';
+    if (row.afterClimaxColor) {
+      div2BackgroundColor = row.afterClimaxColor;
+    } else if (this.props.options.afterClimaxColor) {
+      div2BackgroundColor = this.props.options.afterClimaxColor;
+    }
 		var bar1 = {
 			marginTop: '2px',
 			marginBottom: '2px',
 			marginLeft: leftPadWidth,
 			marginRight: '0px',
-			backgroundColor: 'blue',
+			backgroundColor: div1BackgroundColor,
 			width: div1Width,
 			float: 'left',
-			height: '30px'
+			height: '30px',
+      borderTopLeftRadius: '10px',
+      borderBottomLeftRadius: '10px',
+      boxShadow: '2px 2px 4px #000000'
 		};
 		var bar2 = {
 			marginTop: '2px',
 			marginBottom: '2px',
 			marginLeft: '0px',
 			marginRight: rightPadWidth,
-			backgroundColor: 'red',
+			backgroundColor: div2BackgroundColor,
 			width: div2Width,
 			float: 'left',
-			height: '30px'
+			height: '30px',
+      borderTopRightRadius: '10px',
+      borderBottomRightRadius: '10px',
+      boxShadow: '2px 2px 4px #000000'
 		};
 		return (
 			<div>
@@ -74,6 +92,7 @@ export default class ReactGantt extends Component {
 		}
 		var titleStyle = {
 			textAlign: 'right',
+      verticalAlign: 'middle',
 			paddingRight: '10px',
 			fontWeight: 'bold'
 		};
@@ -115,7 +134,7 @@ export default class ReactGantt extends Component {
 		var years = moment(rightBound).diff(moment(leftBound), 'years');
 		if (years < 2) {
 			var months = moment(rightBound).diff(moment(leftBound), 'months');
-			if (months < 2) {
+			if (months < 6) {
 				var days = (moment(rightBound).unix() - moment(leftBound).unix()) / 24 / 60 / 60;
 				if (days < 2) {
 					var hours = moment(rightBound).diff(moment(leftBound), 'hours');
@@ -221,7 +240,7 @@ export default class ReactGantt extends Component {
 		if (this.bootstraped) {
 			return (
 				<div>
-					<Table id={this.state.tableId} style={tableStyle}>
+					<Table id={this.state.tableId} style={tableStyle} striped bordered condensed hover>
 						<thead>
 							<tr>
 								<td></td>
