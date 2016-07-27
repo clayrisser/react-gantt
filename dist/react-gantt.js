@@ -395,6 +395,381 @@ var invariant = function(condition, format, a, b, c, d, e, f) {
 module.exports = invariant;
 
 },{}],35:[function(require,module,exports){
+/**
+ * lodash 3.9.1 (Custom Build) <https://lodash.com/>
+ * Build: `lodash modern modularize exports="npm" -o ./`
+ * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
+ * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
+ * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+ * Available under MIT license <https://lodash.com/license>
+ */
+
+/** `Object#toString` result references. */
+var funcTag = '[object Function]';
+
+/** Used to detect host constructors (Safari > 5). */
+var reIsHostCtor = /^\[object .+?Constructor\]$/;
+
+/**
+ * Checks if `value` is object-like.
+ *
+ * @private
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
+ */
+function isObjectLike(value) {
+  return !!value && typeof value == 'object';
+}
+
+/** Used for native method references. */
+var objectProto = Object.prototype;
+
+/** Used to resolve the decompiled source of functions. */
+var fnToString = Function.prototype.toString;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty = objectProto.hasOwnProperty;
+
+/**
+ * Used to resolve the [`toStringTag`](http://ecma-international.org/ecma-262/6.0/#sec-object.prototype.tostring)
+ * of values.
+ */
+var objToString = objectProto.toString;
+
+/** Used to detect if a method is native. */
+var reIsNative = RegExp('^' +
+  fnToString.call(hasOwnProperty).replace(/[\\^$.*+?()[\]{}|]/g, '\\$&')
+  .replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, '$1.*?') + '$'
+);
+
+/**
+ * Gets the native function at `key` of `object`.
+ *
+ * @private
+ * @param {Object} object The object to query.
+ * @param {string} key The key of the method to get.
+ * @returns {*} Returns the function if it's native, else `undefined`.
+ */
+function getNative(object, key) {
+  var value = object == null ? undefined : object[key];
+  return isNative(value) ? value : undefined;
+}
+
+/**
+ * Checks if `value` is classified as a `Function` object.
+ *
+ * @static
+ * @memberOf _
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
+ * @example
+ *
+ * _.isFunction(_);
+ * // => true
+ *
+ * _.isFunction(/abc/);
+ * // => false
+ */
+function isFunction(value) {
+  // The use of `Object#toString` avoids issues with the `typeof` operator
+  // in older versions of Chrome and Safari which return 'function' for regexes
+  // and Safari 8 equivalents which return 'object' for typed array constructors.
+  return isObject(value) && objToString.call(value) == funcTag;
+}
+
+/**
+ * Checks if `value` is the [language type](https://es5.github.io/#x8) of `Object`.
+ * (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
+ *
+ * @static
+ * @memberOf _
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is an object, else `false`.
+ * @example
+ *
+ * _.isObject({});
+ * // => true
+ *
+ * _.isObject([1, 2, 3]);
+ * // => true
+ *
+ * _.isObject(1);
+ * // => false
+ */
+function isObject(value) {
+  // Avoid a V8 JIT bug in Chrome 19-20.
+  // See https://code.google.com/p/v8/issues/detail?id=2291 for more details.
+  var type = typeof value;
+  return !!value && (type == 'object' || type == 'function');
+}
+
+/**
+ * Checks if `value` is a native function.
+ *
+ * @static
+ * @memberOf _
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a native function, else `false`.
+ * @example
+ *
+ * _.isNative(Array.prototype.push);
+ * // => true
+ *
+ * _.isNative(_);
+ * // => false
+ */
+function isNative(value) {
+  if (value == null) {
+    return false;
+  }
+  if (isFunction(value)) {
+    return reIsNative.test(fnToString.call(value));
+  }
+  return isObjectLike(value) && reIsHostCtor.test(value);
+}
+
+module.exports = getNative;
+
+},{}],36:[function(require,module,exports){
+/**
+ * lodash 3.1.1 (Custom Build) <https://lodash.com/>
+ * Build: `lodash modern modularize exports="npm" -o ./`
+ * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
+ * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
+ * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+ * Available under MIT license <https://lodash.com/license>
+ */
+var getNative = require('lodash._getnative');
+
+/** Used as the `TypeError` message for "Functions" methods. */
+var FUNC_ERROR_TEXT = 'Expected a function';
+
+/* Native method references for those with the same name as other `lodash` methods. */
+var nativeMax = Math.max,
+    nativeNow = getNative(Date, 'now');
+
+/**
+ * Gets the number of milliseconds that have elapsed since the Unix epoch
+ * (1 January 1970 00:00:00 UTC).
+ *
+ * @static
+ * @memberOf _
+ * @category Date
+ * @example
+ *
+ * _.defer(function(stamp) {
+ *   console.log(_.now() - stamp);
+ * }, _.now());
+ * // => logs the number of milliseconds it took for the deferred function to be invoked
+ */
+var now = nativeNow || function() {
+  return new Date().getTime();
+};
+
+/**
+ * Creates a debounced function that delays invoking `func` until after `wait`
+ * milliseconds have elapsed since the last time the debounced function was
+ * invoked. The debounced function comes with a `cancel` method to cancel
+ * delayed invocations. Provide an options object to indicate that `func`
+ * should be invoked on the leading and/or trailing edge of the `wait` timeout.
+ * Subsequent calls to the debounced function return the result of the last
+ * `func` invocation.
+ *
+ * **Note:** If `leading` and `trailing` options are `true`, `func` is invoked
+ * on the trailing edge of the timeout only if the the debounced function is
+ * invoked more than once during the `wait` timeout.
+ *
+ * See [David Corbacho's article](http://drupalmotion.com/article/debounce-and-throttle-visual-explanation)
+ * for details over the differences between `_.debounce` and `_.throttle`.
+ *
+ * @static
+ * @memberOf _
+ * @category Function
+ * @param {Function} func The function to debounce.
+ * @param {number} [wait=0] The number of milliseconds to delay.
+ * @param {Object} [options] The options object.
+ * @param {boolean} [options.leading=false] Specify invoking on the leading
+ *  edge of the timeout.
+ * @param {number} [options.maxWait] The maximum time `func` is allowed to be
+ *  delayed before it is invoked.
+ * @param {boolean} [options.trailing=true] Specify invoking on the trailing
+ *  edge of the timeout.
+ * @returns {Function} Returns the new debounced function.
+ * @example
+ *
+ * // avoid costly calculations while the window size is in flux
+ * jQuery(window).on('resize', _.debounce(calculateLayout, 150));
+ *
+ * // invoke `sendMail` when the click event is fired, debouncing subsequent calls
+ * jQuery('#postbox').on('click', _.debounce(sendMail, 300, {
+ *   'leading': true,
+ *   'trailing': false
+ * }));
+ *
+ * // ensure `batchLog` is invoked once after 1 second of debounced calls
+ * var source = new EventSource('/stream');
+ * jQuery(source).on('message', _.debounce(batchLog, 250, {
+ *   'maxWait': 1000
+ * }));
+ *
+ * // cancel a debounced call
+ * var todoChanges = _.debounce(batchLog, 1000);
+ * Object.observe(models.todo, todoChanges);
+ *
+ * Object.observe(models, function(changes) {
+ *   if (_.find(changes, { 'user': 'todo', 'type': 'delete'})) {
+ *     todoChanges.cancel();
+ *   }
+ * }, ['delete']);
+ *
+ * // ...at some point `models.todo` is changed
+ * models.todo.completed = true;
+ *
+ * // ...before 1 second has passed `models.todo` is deleted
+ * // which cancels the debounced `todoChanges` call
+ * delete models.todo;
+ */
+function debounce(func, wait, options) {
+  var args,
+      maxTimeoutId,
+      result,
+      stamp,
+      thisArg,
+      timeoutId,
+      trailingCall,
+      lastCalled = 0,
+      maxWait = false,
+      trailing = true;
+
+  if (typeof func != 'function') {
+    throw new TypeError(FUNC_ERROR_TEXT);
+  }
+  wait = wait < 0 ? 0 : (+wait || 0);
+  if (options === true) {
+    var leading = true;
+    trailing = false;
+  } else if (isObject(options)) {
+    leading = !!options.leading;
+    maxWait = 'maxWait' in options && nativeMax(+options.maxWait || 0, wait);
+    trailing = 'trailing' in options ? !!options.trailing : trailing;
+  }
+
+  function cancel() {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+    if (maxTimeoutId) {
+      clearTimeout(maxTimeoutId);
+    }
+    lastCalled = 0;
+    maxTimeoutId = timeoutId = trailingCall = undefined;
+  }
+
+  function complete(isCalled, id) {
+    if (id) {
+      clearTimeout(id);
+    }
+    maxTimeoutId = timeoutId = trailingCall = undefined;
+    if (isCalled) {
+      lastCalled = now();
+      result = func.apply(thisArg, args);
+      if (!timeoutId && !maxTimeoutId) {
+        args = thisArg = undefined;
+      }
+    }
+  }
+
+  function delayed() {
+    var remaining = wait - (now() - stamp);
+    if (remaining <= 0 || remaining > wait) {
+      complete(trailingCall, maxTimeoutId);
+    } else {
+      timeoutId = setTimeout(delayed, remaining);
+    }
+  }
+
+  function maxDelayed() {
+    complete(trailing, timeoutId);
+  }
+
+  function debounced() {
+    args = arguments;
+    stamp = now();
+    thisArg = this;
+    trailingCall = trailing && (timeoutId || !leading);
+
+    if (maxWait === false) {
+      var leadingCall = leading && !timeoutId;
+    } else {
+      if (!maxTimeoutId && !leading) {
+        lastCalled = stamp;
+      }
+      var remaining = maxWait - (stamp - lastCalled),
+          isCalled = remaining <= 0 || remaining > maxWait;
+
+      if (isCalled) {
+        if (maxTimeoutId) {
+          maxTimeoutId = clearTimeout(maxTimeoutId);
+        }
+        lastCalled = stamp;
+        result = func.apply(thisArg, args);
+      }
+      else if (!maxTimeoutId) {
+        maxTimeoutId = setTimeout(maxDelayed, remaining);
+      }
+    }
+    if (isCalled && timeoutId) {
+      timeoutId = clearTimeout(timeoutId);
+    }
+    else if (!timeoutId && wait !== maxWait) {
+      timeoutId = setTimeout(delayed, wait);
+    }
+    if (leadingCall) {
+      isCalled = true;
+      result = func.apply(thisArg, args);
+    }
+    if (isCalled && !timeoutId && !maxTimeoutId) {
+      args = thisArg = undefined;
+    }
+    return result;
+  }
+  debounced.cancel = cancel;
+  return debounced;
+}
+
+/**
+ * Checks if `value` is the [language type](https://es5.github.io/#x8) of `Object`.
+ * (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
+ *
+ * @static
+ * @memberOf _
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is an object, else `false`.
+ * @example
+ *
+ * _.isObject({});
+ * // => true
+ *
+ * _.isObject([1, 2, 3]);
+ * // => true
+ *
+ * _.isObject(1);
+ * // => false
+ */
+function isObject(value) {
+  // Avoid a V8 JIT bug in Chrome 19-20.
+  // See https://code.google.com/p/v8/issues/detail?id=2291 for more details.
+  var type = typeof value;
+  return !!value && (type == 'object' || type == 'function');
+}
+
+module.exports = debounce;
+
+},{"lodash._getnative":35}],37:[function(require,module,exports){
 //! moment.js
 //! version : 2.14.1
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors
@@ -4590,7 +4965,7 @@ module.exports = invariant;
     return _moment;
 
 }));
-},{}],36:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -4711,7 +5086,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],37:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 'use strict';
 
 var _inherits = require('babel-runtime/helpers/inherits')['default'];
@@ -4804,7 +5179,7 @@ Table.defaultProps = defaultProps;
 
 exports['default'] = _utilsBootstrapUtils.bsClass('table', Table);
 module.exports = exports['default'];
-},{"./utils/bootstrapUtils":39,"babel-runtime/helpers/class-call-check":5,"babel-runtime/helpers/extends":6,"babel-runtime/helpers/inherits":7,"babel-runtime/helpers/interop-require-default":8,"babel-runtime/helpers/object-without-properties":9,"classnames":undefined,"react":undefined}],38:[function(require,module,exports){
+},{"./utils/bootstrapUtils":41,"babel-runtime/helpers/class-call-check":5,"babel-runtime/helpers/extends":6,"babel-runtime/helpers/inherits":7,"babel-runtime/helpers/interop-require-default":8,"babel-runtime/helpers/object-without-properties":9,"classnames":undefined,"react":undefined}],40:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -4845,7 +5220,7 @@ var Style = {
   INVERSE: 'inverse'
 };
 exports.Style = Style;
-},{}],39:[function(require,module,exports){
+},{}],41:[function(require,module,exports){
 (function (process){
 // TODO: The publicly exposed parts of this should be in lib/BootstrapUtils.
 
@@ -5063,7 +5438,103 @@ function addStyle(Component) {
 var _curry = curry;
 exports._curry = _curry;
 }).call(this,require('_process'))
-},{"./StyleConfig":38,"_process":36,"babel-runtime/core-js/object/entries":3,"babel-runtime/helpers/extends":6,"babel-runtime/helpers/interop-require-default":8,"invariant":34,"react":undefined}],40:[function(require,module,exports){
+},{"./StyleConfig":40,"_process":38,"babel-runtime/core-js/object/entries":3,"babel-runtime/helpers/extends":6,"babel-runtime/helpers/interop-require-default":8,"invariant":34,"react":undefined}],42:[function(require,module,exports){
+/**
+ * WindowResizeListener
+ * React component for listening to window resize events
+ */
+var React = require('react')
+var debounce = require('lodash.debounce')
+
+var WindowResizeListener = React.createClass({
+  displayName: 'WindowResizeListener',
+
+  propTypes: {
+    /**
+     * Called at least once soon after being mounted
+     * type WindowSize = { windowWidth: number, windowHeight: number }
+     * type onResize = (windowSize: WindowSize) => void
+     */
+    onResize: React.PropTypes.func.isRequired
+  },
+
+  statics: {
+    /**
+     * List of resize listeners
+     * @private
+     */
+    _listeners: [],
+
+    /**
+     * Maximum debounce wait time
+     * @public
+     */
+    DEBOUNCE_TIME: 100,
+
+    /**
+     * Resize handler
+     * Gets the window size and calls each listener
+     * @private
+     */
+    _onResize: function _onResize () {
+      var windowWidth = window.innerWidth ||
+        document.documentElement.clientWidth ||
+        document.body.clientWidth
+      var windowHeight = window.innerHeight ||
+        document.documentElement.clientHeight ||
+        document.body.clientHeight
+
+      WindowResizeListener._listeners.forEach(function (listener) {
+        listener({
+          windowWidth: windowWidth,
+          windowHeight: windowHeight
+        })
+      })
+    }
+  },
+
+  shouldComponentUpdate: function shouldComponentUpdate (nextProps) {
+    return nextProps.onResize !== this.props.onResize
+  },
+
+  componentDidMount: function componentDidMount () {
+    // Defer creating _debouncedResize until it's mounted
+    // This allows users to change DEBOUNCE_TIME if they want
+    // If there's no listeners, we need to attach the window listener
+    if (!WindowResizeListener._listeners.length) {
+      WindowResizeListener._debouncedResize = debounce(
+        WindowResizeListener._onResize,
+        WindowResizeListener.DEBOUNCE_TIME
+      )
+      window.addEventListener('resize', WindowResizeListener._debouncedResize, false)
+    }
+    WindowResizeListener._listeners.push(this.props.onResize)
+    WindowResizeListener._debouncedResize()
+  },
+
+  componentWillUnmount: function componentWillUnmount () {
+    var idx = WindowResizeListener._listeners.indexOf(this.props.onResize)
+    WindowResizeListener._listeners.splice(idx, 1)
+    if (!WindowResizeListener._listeners.length) {
+      window.removeEventListener('resize', WindowResizeListener._debouncedResize, false)
+    }
+  },
+
+  componentWillReceiveProps: function componentWillReceiveProps (nextProps) {
+    if (nextProps.onResize !== this.props.onResize) {
+      var idx = WindowResizeListener._listeners.indexOf(this.props.onResize)
+      WindowResizeListener._listeners.splice(idx, 1, nextProps.onResize)
+    }
+  },
+
+  render: function resize () {
+    return null
+  }
+})
+
+exports.default = exports.WindowResizeListener = WindowResizeListener
+
+},{"lodash.debounce":36,"react":undefined}],43:[function(require,module,exports){
 //     Underscore.js 1.8.3
 //     http://underscorejs.org
 //     (c) 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
@@ -6613,7 +7084,7 @@ exports._curry = _curry;
   }
 }.call(this));
 
-},{}],41:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -6646,6 +7117,8 @@ var _underscore2 = _interopRequireDefault(_underscore);
 var _reactBootstrapLibTable = require('react-bootstrap/lib/Table');
 
 var _reactBootstrapLibTable2 = _interopRequireDefault(_reactBootstrapLibTable);
+
+var _reactWindowResizeListener = require('react-window-resize-listener');
 
 var ReactGantt = (function (_Component) {
 	_inherits(ReactGantt, _Component);
@@ -6813,7 +7286,6 @@ var ReactGantt = (function (_Component) {
 			} else {
 				this.setState({ scale: this.calculateScale(years, 'years') });
 			}
-			window.addEventListener('resize', this.tableWidthChanged.bind(this));
 		}
 	}, {
 		key: 'calculateScale',
@@ -6873,18 +7345,6 @@ var ReactGantt = (function (_Component) {
 			);
 		}
 	}, {
-		key: 'tableWidthChanged',
-		value: function tableWidthChanged() {
-			if (this.widthChangedCount >= 0) {
-				this.widthChangedCount++;
-				if (this.widthChangedCount % 10 === 0) {
-					this.drawScale();
-				}
-			} else {
-				this.widthChangedCount = 0;
-			}
-		}
-	}, {
 		key: 'componentWillMount',
 		value: function componentWillMount() {
 			this.bootstraped = false;
@@ -6910,6 +7370,8 @@ var ReactGantt = (function (_Component) {
 	}, {
 		key: 'render',
 		value: function render() {
+			var _this = this;
+
 			console.log('updated');
 			var tableStyle = {
 				width: '100%'
@@ -6943,7 +7405,10 @@ var ReactGantt = (function (_Component) {
 							null,
 							this.renderRows()
 						)
-					)
+					),
+					_react2['default'].createElement(_reactWindowResizeListener.WindowResizeListener, { onResize: function (windowSize) {
+							_this.drawScale();
+						} })
 				);
 			} else {
 				return _react2['default'].createElement(
@@ -6971,7 +7436,10 @@ var ReactGantt = (function (_Component) {
 							null,
 							this.renderRows()
 						)
-					)
+					),
+					_react2['default'].createElement(_reactWindowResizeListener.WindowResizeListener, { onResize: function (windowSize) {
+							_this.drawScale();
+						} })
 				);
 			}
 		}
@@ -6984,5 +7452,5 @@ exports['default'] = ReactGantt;
 module.exports = exports['default'];
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"moment":35,"react-bootstrap/lib/Table":37,"underscore":40}]},{},[41])(41)
+},{"moment":37,"react-bootstrap/lib/Table":39,"react-window-resize-listener":42,"underscore":43}]},{},[44])(44)
 });

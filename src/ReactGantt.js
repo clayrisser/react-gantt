@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import moment from 'moment';
 import _ from 'underscore';
 import Table from 'react-bootstrap/lib/Table';
+import {WindowResizeListener} from 'react-window-resize-listener';
 
 export default class ReactGantt extends Component {
 	constructor() {
@@ -153,7 +154,6 @@ export default class ReactGantt extends Component {
 		} else {
 			this.setState({scale: this.calculateScale(years, 'years')});
 		}
-    window.addEventListener('resize', this.tableWidthChanged.bind(this));
 	}
 
 	calculateScale(count, type) {
@@ -212,17 +212,6 @@ export default class ReactGantt extends Component {
 		);
 	}
 
-  tableWidthChanged() {
-    if (this.widthChangedCount >= 0) {
-      this.widthChangedCount++;
-      if (this.widthChangedCount % 10 === 0) {
-			  this.drawScale();
-      }
-    } else {
-      this.widthChangedCount = 0;
-    }
-  }
-
 	componentWillMount() {
 		this.bootstraped = false;
 		if (this.props.options.bootstraped) {
@@ -264,6 +253,7 @@ export default class ReactGantt extends Component {
 							{this.renderRows()}
 						</tbody>
 					</Table>
+          <WindowResizeListener onResize={windowSize => {this.drawScale()}} />
 				</div>
 			);
 		} else {
@@ -280,6 +270,7 @@ export default class ReactGantt extends Component {
 							{this.renderRows()}
 						</tbody>
 					</table>
+          <WindowResizeListener onResize={windowSize => {this.drawScale()}} />
 				</div>
 			);
 		}

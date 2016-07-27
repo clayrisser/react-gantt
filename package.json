@@ -1,6 +1,6 @@
 {
   "name": "react-gantt",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "ReactGantt",
   "main": "lib/ReactGantt.js",
   "author": "Jam Risser",
@@ -16,6 +16,7 @@
     "classnames": "^2.1.2",
     "moment": "^2.14.1",
     "react-bootstrap": "^0.30.0",
+    "react-window-resize-listener": "^1.0.0",
     "underscore": "^1.8.3"
   },
   "devDependencies": {
