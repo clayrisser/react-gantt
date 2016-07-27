@@ -153,13 +153,14 @@ export default class ReactGantt extends Component {
 		} else {
 			this.setState({scale: this.calculateScale(years, 'years')});
 		}
+    window.addEventListener('resize', this.tableWidthChanged.bind(this));
 	}
 
 	calculateScale(count, type) {
 		var difference = moment(this.props.options.leftBound).unix();
 		var widthByTime = moment(this.props.options.rightBound).unix() - difference;
-		var table = document.querySelector('#' + this.state.tableId + ' > thead td:nth-child(2)');
-		var widthByPixels = table.offsetWidth;
+		var scale = document.querySelector('#' + this.state.tableId + ' > thead td:nth-child(2)');
+		var widthByPixels = scale.offsetWidth;
 		var markersCount = Math.round(widthByPixels / 100);
 		var unitByPixels = widthByPixels / count;
 		var maxIntervalWidth = 100;
@@ -172,16 +173,16 @@ export default class ReactGantt extends Component {
 		}
 		var intervalByPixels = unitsPerInterval * unitByPixels;
 		var markersCount = Math.floor(widthByPixels / intervalByPixels);
+    var intervalByPercent = intervalByPixels / widthByPixels * 100;
 		var markers = [];
 		var style = {
 			margin: '0px',
 			padding: '0px',
-			width: intervalByPixels + 'px',
+			width: intervalByPercent + '%',
 			float: 'left',
 			borderLeft: 'solid',
 			borderWidth: '1px',
-			paddingLeft: '5px',
-			width: intervalByPixels + 'px'
+			paddingLeft: '5px'
 		};
 		for (var i = 0; i < markersCount; i++) {
 			var date = moment(difference * 1000);
@@ -211,6 +212,17 @@ export default class ReactGantt extends Component {
 		);
 	}
 
+  tableWidthChanged() {
+    if (this.widthChangedCount >= 0) {
+      this.widthChangedCount++;
+      if (this.widthChangedCount % 10 === 0) {
+			  this.drawScale();
+      }
+    } else {
+      this.widthChangedCount = 0;
+    }
+  }
+
 	componentWillMount() {
 		this.bootstraped = false;
 		if (this.props.options.bootstraped) {
@@ -231,6 +243,7 @@ export default class ReactGantt extends Component {
 	}
 
 	render() {
+    console.log('updated');
 		var tableStyle = {
 			width: '100%'
 		};

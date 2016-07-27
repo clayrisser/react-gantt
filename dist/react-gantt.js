@@ -6813,14 +6813,15 @@ var ReactGantt = (function (_Component) {
 			} else {
 				this.setState({ scale: this.calculateScale(years, 'years') });
 			}
+			window.addEventListener('resize', this.tableWidthChanged.bind(this));
 		}
 	}, {
 		key: 'calculateScale',
 		value: function calculateScale(count, type) {
 			var difference = (0, _moment2['default'])(this.props.options.leftBound).unix();
 			var widthByTime = (0, _moment2['default'])(this.props.options.rightBound).unix() - difference;
-			var table = document.querySelector('#' + this.state.tableId + ' > thead td:nth-child(2)');
-			var widthByPixels = table.offsetWidth;
+			var scale = document.querySelector('#' + this.state.tableId + ' > thead td:nth-child(2)');
+			var widthByPixels = scale.offsetWidth;
 			var markersCount = Math.round(widthByPixels / 100);
 			var unitByPixels = widthByPixels / count;
 			var maxIntervalWidth = 100;
@@ -6833,16 +6834,16 @@ var ReactGantt = (function (_Component) {
 			}
 			var intervalByPixels = unitsPerInterval * unitByPixels;
 			var markersCount = Math.floor(widthByPixels / intervalByPixels);
+			var intervalByPercent = intervalByPixels / widthByPixels * 100;
 			var markers = [];
 			var style = {
 				margin: '0px',
 				padding: '0px',
-				width: intervalByPixels + 'px',
+				width: intervalByPercent + '%',
 				float: 'left',
 				borderLeft: 'solid',
 				borderWidth: '1px',
-				paddingLeft: '5px',
-				width: intervalByPixels + 'px'
+				paddingLeft: '5px'
 			};
 			for (var i = 0; i < markersCount; i++) {
 				var date = (0, _moment2['default'])(difference * 1000);
@@ -6872,6 +6873,18 @@ var ReactGantt = (function (_Component) {
 			);
 		}
 	}, {
+		key: 'tableWidthChanged',
+		value: function tableWidthChanged() {
+			if (this.widthChangedCount >= 0) {
+				this.widthChangedCount++;
+				if (this.widthChangedCount % 10 === 0) {
+					this.drawScale();
+				}
+			} else {
+				this.widthChangedCount = 0;
+			}
+		}
+	}, {
 		key: 'componentWillMount',
 		value: function componentWillMount() {
 			this.bootstraped = false;
@@ -6897,6 +6910,7 @@ var ReactGantt = (function (_Component) {
 	}, {
 		key: 'render',
 		value: function render() {
+			console.log('updated');
 			var tableStyle = {
 				width: '100%'
 			};
