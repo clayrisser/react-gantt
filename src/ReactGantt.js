@@ -105,6 +105,7 @@ export default class ReactGantt extends Component {
 	}
 
 	drawScale() {
+		console.warn('redrawing');
 		var leftBound = this.props.options.leftBound;
 		var rightBound = this.props.options.rightBound;
 		var minutes = 0;
@@ -203,7 +204,7 @@ export default class ReactGantt extends Component {
 
 	componentDidUpdate() {
 		this.previousProps = this.props;
-		if (this.previousProps !== this.props) { // prevents infinite loop
+		if (this.previousProps.options !== this.props.options || this.previousProps.rows !== this.props.rows) { // prevents infinite loop
 			this.drawScale();
 		}
 	}
