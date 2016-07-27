@@ -90,11 +90,11 @@ export default class ReactGantt extends Component {
 		for(var i = 0; i < this.props.rows.length; i++) {
 			var rowObject = this.props.rows[i];
 			var row = (
-				<tr key={rowObject.title}>
+				<tr key={i}>
 					<td style={titleStyle}>
 						<div style={labelStyle}>{rowObject.title}</div>
 					</td>
-					<td key={rowObject.title} style={timelineStyle}>
+					<td style={timelineStyle}>
 						{this.renderBar(rowObject)}
 					</td>
 				</tr>
@@ -197,11 +197,15 @@ export default class ReactGantt extends Component {
 	}
 
 	componentDidMount() {
+		this.previousProps = this.props;
 		this.drawScale();
 	}
 
 	componentDidUpdate() {
-	//	this.drawScale();
+		this.previousProps = this.props;
+		if (this.previousProps !== this.props) { // prevents infinite loop
+			this.drawScale();
+		}
 	}
 
 	render() {
