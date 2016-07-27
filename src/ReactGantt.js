@@ -205,14 +205,13 @@ export default class ReactGantt extends Component {
 	}
 
 	componentDidUpdate() {
-		this.previousProps = this.props;
 		if (this.previousProps.options !== this.props.options || this.previousProps.rows !== this.props.rows) { // prevents infinite loop
+			this.previousProps = this.props;
 			this.drawScale();
 		}
 	}
 
 	render() {
-		this.renderRows();
 		var tableStyle = {
 			width: '100%'
 		};

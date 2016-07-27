@@ -6869,16 +6869,15 @@ var ReactGantt = (function (_Component) {
 	}, {
 		key: 'componentDidUpdate',
 		value: function componentDidUpdate() {
-			this.previousProps = this.props;
 			if (this.previousProps.options !== this.props.options || this.previousProps.rows !== this.props.rows) {
 				// prevents infinite loop
+				this.previousProps = this.props;
 				this.drawScale();
 			}
 		}
 	}, {
 		key: 'render',
 		value: function render() {
-			this.renderRows();
 			var tableStyle = {
 				width: '100%'
 			};
