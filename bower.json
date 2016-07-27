@@ -1,6 +1,6 @@
 {
   "name": "react-gantt",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "ReactGantt",
   "main": "dist/react-gantt.min.js",
   "homepage": "https://github.com/jamrizzi/react-gantt",
