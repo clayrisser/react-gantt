@@ -232,7 +232,6 @@ export default class ReactGantt extends Component {
 	}
 
 	render() {
-    console.log('updated');
 		var tableStyle = {
 			width: '100%'
 		};

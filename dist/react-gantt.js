@@ -7372,7 +7372,6 @@ var ReactGantt = (function (_Component) {
 		value: function render() {
 			var _this = this;
 
-			console.log('updated');
 			var tableStyle = {
 				width: '100%'
 			};
