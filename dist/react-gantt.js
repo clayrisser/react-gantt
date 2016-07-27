@@ -6808,7 +6808,10 @@ var ReactGantt = (function (_Component) {
 			if (this.props.options.maxIntervalWidth) {
 				maxIntervalWidth = this.props.options.maxIntervalWidth;
 			}
-			var unitsPerInterval = Math.floor(maxIntervalWidth / unitByPixels);
+			var unitsPerInterval = 1;
+			if (maxIntervalWidth > unitByPixels) {
+				unitsPerInterval = Math.floor(maxIntervalWidth / unitByPixels);
+			}
 			var intervalByPixels = unitsPerInterval * unitByPixels;
 			var markersCount = Math.floor(widthByPixels / intervalByPixels);
 			var markers = [];
@@ -6867,7 +6870,7 @@ var ReactGantt = (function (_Component) {
 		key: 'componentDidUpdate',
 		value: function componentDidUpdate() {
 			this.previousProps = this.props;
-			if (this.previousProps !== this.props) {
+			if (this.previousProps.options !== this.props.options || this.previousProps.rows !== this.props.rows) {
 				// prevents infinite loop
 				this.drawScale();
 			}
