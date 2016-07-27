@@ -11,14 +11,16 @@ var App = React.createClass({
 				startDate: moment().set({hour: 0, date: 16, month: 8, year: 2016}).toDate(),
 				climaxDate: moment().set({hour: 0, date: 20, month: 8, year: 2016}).toDate(),
 				endDate: moment().set({hour: 0, date: 28, month: 8, year: 2016}).toDate(),
-				group: 'myTasks'
+				group: 'myTasks',
+				action: () => {console.log('the first one was clicked')}
 			},
 			{
 				title: 'Task 2',
 				startDate: moment().set({hour: 0, date: 11, month: 8, year: 2016}).toDate(),
 				climaxDate: moment().set({hour: 0, date: 13, month: 8, year: 2016}).toDate(),
 				endDate: moment().set({hour: 0, date: 19, month: 8, year: 2016}).toDate(),
-				group: 'myTasks'
+				group: 'myTasks',
+				action: () => {console.log('the second one was clicked')}
 			}
 		];
 		var options = {

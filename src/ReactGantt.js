@@ -91,6 +91,9 @@ export default class ReactGantt extends Component {
 		if (this.props.options && this.props.options.labelWidth) {
 			labelWidth = this.props.options.labelWidth;
 		}
+		var rowStyle = {
+			cursor: 'pointer'
+		}
 		var titleStyle = {
 			textAlign: 'right',
       verticalAlign: 'middle',
@@ -98,7 +101,7 @@ export default class ReactGantt extends Component {
 			fontWeight: 'bold'
 		};
 		var timelineStyle = {
-			width: '50%'
+			width: '100%'
 		};
 		if (this.props.options.showBorders !== false) {
 			titleStyle.border = 'solid';
@@ -111,7 +114,7 @@ export default class ReactGantt extends Component {
 			for(var i = 0; i < this.props.rows.length; i++) {
 				var rowObject = this.props.rows[i];
 				var row = (
-					<tr key={i}>
+					<tr key={i} style={rowStyle} onClick={rowObject.action} onMouseOver={this.showPopup.bind(this, rowObject)} onMouseOut={this.hidePopup.bind(this)}>
 						<td style={titleStyle}>
 							<div style={labelStyle}>{rowObject.title}</div>
 						</td>
@@ -136,6 +139,25 @@ export default class ReactGantt extends Component {
 			rows.push(row);
 		}
 		return rows;
+	}
+
+	showPopup(row) {
+		if (this.bootstraped) {
+			var popover = document.querySelector('#' + this.state.tableId + ' .popover');
+			popover.innerHTML = `<div class="card-block">
+			    <h3 class="card-title">` + row.title + `</h3>
+					<h6><b>Start Date</b>: ` + moment(row.startDate).format('MMMM D') + `</h6>
+					<h6><b>End Date</b>: ` + moment(row.endDate).format('MMMM D') + `</h6>
+			  </div>`;
+			popover.style.left = this.mouseX + 10 + 'px';
+			popover.style.top = this.mouseY + 20 + 'px';
+			popover.style.display = 'inline';
+		}
+	}
+
+	hidePopup() {
+		var popover = document.querySelector('#' + this.state.tableId + ' .popover');
+		popover.style.display = 'none';
 	}
 
 	drawScale() {
@@ -173,7 +195,7 @@ export default class ReactGantt extends Component {
 	calculateScale(count, type) {
 		var difference = moment(this.props.options.leftBound).unix();
 		var widthByTime = moment(this.props.options.rightBound).unix() - difference;
-		var scale = document.querySelector('#' + this.state.tableId + ' > thead td:nth-child(2)');
+		var scale = document.querySelector('#' + this.state.tableId + ' thead td:nth-child(2)');
 		var widthByPixels = scale.offsetWidth;
 		var markersCount = Math.round(widthByPixels / 100);
 		var unitByPixels = widthByPixels / count;
@@ -236,6 +258,10 @@ export default class ReactGantt extends Component {
 	componentDidMount() {
 		this.previousProps = this.props;
 		this.drawScale();
+		document.onmousemove = (e) => {
+	    this.mouseX = e.pageX;
+	    this.mouseY = e.pageY;
+		};
 	}
 
 	componentDidUpdate() {
@@ -252,10 +278,15 @@ export default class ReactGantt extends Component {
 		var scaleStyle = {
 			width: '100%'
 		};
+		var popoverStyle = {
+			position: 'absolute',
+			display: 'none'
+		};
 		if (this.bootstraped) {
 			return (
-				<div>
-					<Table id={this.state.tableId} style={tableStyle} striped bordered condensed hover>
+				<div id={this.state.tableId}>
+					<div className='popover card' style={popoverStyle}></div>
+					<Table style={tableStyle} striped bordered condensed hover>
 						<thead>
 							<tr>
 								<td></td>
@@ -271,8 +302,9 @@ export default class ReactGantt extends Component {
 			);
 		} else {
 			return (
-				<div>
-					<table id={this.state.tableId} style={tableStyle}>
+				<div id={this.state.tableId}>
+					<div className='popover' style={popoverStyle}></div>
+					<table style={tableStyle}>
 						<thead>
 							<tr>
 								<td></td>
