@@ -114,7 +114,7 @@ export default class ReactGantt extends Component {
 			for(var i = 0; i < this.props.rows.length; i++) {
 				var rowObject = this.props.rows[i];
 				var row = (
-					<tr key={i} style={rowStyle} onClick={eval(rowObject.action)} onMouseOver={this.showPopup.bind(this, rowObject)} onMouseOut={this.hidePopup.bind(this)}>
+					<tr key={i} style={rowStyle} onClick={rowObject.action} onMouseOver={this.showPopup.bind(this, rowObject)} onMouseOut={this.hidePopup.bind(this)}>
 						<td style={titleStyle}>
 							<div style={labelStyle}>{rowObject.title}</div>
 						</td>
