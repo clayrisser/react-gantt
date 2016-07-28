@@ -7237,7 +7237,7 @@ var ReactGantt = (function (_Component) {
 					var rowObject = this.props.rows[i];
 					var row = _react2['default'].createElement(
 						'tr',
-						{ key: i, style: rowStyle, onClick: rowObject.action, onMouseOver: this.showPopup.bind(this, rowObject), onMouseOut: this.hidePopup.bind(this) },
+						{ key: i, style: rowStyle, onClick: eval(rowObject.action), onMouseOver: this.showPopup.bind(this, rowObject), onMouseOut: this.hidePopup.bind(this) },
 						_react2['default'].createElement(
 							'td',
 							{ style: titleStyle },
@@ -7284,8 +7284,8 @@ var ReactGantt = (function (_Component) {
 			if (this.bootstraped) {
 				var popover = document.querySelector('#' + this.state.tableId + ' .popover');
 				popover.innerHTML = '<div class="card-block">\n\t\t\t    <h3 class="card-title">' + row.title + '</h3>\n\t\t\t\t\t<h6><b>Start Date</b>: ' + (0, _moment2['default'])(row.startDate).format('MMMM D') + '</h6>\n\t\t\t\t\t<h6><b>End Date</b>: ' + (0, _moment2['default'])(row.endDate).format('MMMM D') + '</h6>\n\t\t\t  </div>';
-				popover.style.left = this.mouseX + 10 + 'px';
-				popover.style.top = this.mouseY + 20 + 'px';
+				popover.style.left = this.mouseX + 20 + 'px';
+				popover.style.top = this.mouseY - 10 + 'px';
 				popover.style.display = 'inline';
 			}
 		}
