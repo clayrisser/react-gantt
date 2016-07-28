@@ -114,7 +114,7 @@ export default class ReactGantt extends Component {
 			for(var i = 0; i < this.props.rows.length; i++) {
 				var rowObject = this.props.rows[i];
 				var row = (
-					<tr key={i} style={rowStyle} onClick={rowObject.action} onMouseOver={this.showPopup.bind(this, rowObject)} onMouseOut={this.hidePopup.bind(this)}>
+					<tr key={i} style={rowStyle} onClick={eval(rowObject.action)} onMouseOver={this.showPopup.bind(this, rowObject)} onMouseOut={this.hidePopup.bind(this)}>
 						<td style={titleStyle}>
 							<div style={labelStyle}>{rowObject.title}</div>
 						</td>
@@ -149,8 +149,8 @@ export default class ReactGantt extends Component {
 					<h6><b>Start Date</b>: ` + moment(row.startDate).format('MMMM D') + `</h6>
 					<h6><b>End Date</b>: ` + moment(row.endDate).format('MMMM D') + `</h6>
 			  </div>`;
-			popover.style.left = this.mouseX + 10 + 'px';
-			popover.style.top = this.mouseY + 20 + 'px';
+			popover.style.left = this.mouseX + 20 + 'px';
+			popover.style.top = this.mouseY - 10 + 'px';
 			popover.style.display = 'inline';
 		}
 	}
