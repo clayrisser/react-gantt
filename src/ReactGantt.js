@@ -11,7 +11,7 @@ export default class ReactGantt extends Component {
 			tableId: _.sample('ABCDEFGHIJKLMNOPQRSTUVWXYZ', 32).join(''),
 			scaleMarksCount: 99,
 			scaleDrawn: false
-		}
+		};
 	}
 
 	renderBar(row) {
@@ -93,7 +93,7 @@ export default class ReactGantt extends Component {
 		}
 		var rowStyle = {
 			cursor: 'pointer'
-		}
+		};
 		var titleStyle = {
 			textAlign: 'right',
       verticalAlign: 'middle',
@@ -193,15 +193,16 @@ export default class ReactGantt extends Component {
 	}
 
 	calculateScale(count, type) {
-		var difference = moment(this.props.options.leftBound).unix();
-		var widthByTime = moment(this.props.options.rightBound).unix() - difference;
+		var options = this.props.options;
+		var difference = moment(options.leftBound).unix();
+		var widthByTime = moment(options.rightBound).unix() - difference;
 		var scale = document.querySelector('#' + this.state.tableId + ' thead td:nth-child(2)');
 		var widthByPixels = scale.offsetWidth;
 		var markersCount = Math.round(widthByPixels / 100);
 		var unitByPixels = widthByPixels / count;
 		var maxIntervalWidth = 100;
-		if (this.props.options.maxIntervalWidth) {
-			maxIntervalWidth = this.props.options.maxIntervalWidth;
+		if (options.maxIntervalWidth) {
+			maxIntervalWidth = options.maxIntervalWidth;
 		}
 		var unitsPerInterval = 1;
 		if (maxIntervalWidth > unitByPixels) {
@@ -222,21 +223,34 @@ export default class ReactGantt extends Component {
 		};
 		for (var i = 0; i < markersCount; i++) {
 			var date = moment(difference * 1000);
+			var formattedInterval;
 			switch (type) {
 				case 'years':
 					date.add(i * unitsPerInterval, 'years');
+					formattedInterval=date.format('YYYY MM DD');
 					break;
 				case 'months':
 					date.add(i * unitsPerInterval, 'months');
+					formattedInterval=date.format('YYYY MM DD');
 					break;
 				case 'days':
 					date.add(i * unitsPerInterval, 'days');
+					formattedInterval=date.format('YYYY MM DD');
 					break;
+				case 'hours':
+					date.add(i * unitsPerInterval, 'hours');
+					formattedInterval=date.format('H:mm');
+				case 'minutes':
+					date.add(i * unitsPerInterval, 'minutes');
+					formattedInterval=date.format('H:mm:ss');
 				default:
+			}
+			if (options && options.intervalFormat){
+				formattedInterval = date.format(options.intervalFormat);
 			}
 			var mark = (
 				<div key={i} style={style}>
-					{date.format('YYYY MM DD')}
+					{ formattedInterval }
 				</div>
 			);
 			markers.push(mark);
@@ -297,7 +311,7 @@ export default class ReactGantt extends Component {
 							{this.renderRows()}
 						</tbody>
 					</Table>
-          <WindowResizeListener onResize={windowSize => {this.drawScale()}} />
+          <WindowResizeListener onResize={windowSize => {this.drawScale();}} />
 				</div>
 			);
 		} else {
@@ -315,7 +329,7 @@ export default class ReactGantt extends Component {
 							{this.renderRows()}
 						</tbody>
 					</table>
-          <WindowResizeListener onResize={windowSize => {this.drawScale()}} />
+          <WindowResizeListener onResize={windowSize => {this.drawScale();}} />
 				</div>
 			);
 		}
