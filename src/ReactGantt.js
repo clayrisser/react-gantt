@@ -11,7 +11,7 @@ export default class ReactGantt extends Component {
 			tableId: _.sample('ABCDEFGHIJKLMNOPQRSTUVWXYZ', 32).join(''),
 			scaleMarksCount: 99,
 			scaleDrawn: false
-		}
+		};
 	}
 
 	renderBar(row) {
@@ -93,7 +93,7 @@ export default class ReactGantt extends Component {
 		}
 		var rowStyle = {
 			cursor: 'pointer'
-		}
+		};
 		var titleStyle = {
 			textAlign: 'right',
       verticalAlign: 'middle',
@@ -168,6 +168,7 @@ export default class ReactGantt extends Component {
 		var days = 0;
 		var weeks = 0;
 		var months = 0;
+		console.log('Scale');
 		var years = moment(rightBound).diff(moment(leftBound), 'years');
 		if (years < 2) {
 			var months = moment(rightBound).diff(moment(leftBound), 'months');
@@ -222,21 +223,31 @@ export default class ReactGantt extends Component {
 		};
 		for (var i = 0; i < markersCount; i++) {
 			var date = moment(difference * 1000);
+			var formattedInterval;
 			switch (type) {
 				case 'years':
 					date.add(i * unitsPerInterval, 'years');
+					formattedInterval=date.format('YYYY MM DD');
 					break;
 				case 'months':
 					date.add(i * unitsPerInterval, 'months');
+					formattedInterval=date.format('YYYY MM DD');
 					break;
 				case 'days':
 					date.add(i * unitsPerInterval, 'days');
+					formattedInterval=date.format('YYYY MM DD');
 					break;
+				case 'hours':
+					date.add(i * unitsPerInterval, 'hours');
+					formattedInterval=date.format('H:mm');
+				case 'minutes':
+					date.add(i * unitsPerInterval, 'minutes');
+					formattedInterval=date.format('H:mm:ss');
 				default:
 			}
 			var mark = (
 				<div key={i} style={style}>
-					{date.format('YYYY MM DD')}
+					{ ((this.props.options.intervalFormat) ? date.format(this.props.options.intervalFormat) : formattedInterval ) }
 				</div>
 			);
 			markers.push(mark);
@@ -297,7 +308,7 @@ export default class ReactGantt extends Component {
 							{this.renderRows()}
 						</tbody>
 					</Table>
-          <WindowResizeListener onResize={windowSize => {this.drawScale()}} />
+          <WindowResizeListener onResize={windowSize => {this.drawScale();}} />
 				</div>
 			);
 		} else {
@@ -315,7 +326,7 @@ export default class ReactGantt extends Component {
 							{this.renderRows()}
 						</tbody>
 					</table>
-          <WindowResizeListener onResize={windowSize => {this.drawScale()}} />
+          <WindowResizeListener onResize={windowSize => {this.drawScale();}} />
 				</div>
 			);
 		}
