@@ -55,7 +55,6 @@ To build, watch and serve the examples (which will also watch the component sour
 
 ## License
 
-__PUT LICENSE HERE__
+This project is dual licensed under the MIT or GPL Version 3 licenses.
 
 Copyright (c) 2016 Jam Risser.
-
