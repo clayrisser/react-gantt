@@ -245,9 +245,13 @@ export default class ReactGantt extends Component {
 					formattedInterval=date.format('H:mm:ss');
 				default:
 			}
+			var options = this.props.options;
+			if (options && options.intervalFormat){
+				formattedInterval = date.format(options.intervalFormat);
+			}
 			var mark = (
 				<div key={i} style={style}>
-					{ ((this.props.options.intervalFormat) ? date.format(this.props.options.intervalFormat) : formattedInterval ) }
+					{ formattedInterval }
 				</div>
 			);
 			markers.push(mark);
