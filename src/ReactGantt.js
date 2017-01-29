@@ -194,15 +194,16 @@ export default class ReactGantt extends Component {
 	}
 
 	calculateScale(count, type) {
-		var difference = moment(this.props.options.leftBound).unix();
-		var widthByTime = moment(this.props.options.rightBound).unix() - difference;
+		var options = this.props.options;
+		var difference = moment(options.leftBound).unix();
+		var widthByTime = moment(options.rightBound).unix() - difference;
 		var scale = document.querySelector('#' + this.state.tableId + ' thead td:nth-child(2)');
 		var widthByPixels = scale.offsetWidth;
 		var markersCount = Math.round(widthByPixels / 100);
 		var unitByPixels = widthByPixels / count;
 		var maxIntervalWidth = 100;
-		if (this.props.options.maxIntervalWidth) {
-			maxIntervalWidth = this.props.options.maxIntervalWidth;
+		if (options.maxIntervalWidth) {
+			maxIntervalWidth = options.maxIntervalWidth;
 		}
 		var unitsPerInterval = 1;
 		if (maxIntervalWidth > unitByPixels) {
@@ -245,7 +246,6 @@ export default class ReactGantt extends Component {
 					formattedInterval=date.format('H:mm:ss');
 				default:
 			}
-			var options = this.props.options;
 			if (options && options.intervalFormat){
 				formattedInterval = date.format(options.intervalFormat);
 			}
