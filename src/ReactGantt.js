@@ -168,7 +168,6 @@ export default class ReactGantt extends Component {
 		var days = 0;
 		var weeks = 0;
 		var months = 0;
-		console.log('Scale');
 		var years = moment(rightBound).diff(moment(leftBound), 'years');
 		if (years < 2) {
 			var months = moment(rightBound).diff(moment(leftBound), 'months');
