@@ -1,6 +1,6 @@
 # ReactGantt
 
-__COMPONENT DESCRIPTION GOES HERE__
+A gantt chart for react. Uses (optional) [react-bootstrap](https://react-bootstrap.github.io/) and [moment.js](https://momentjs.com/)
 
 
 ## Demo & Examples
@@ -30,7 +30,9 @@ npm install react-gantt --save
 
 ## Usage
 
-__EXPLAIN USAGE HERE__
+Import the component to your React project and include as per any other React component.
+
+Available properties are `groups`, `rows` and `options` explained below.
 
 ```
 import ReactGantt from 'react-gantt';
@@ -92,8 +94,6 @@ const groups = [
 
 return <ReactGantt groups={groups} />;
 ```
-
-__ADDITIONAL USAGE NOTES__
 
 
 ## Development (`src`, `lib` and the build process)
