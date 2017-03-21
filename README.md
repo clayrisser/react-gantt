@@ -33,7 +33,7 @@ npm install react-gantt --save
 __EXPLAIN USAGE HERE__
 
 ```
-var ReactGantt = require('react-gantt');
+import ReactGantt from 'react-gantt';
 
 <ReactGantt>Example</ReactGantt>
 ```
@@ -56,7 +56,8 @@ var ReactGantt = require('react-gantt');
 | showBorder | Enable or disable the borders | no | boolean | true |
 | maxIntervalWidth | Maximum width between intervals | no | number | 100 |
 | intervalFormat | moment.js date format for intervals | no | string | 'YYYY MM DD' |
-| bootstrapped | Display extra bootstrap titles | no | boolean | false |
+| bootstrapped | Use react-bootstrap table | no | boolean | false |
+| responsive | Add responsive prop to bootstrap table | no | boolean | false |
 
 
 #### Rows

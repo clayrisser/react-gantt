@@ -27,7 +27,7 @@ var App = React.createClass({
 			leftBound: moment().set({hour: 0, date: 1, month: 6, year: 2016}).toDate(),
 			rightBound: moment().set({hour: 0, date: 29, month: 8, year: 2016}).toDate(),
 			labelWidth: '120px',
-			bootstraped: true,
+			bootstrapped: true,
 			maxIntervalWidth: 150,
 			showBorders: false,
 			intervalFormat: 'YYYY MM DD'

@@ -79,8 +79,8 @@ export default class ReactGantt extends Component {
 		};
 		return (
 			<div>
-				<div style={bar1}></div>
-				<div style={bar2}></div>
+				<div style={bar1} />
+				<div style={bar2} />
 			</div>
 		);
 	}
@@ -129,7 +129,7 @@ export default class ReactGantt extends Component {
 			var row = (
 				<tr key={0}>
 					<td style={titleStyle}>
-						<div style={labelStyle}></div>
+						<div style={labelStyle} />
 					</td>
 					<td style={timelineStyle}>
 						<span>No Data</span>
@@ -267,6 +267,10 @@ export default class ReactGantt extends Component {
 		if (this.props.options.bootstrapped) {
 			this.bootstrapped = this.props.options.bootstrapped;
 		}
+
+		if (this.props.options.responsive) {
+			this.responsive = true;
+		}
 	}
 
 	componentDidMount() {
@@ -299,11 +303,11 @@ export default class ReactGantt extends Component {
 		if (this.bootstrapped) {
 			return (
 				<div id={this.state.tableId}>
-					<div className='popover card' style={popoverStyle}></div>
-					<Table style={tableStyle} striped bordered condensed hover>
+					<div className="popover card" style={popoverStyle} />
+					<Table style={tableStyle} striped bordered condensed hover responsive={this.responsive}>
 						<thead>
 							<tr>
-								<td></td>
+								<td />
 								<td style={scaleStyle}>{this.state.scale}</td>
 							</tr>
 						</thead>
@@ -317,11 +321,11 @@ export default class ReactGantt extends Component {
 		} else {
 			return (
 				<div id={this.state.tableId}>
-					<div className='popover' style={popoverStyle}></div>
+					<div className="popover" style={popoverStyle} />
 					<table style={tableStyle}>
 						<thead>
 							<tr>
-								<td></td>
+								<td />
 								<td style={scaleStyle}>{this.state.scale}</td>
 							</tr>
 						</thead>
@@ -337,13 +341,13 @@ export default class ReactGantt extends Component {
 }
 
 ReactGantt.propTypes = {
-	options: React.PropTypes.object,
 	groups: React.PropTypes.array,
+	options: React.PropTypes.object,
 	rows: React.PropTypes.array,
 };
 
 ReactGantt.defaultProps = {
-	options: {},
 	groups: {},
+	options: {},
 	rows: {},
 };
