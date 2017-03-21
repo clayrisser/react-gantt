@@ -40,9 +40,57 @@ var ReactGantt = require('react-gantt');
 
 ### Properties
 
-* __DOCUMENT PROPERTIES HERE__
+#### Options
 
-### Notes
+```
+<ReactGantt options={{ ...options }} />
+```
+
+| Attribute | Description | Required | Type | Example/Default  |
+| :------------- |:-------------| :-----:| :-----:| :-----|
+| leftBound | Date for left bounds of table | yes | string | '2017-03-20' |
+| rightBound | Date for right bounds of table | yes | string | '2017-03-31' |
+| beforeClimaxColor | Color for left hand side of event bar. Accepts any css colors | no | string | 'red' |
+| afterClimaxColor | Color for left hand side of event bar. Accepts any css colors | no | string | 'blue' |
+| labelWidth | Width of left hand label. Accepts any css units | no | string | '80px' |
+| showBorder | Enable or disable the borders | no | boolean | true |
+| maxIntervalWidth | Maximum width between intervals | no | number | 100 |
+| intervalFormat | moment.js date format for intervals | no | string | 'YYYY MM DD' |
+| bootstrapped | Display extra bootstrap titles | no | boolean | false |
+
+
+#### Rows
+
+```
+const rows = [
+	{
+		title: 'Task 1',
+		startDate: moment().set({hour: 0, date: 16, month: 8, year: 2016}).toDate(),
+		climaxDate: moment().set({hour: 0, date: 20, month: 8, year: 2016}).toDate(),
+		endDate: moment().set({hour: 0, date: 28, month: 8, year: 2016}).toDate(),
+		group: 'myTasks',
+		action: () => {console.log('the first one was clicked');}
+	},
+	...
+];
+
+return <ReactGantt rows={rows} />;
+```
+
+
+#### Groups
+
+```
+const groups = [
+	{
+		id: 'myTasks',
+		title: 'My Tasks'
+	},
+	...
+];
+
+return <ReactGantt groups={groups} />;
+```
 
 __ADDITIONAL USAGE NOTES__
 
