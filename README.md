@@ -55,7 +55,7 @@ import ReactGantt from 'react-gantt';
 | beforeClimaxColor | Color for left hand side of event bar. Accepts any css colors | no | string | 'red' |
 | afterClimaxColor | Color for left hand side of event bar. Accepts any css colors | no | string | 'blue' |
 | labelWidth | Width of left hand label. Accepts any css units | no | string | '80px' |
-| showBorder | Enable or disable the borders | no | boolean | true |
+| showBorders | Enable or disable the borders | no | boolean | true |
 | maxIntervalWidth | Maximum width between intervals | no | number | 100 |
 | intervalFormat | moment.js date format for intervals | no | string | 'YYYY MM DD' |
 | bootstrapped | Use react-bootstrap table | no | boolean | false |
