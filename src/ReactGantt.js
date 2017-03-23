@@ -39,18 +39,18 @@ export default class ReactGantt extends Component {
 		var div1Width = ((climaxDate - startDate) / rightBound * 100) + '%';
 		var div2Width = ((endDate - climaxDate) / rightBound * 100) + '%';
 		var rightPadWidth = ((rightBound - endDate) / rightBound * 100) + '%';
-    var div1BackgroundColor = 'blue';
-    if (row.beforeClimaxColor) {
-      div1BackgroundColor = row.beforeClimaxColor;
-    } else if (this.props.options.beforeClimaxColor) {
-      div1BackgroundColor = this.props.options.beforeClimaxColor;
-    }
-    var div2BackgroundColor = 'red';
-    if (row.afterClimaxColor) {
-      div2BackgroundColor = row.afterClimaxColor;
-    } else if (this.props.options.afterClimaxColor) {
-      div2BackgroundColor = this.props.options.afterClimaxColor;
-    }
+		var div1BackgroundColor = 'blue';
+		if (row.beforeClimaxColor) {
+			div1BackgroundColor = row.beforeClimaxColor;
+		} else if (this.props.options.beforeClimaxColor) {
+			div1BackgroundColor = this.props.options.beforeClimaxColor;
+		}
+		var div2BackgroundColor = 'red';
+		if (row.afterClimaxColor) {
+			div2BackgroundColor = row.afterClimaxColor;
+		} else if (this.props.options.afterClimaxColor) {
+			div2BackgroundColor = this.props.options.afterClimaxColor;
+		}
 		var bar1 = {
 			marginTop: '2px',
 			marginBottom: '2px',
@@ -60,9 +60,9 @@ export default class ReactGantt extends Component {
 			width: div1Width,
 			float: 'left',
 			height: '30px',
-      borderTopLeftRadius: '10px',
-      borderBottomLeftRadius: '10px',
-      boxShadow: '2px 2px 4px #000000'
+			borderTopLeftRadius: '10px',
+			borderBottomLeftRadius: '10px',
+			boxShadow: '2px 2px 4px #000000'
 		};
 		var bar2 = {
 			marginTop: '2px',
@@ -73,14 +73,14 @@ export default class ReactGantt extends Component {
 			width: div2Width,
 			float: 'left',
 			height: '30px',
-      borderTopRightRadius: '10px',
-      borderBottomRightRadius: '10px',
-      boxShadow: '2px 2px 4px #000000'
+			borderTopRightRadius: '10px',
+			borderBottomRightRadius: '10px',
+			boxShadow: '2px 2px 4px #000000'
 		};
 		return (
 			<div>
-				<div style={bar1}></div>
-				<div style={bar2}></div>
+				<div style={bar1} />
+				<div style={bar2} />
 			</div>
 		);
 	}
@@ -96,7 +96,7 @@ export default class ReactGantt extends Component {
 		};
 		var titleStyle = {
 			textAlign: 'right',
-      verticalAlign: 'middle',
+			verticalAlign: 'middle',
 			paddingRight: '10px',
 			fontWeight: 'bold'
 		};
@@ -129,7 +129,7 @@ export default class ReactGantt extends Component {
 			var row = (
 				<tr key={0}>
 					<td style={titleStyle}>
-						<div style={labelStyle}></div>
+						<div style={labelStyle} />
 					</td>
 					<td style={timelineStyle}>
 						<span>No Data</span>
@@ -142,13 +142,13 @@ export default class ReactGantt extends Component {
 	}
 
 	showPopup(row) {
-		if (this.bootstraped) {
+		if (this.bootstrapped) {
 			var popover = document.querySelector('#' + this.state.tableId + ' .popover');
 			popover.innerHTML = `<div class="card-block">
-			    <h3 class="card-title">` + row.title + `</h3>
+					<h3 class="card-title">` + row.title + `</h3>
 					<h6><b>Start Date</b>: ` + moment(row.startDate).format('MMMM D') + `</h6>
 					<h6><b>End Date</b>: ` + moment(row.endDate).format('MMMM D') + `</h6>
-			  </div>`;
+				</div>`;
 			popover.style.left = this.mouseX + 20 + 'px';
 			popover.style.top = this.mouseY - 10 + 'px';
 			popover.style.display = 'inline';
@@ -210,7 +210,7 @@ export default class ReactGantt extends Component {
 		}
 		var intervalByPixels = unitsPerInterval * unitByPixels;
 		var markersCount = Math.floor(widthByPixels / intervalByPixels);
-    var intervalByPercent = intervalByPixels / widthByPixels * 100;
+		var intervalByPercent = intervalByPixels / widthByPixels * 100;
 		var markers = [];
 		var style = {
 			margin: '0px',
@@ -263,9 +263,13 @@ export default class ReactGantt extends Component {
 	}
 
 	componentWillMount() {
-		this.bootstraped = false;
-		if (this.props.options.bootstraped) {
-			this.bootstraped = this.props.options.bootstraped;
+		this.bootstrapped = false;
+		if (this.props.options.bootstrapped) {
+			this.bootstrapped = this.props.options.bootstrapped;
+		}
+
+		if (this.props.options.responsive) {
+			this.responsive = true;
 		}
 	}
 
@@ -273,8 +277,8 @@ export default class ReactGantt extends Component {
 		this.previousProps = this.props;
 		this.drawScale();
 		document.onmousemove = (e) => {
-	    this.mouseX = e.pageX;
-	    this.mouseY = e.pageY;
+			this.mouseX = e.pageX;
+			this.mouseY = e.pageY;
 		};
 	}
 
@@ -296,14 +300,14 @@ export default class ReactGantt extends Component {
 			position: 'absolute',
 			display: 'none'
 		};
-		if (this.bootstraped) {
+		if (this.bootstrapped) {
 			return (
 				<div id={this.state.tableId}>
-					<div className='popover card' style={popoverStyle}></div>
-					<Table style={tableStyle} striped bordered condensed hover>
+					<div className="popover card" style={popoverStyle} />
+					<Table style={tableStyle} striped bordered condensed hover responsive={this.responsive}>
 						<thead>
 							<tr>
-								<td></td>
+								<td />
 								<td style={scaleStyle}>{this.state.scale}</td>
 							</tr>
 						</thead>
@@ -311,17 +315,17 @@ export default class ReactGantt extends Component {
 							{this.renderRows()}
 						</tbody>
 					</Table>
-          <WindowResizeListener onResize={windowSize => {this.drawScale();}} />
+					<WindowResizeListener onResize={windowSize => {this.drawScale();}} />
 				</div>
 			);
 		} else {
 			return (
 				<div id={this.state.tableId}>
-					<div className='popover' style={popoverStyle}></div>
+					<div className="popover" style={popoverStyle} />
 					<table style={tableStyle}>
 						<thead>
 							<tr>
-								<td></td>
+								<td />
 								<td style={scaleStyle}>{this.state.scale}</td>
 							</tr>
 						</thead>
@@ -329,9 +333,21 @@ export default class ReactGantt extends Component {
 							{this.renderRows()}
 						</tbody>
 					</table>
-          <WindowResizeListener onResize={windowSize => {this.drawScale();}} />
+					<WindowResizeListener onResize={windowSize => {this.drawScale();}} />
 				</div>
 			);
 		}
 	}
 }
+
+ReactGantt.propTypes = {
+	groups: React.PropTypes.array,
+	options: React.PropTypes.object,
+	rows: React.PropTypes.array,
+};
+
+ReactGantt.defaultProps = {
+	groups: {},
+	options: {},
+	rows: {},
+};

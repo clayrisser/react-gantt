@@ -1,6 +1,6 @@
 # ReactGantt
 
-__COMPONENT DESCRIPTION GOES HERE__
+A gantt chart for react. Uses (optional) [react-bootstrap](https://react-bootstrap.github.io/) and [moment.js](https://momentjs.com/)
 
 
 ## Demo & Examples
@@ -30,21 +30,70 @@ npm install react-gantt --save
 
 ## Usage
 
-__EXPLAIN USAGE HERE__
+Import the component to your React project and include as per any other React component.
+
+Available properties are `groups`, `rows` and `options` explained below.
 
 ```
-var ReactGantt = require('react-gantt');
+import ReactGantt from 'react-gantt';
 
 <ReactGantt>Example</ReactGantt>
 ```
 
 ### Properties
 
-* __DOCUMENT PROPERTIES HERE__
+#### Options
 
-### Notes
+```
+<ReactGantt options={{ ...options }} />
+```
 
-__ADDITIONAL USAGE NOTES__
+| Attribute | Description | Required | Type | Example/Default  |
+| :------------- |:-------------| :-----:| :-----:| :-----|
+| leftBound | Date for left bounds of table | yes | string | '2017-03-20' |
+| rightBound | Date for right bounds of table | yes | string | '2017-03-31' |
+| beforeClimaxColor | Color for left hand side of event bar. Accepts any css colors | no | string | 'red' |
+| afterClimaxColor | Color for left hand side of event bar. Accepts any css colors | no | string | 'blue' |
+| labelWidth | Width of left hand label. Accepts any css units | no | string | '80px' |
+| showBorders | Enable or disable the borders | no | boolean | true |
+| maxIntervalWidth | Maximum width between intervals | no | number | 100 |
+| intervalFormat | moment.js date format for intervals | no | string | 'YYYY MM DD' |
+| bootstrapped | Use react-bootstrap table | no | boolean | false |
+| responsive | Add responsive prop to bootstrap table | no | boolean | false |
+
+
+#### Rows
+
+```
+const rows = [
+	{
+		title: 'Task 1',
+		startDate: moment().set({hour: 0, date: 16, month: 8, year: 2016}).toDate(),
+		climaxDate: moment().set({hour: 0, date: 20, month: 8, year: 2016}).toDate(),
+		endDate: moment().set({hour: 0, date: 28, month: 8, year: 2016}).toDate(),
+		group: 'myTasks',
+		action: () => {console.log('the first one was clicked');}
+	},
+	...
+];
+
+return <ReactGantt rows={rows} />;
+```
+
+
+#### Groups
+
+```
+const groups = [
+	{
+		id: 'myTasks',
+		title: 'My Tasks'
+	},
+	...
+];
+
+return <ReactGantt groups={groups} />;
+```
 
 
 ## Development (`src`, `lib` and the build process)
