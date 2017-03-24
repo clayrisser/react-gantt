@@ -11,7 +11,7 @@ class App extends Component {
 			rightBound: moment().set({hour: 0, date: 29, month: 8, year: 2016}).toDate(),
 			labelWidth: '120px',
 			bootstrapped: true,
-			maxIntervalWidth: 150,
+			intervalWidth: 150,
 			showBorders: true,
 			intervalFormat: 'YYYY MM DD'
 		};

@@ -8,16 +8,23 @@ import GanttRow from './GanttRow';
 export default class ReactGantt extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      lifecycle: {
+        barsLoaded: false
+      }
+    };
   }
 
   componentWillMount() {
-    this.renderedTimeline = (<div></div>);
+    this.renderedTimeline = null;
   }
 
   componentDidMount() {
     window.addEventListener('resize', () => {
       this.forceUpdate();
+      setTimeout(() => {
+        this.forceUpdate();
+      }, 1000);
     });
     this.forceUpdate();
   }
@@ -26,10 +33,12 @@ export default class ReactGantt extends Component {
     this.renderedTimeline = this.renderTimeline();
   }
 
-  getMarkersCount(timespan, minIntervalWidth, timelineWidth) {
-    let markersCount = Math.round(timelineWidth / minIntervalWidth);
-    if (timespan.value < markersCount) markersCount = timespan.value;
-    return markersCount;
+  componentDidUpdate() {
+    if (this.renderedTimeline && !this.state.lifecycle.barsLoaded) {
+      this.setState({lifecycle: _.assign({}, this.state.lifecycle, {
+        barsLoaded: true
+      })});
+    }
   }
 
   renderTimeline() {
@@ -48,46 +57,53 @@ export default class ReactGantt extends Component {
         }
       }
     };
-    let options = this.props.options;
-    let leftBound = moment(options.leftBound);
-    let rightBound = moment(options.rightBound);
-    let timespan = this.getTimespan(leftBound, rightBound);
-    let minIntervalWidth = 160;
-    let timelineWidth = this.refs.timeline.offsetWidth;
-    let markersCount = this.getMarkersCount(timespan, minIntervalWidth, timelineWidth);
     let marks = [];
     let label = '';
-    let adjustedDate = this.roundDate(leftBound, timespan.type);
-    let leftoverTime = adjustedDate.diff(leftBound, 'seconds');
-    let timelineTime = rightBound.diff(leftBound, 'seconds');
-    let secondsPerPixel = timelineTime / timelineWidth;
-    let leftoverWidth = leftoverTime / secondsPerPixel;
-    marks.push(<td key={-1} style={{width: leftoverWidth + 'px'}}></td>);
-    for(let i = 0; i < markersCount; i++) {
-      let date = _.clone(adjustedDate);
+    let options = this.props.options;
+    let leftBoundDate = moment(options.leftBound);
+    let rightBoundDate = moment(options.rightBound);
+    let leftBoundTime = 0;
+    let rightBoundTime = rightBoundDate.diff(leftBoundDate, 'seconds');
+    let leftBoundPixels = 0;
+    let rightBoundPixels = this.refs.timeline.offsetWidth;
+    let secondsPerPixel = rightBoundTime / rightBoundPixels;
+    let timespan = this.getTimespan(leftBoundDate, rightBoundDate, options.intervalWidth, rightBoundPixels);
+    let adjustedDate = this.roundDate(leftBoundDate, timespan.type);
+    let leftoverTime = adjustedDate.diff(leftBoundDate, 'seconds');
+    let leftoverPixels = leftoverTime / secondsPerPixel;
+    marks.push(<td key={-1} style={{width: leftoverPixels + 'px'}}></td>);
+    for(let i = 0; i < timespan.markersCount; i++) {
+      let date = moment(adjustedDate);
       switch (timespan.type) {
         case 'years':
-          date.add(i * timespan.value, 'years');
+          date.add(i * timespan.interval, 'years');
           label = date.format('YYYY MM DD');
           break;
         case 'months':
-          date.add(i * timespan.value, 'months');
+          date.add(i * timespan.interval, 'months');
           label = date.format('YYYY MM DD');
           break;
         case 'days':
-          date.add(i * timespan.value, 'days');
+          date.add(i * timespan.interval, 'days');
           label = date.format('YYYY MM DD');
           break;
         case 'hours':
-          date.add(i * timespan.value, 'hours');
+          date.add(i * timespan.interval, 'hours');
           label = date.format('H:mm');
+          break;
         case 'minutes':
-          date.add(i * timespan.value, 'minutes');
+          date.add(i * timespan.interval, 'minutes');
           label = date.format('H:mm:ss');
+          break;
       }
       marks.push(<td key={i} style={style.marks.td}>
         {label}
       </td>);
+    }
+    this.timeline = {
+      pixels: rightBoundPixels,
+      time: rightBoundTime,
+      secondsPerPixel: secondsPerPixel
     }
     return(<div>
       <table style={style.marks.table}>
@@ -117,14 +133,16 @@ export default class ReactGantt extends Component {
       }
     };
     let rows = this.props.rows.map((row) => {
-      return (<GanttRow key={row.title} row={row} />);
+      return (<GanttRow key={row.title} row={row} options={this.props.options} timeline={this.timeline} />);
     });
     return (<div>
       <table style={style.table}>
         <thead>
           <tr>
             <th style={_.assign({}, style.th, style.leftTh)} />
-            <th style={_.assign({}, style.th, style.rightTh)} ref="timeline">{this.renderedTimeline}</th>
+            <th style={_.assign({}, style.th, style.rightTh)} ref="timeline">
+              {this.renderedTimeline}
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -134,7 +152,7 @@ export default class ReactGantt extends Component {
     </div>);
   }
 
-  getTimespan(leftBound, rightBound) {
+  getTimespan(leftBound, rightBound, intervalWidth, timelinePixels) {
     let timespan = {
       value: rightBound.diff(leftBound, 'years'),
       type: 'years'
@@ -163,6 +181,10 @@ export default class ReactGantt extends Component {
         }
       }
     }
+    timespan.markersCount = Math.round(timelinePixels / intervalWidth);
+    if (timespan.value < timespan.markersCount) timespan.markersCount = timespan.value;
+    timespan.interval = Math.round(timespan.value / timespan.markersCount);
+    if (timespan.interval === 0) timespan.interval = 1;
     return timespan;
   }
 

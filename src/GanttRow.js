@@ -9,6 +9,7 @@ export default class GanttRow extends Component {
 	}
 
 	render() {
+    if (!this.props.timeline) return(<tr></tr>);
     let style = {
       tr: {
         border: '2px solid black'
@@ -29,7 +30,7 @@ export default class GanttRow extends Component {
         {this.props.row.title}
       </td>
       <td style={_.assign({}, style.td, style.rightTd)}>
-        <GanttBar row={this.props.row} />
+        <GanttBar row={this.props.row} options={this.props.options} timeline={this.props.timeline} />
 		  </td>
     </tr>);
 	}

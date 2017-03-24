@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import _ from 'underscore';
+import moment from 'moment';
 
 export default class GanttBar extends Component {
 	constructor(props) {
@@ -8,8 +9,50 @@ export default class GanttBar extends Component {
 	}
 
 	render() {
+    let style = {
+      bar: {
+       marginTop: '0px',
+        marginBottom: '0px',
+        float: 'left',
+        height: '30px',
+        boxShadow: '2px 2px 4px #000000'
+      }
+    }
+    let options = this.props.options;
+    let row = this.props.row;
+    let timeline = this.props.timeline;
+    let secondsPerPixel = timeline.secondsPerPixel;
+    let leftBoundDate = moment(options.leftBound);
+    let rightBoundDate = moment(options.rightBound);
+    let startDate = moment(row.startDate);
+    let climaxDate = moment(row.climaxDate);
+    let endDate = moment(row.endDate);
+    let timelineTime = timeline.time;
+    let startTime = startDate.diff(leftBoundDate, 'seconds');
+    let climaxTime = climaxDate.diff(leftBoundDate, 'seconds');
+    let endTime = endDate.diff(leftBoundDate, 'seconds');
+    let timelinePixels = timeline.pixels;
+    let startPixels = Math.floor(startTime / secondsPerPixel);
+    let climaxPixels = Math.floor(climaxTime / secondsPerPixel);
+    let endPixels = Math.floor(endTime / secondsPerPixel);
+    style.bar1 = {
+      marginLeft: startPixels + 'px',
+      marginRight: '0px',
+      backgroundColor: 'blue',
+      width: (climaxPixels - startPixels) + 'px',
+      borderTopLeftRadius: '10px',
+      borderBottomLeftRadius: '10px'
+    };
+    style.bar2 = {
+      marginLeft: '0px',
+      backgroundColor: 'green',
+      width: (endPixels - climaxPixels) + 'px',
+      borderTopRightRadius: '10px',
+      borderBottomRightRadius: '10px'
+    };
     return(<div>
-      i am the bar
+      <div style={_.assign({}, style.bar, style.bar1)} />
+      <div style={_.assign({}, style.bar, style.bar2)} />
 		</div>);
 	}
 }
