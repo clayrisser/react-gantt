@@ -14,10 +14,10 @@ export default class GanttBar extends Component {
        marginTop: '0px',
         marginBottom: '0px',
         float: 'left',
-        height: '30px',
-        boxShadow: '2px 2px 4px #000000'
+        height: '30px'
       }
     }
+    let calibration = 0.978;
     let options = this.props.options;
     let row = this.props.row;
     let timeline = this.props.timeline;
@@ -32,24 +32,54 @@ export default class GanttBar extends Component {
     let climaxTime = climaxDate.diff(leftBoundDate, 'seconds');
     let endTime = endDate.diff(leftBoundDate, 'seconds');
     let timelinePixels = timeline.pixels;
-    let startPixels = Math.floor(startTime / secondsPerPixel);
-    let climaxPixels = Math.floor(climaxTime / secondsPerPixel);
-    let endPixels = Math.floor(endTime / secondsPerPixel);
+    let startPixels = Math.floor((startTime / secondsPerPixel) * calibration);
+    let climaxPixels = Math.floor((climaxTime / secondsPerPixel) * calibration);
+    let endPixels = Math.floor((endTime / secondsPerPixel) * calibration);
     style.bar1 = {
-      marginLeft: startPixels + 'px',
-      marginRight: '0px',
+      margin: '0px',
       backgroundColor: 'blue',
-      width: (climaxPixels - startPixels) + 'px',
       borderTopLeftRadius: '10px',
       borderBottomLeftRadius: '10px'
     };
     style.bar2 = {
-      marginLeft: '0px',
+      margin: '0px',
       backgroundColor: 'green',
-      width: (endPixels - climaxPixels) + 'px',
       borderTopRightRadius: '10px',
       borderBottomRightRadius: '10px'
     };
+    if (startDate.isBefore(leftBoundDate)) {
+      startPixels = 0;
+      style.bar1.borderTopLeftRadius = '0px';
+      style.bar1.borderBottomLeftRadius = '0px';
+    }
+    if (climaxDate.isBefore(leftBoundDate)) {
+      climaxPixels = 0;
+      style.bar1.display = 'none';
+    }
+    if (endDate.isBefore(leftBoundDate)) {
+      style.bar1.display = 'none';
+      style.bar2.display = 'none';
+    }
+    if (startDate.isAfter(rightBoundDate)) {
+      style.bar1.display = 'none';
+      style.bar2.display = 'none';
+    }
+    if (climaxDate.isAfter(rightBoundDate)) {
+      climaxPixels = timelinePixels - 4;
+      style.bar2.display = 'none';
+    }
+    if (endDate.isAfter(rightBoundDate)) {
+      endPixels = timelinePixels - 4;
+      style.bar2.borderTopRightRadius = '0px';
+      style.bar2.borderBottomRightRadius = '0px';
+    }
+    style.bar1 = _.assign({}, style.bar1, {
+      marginLeft: startPixels + 'px',
+      width: (climaxPixels - startPixels) + 'px'
+    });
+    style.bar2 = _.assign({}, style.bar2, {
+      width: (endPixels - climaxPixels) + 'px'
+    });
     return(<div>
       <div style={_.assign({}, style.bar, style.bar1)} />
       <div style={_.assign({}, style.bar, style.bar2)} />

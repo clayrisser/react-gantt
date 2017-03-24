@@ -18,15 +18,23 @@ class App extends Component {
 		var rows = [
 			{
 				title: 'Task 1',
-				startDate: moment().set({hour: 0, date: 16, month: 8, year: 2016}).toDate(),
+				startDate: moment().set({hour: 0, date: 16, month: 2, year: 2017}).toDate(),
+				climaxDate: moment().set({hour: 0, date: 20, month: 3, year: 2017}).toDate(),
+				endDate: moment().set({hour: 0, date: 28, month: 4, year: 2017}).toDate(),
+				group: 'myTasks',
+				onClick: () => {console.log('the first one was clicked');}
+			},
+			{
+				title: 'Task 2',
+				startDate: moment().set({hour: 0, date: 16, month: 2, year: 2016}).toDate(),
 				climaxDate: moment().set({hour: 0, date: 20, month: 8, year: 2016}).toDate(),
 				endDate: moment().set({hour: 0, date: 28, month: 8, year: 2016}).toDate(),
 				group: 'myTasks',
 				onClick: () => {console.log('the first one was clicked');}
 			},
 			{
-				title: 'Task 2',
-				startDate: moment().set({hour: 0, date: 11, month: 8, year: 2016}).toDate(),
+				title: 'Task 3',
+				startDate: moment().set({hour: 0, date: 11, month: 1, year: 2012}).toDate(),
 				climaxDate: moment().set({hour: 0, date: 13, month: 8, year: 2016}).toDate(),
 				endDate: moment().set({hour: 0, date: 19, month: 8, year: 2016}).toDate(),
 				group: 'myTasks',
