@@ -18,35 +18,53 @@ class App extends Component {
 		var rows = [
 			{
 				title: 'Task 1',
-				startDate: moment().set({hour: 0, date: 16, month: 2, year: 2017}).toDate(),
-				climaxDate: moment().set({hour: 0, date: 20, month: 3, year: 2017}).toDate(),
-				endDate: moment().set({hour: 0, date: 28, month: 4, year: 2017}).toDate(),
+        transitions: {
+          start: moment().set({hour: 0, date: 9, month: 7, year: 2016}).toDate(),
+          climax: moment().set({hour: 0, date: 4, month: 8, year: 2016}).toDate(),
+				  end: moment().set({hour: 0, date: 17, month: 8, year: 2016}).toDate()
+        },
 				group: 'myTasks',
 				onClick: () => {console.log('the first one was clicked');}
 			},
 			{
 				title: 'Task 2',
-				startDate: moment().set({hour: 0, date: 16, month: 2, year: 2016}).toDate(),
-				climaxDate: moment().set({hour: 0, date: 20, month: 8, year: 2016}).toDate(),
-				endDate: moment().set({hour: 0, date: 28, month: 8, year: 2016}).toDate(),
+        transitions: {
+          start: moment().set({hour: 0, date: 27, month: 2, year: 2016}).toDate(),
+          climax: moment().set({hour: 0, date: 9, month: 7, year: 2016}).toDate(),
+				  end: moment().set({hour: 0, date: 22, month: 7, year: 2016}).toDate()
+        },
 				group: 'myTasks',
-				onClick: () => {console.log('the first one was clicked');}
+				onClick: () => {console.log('the second one was clicked');}
 			},
 			{
 				title: 'Task 3',
-				startDate: moment().set({hour: 0, date: 11, month: 1, year: 2012}).toDate(),
-				climaxDate: moment().set({hour: 0, date: 13, month: 8, year: 2016}).toDate(),
-				endDate: moment().set({hour: 0, date: 19, month: 8, year: 2016}).toDate(),
+        transitions: {
+          start: moment().set({hour: 0, date: 1, month: 2, year: 2016}).toDate(),
+          climax: moment().set({hour: 0, date: 2, month: 7, year: 2016}).toDate(),
+				  end: moment().set({hour: 0, date: 4, month: 11, year: 2016}).toDate()
+        },
 				group: 'myTasks',
-				onClick: () => {console.log('the second one was clicked');}
+				onClick: () => {console.log('the third one was clicked');}
 			}
 		];
-		var groups = [
-			{
-				id: 'myTasks',
-				title: 'My Tasks'
+		var groups = {
+      myTasks: {
+				title: 'My Tasks',
+        transitions: {
+          start: {
+            name: 'Start',
+            color: 'blue',
+          },
+          climax: {
+            name: 'Climax',
+            color: 'green'
+          },
+          end: {
+            name: 'End'
+          }
+        }
 			}
-		];
+		};
 
 		return (
 			<div>

@@ -30,7 +30,7 @@ export default class GanttRow extends Component {
         {this.props.row.title}
       </td>
       <td style={_.assign({}, style.td, style.rightTd)}>
-        <GanttBar row={this.props.row} options={this.props.options} timeline={this.props.timeline} />
+        <GanttBar row={this.props.row} group={this.props.group} options={this.props.options} timeline={this.props.timeline} />
 		  </td>
     </tr>);
 	}

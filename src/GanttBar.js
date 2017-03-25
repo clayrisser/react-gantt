@@ -17,72 +17,94 @@ export default class GanttBar extends Component {
         height: '30px'
       }
     }
-    let calibration = 0.978;
+    let calibration = 0.988;
     let options = this.props.options;
     let row = this.props.row;
+    let group = this.props.group;
     let timeline = this.props.timeline;
     let secondsPerPixel = timeline.secondsPerPixel;
     let leftBoundDate = moment(options.leftBound);
     let rightBoundDate = moment(options.rightBound);
-    let startDate = moment(row.startDate);
-    let climaxDate = moment(row.climaxDate);
-    let endDate = moment(row.endDate);
-    let timelineTime = timeline.time;
-    let startTime = startDate.diff(leftBoundDate, 'seconds');
-    let climaxTime = climaxDate.diff(leftBoundDate, 'seconds');
-    let endTime = endDate.diff(leftBoundDate, 'seconds');
-    let timelinePixels = timeline.pixels;
-    let startPixels = Math.floor((startTime / secondsPerPixel) * calibration);
-    let climaxPixels = Math.floor((climaxTime / secondsPerPixel) * calibration);
-    let endPixels = Math.floor((endTime / secondsPerPixel) * calibration);
-    style.bar1 = {
-      margin: '0px',
-      backgroundColor: 'blue',
-      borderTopLeftRadius: '10px',
-      borderBottomLeftRadius: '10px'
-    };
-    style.bar2 = {
-      margin: '0px',
-      backgroundColor: 'green',
-      borderTopRightRadius: '10px',
-      borderBottomRightRadius: '10px'
-    };
-    if (startDate.isBefore(leftBoundDate)) {
-      startPixels = 0;
-      style.bar1.borderTopLeftRadius = '0px';
-      style.bar1.borderBottomLeftRadius = '0px';
-    }
-    if (climaxDate.isBefore(leftBoundDate)) {
-      climaxPixels = 0;
-      style.bar1.display = 'none';
-    }
-    if (endDate.isBefore(leftBoundDate)) {
-      style.bar1.display = 'none';
-      style.bar2.display = 'none';
-    }
-    if (startDate.isAfter(rightBoundDate)) {
-      style.bar1.display = 'none';
-      style.bar2.display = 'none';
-    }
-    if (climaxDate.isAfter(rightBoundDate)) {
-      climaxPixels = timelinePixels - 4;
-      style.bar2.display = 'none';
-    }
-    if (endDate.isAfter(rightBoundDate)) {
-      endPixels = timelinePixels - 4;
-      style.bar2.borderTopRightRadius = '0px';
-      style.bar2.borderBottomRightRadius = '0px';
-    }
-    style.bar1 = _.assign({}, style.bar1, {
-      marginLeft: startPixels + 'px',
-      width: (climaxPixels - startPixels) + 'px'
+    let transitionDates = {};
+    _.each(row.transitions, (date, key) => {
+      transitionDates[key] = moment(row.transitions[key]);
     });
-    style.bar2 = _.assign({}, style.bar2, {
-      width: (endPixels - climaxPixels) + 'px'
+    let timelineTime = timeline.time;
+    let transitionTimes = {};
+    _.each(row.transitions, (date, key) => {
+      transitionTimes[key] = transitionDates[key].diff(leftBoundDate, 'seconds')
+    });
+    let timelinePixels = timeline.pixels;
+    let transitionPixels = {};
+    _.each(row.transitions, (date, key) => {
+      transitionPixels[key] = Math.floor((transitionTimes[key] / secondsPerPixel) * calibration);
+    });
+    let bars = [];
+    if (_.keys(row.transitions).length > 0) {
+      let i = 0;
+      _.each(transitionPixels, (pixels, key) => {
+        if (i === 0) {
+          bars.push({
+              pixels: pixels,
+              startDate: transitionDates[key],
+              style: {
+                marginLeft: transitionPixels[key] + 'px',
+                backgroundColor: group.transitions[key].color,
+                borderTopLeftRadius: '10px',
+                borderBottomLeftRadius: '10px'
+              }
+          });
+        } else if (i === _.keys(transitionPixels).length - 1) {
+          bars[bars.length - 1].endDate = transitionDates.end;
+          bars[bars.length - 1].style.width = (transitionPixels.end - bars[bars.length - 1].pixels) + 'px';
+          bars[bars.length - 1].style.borderTopRightRadius = '10px';
+          bars[bars.length - 1].style.borderBottomRightRadius = '10px';
+        } else {
+          let previousBar = bars[i - 1];
+          previousBar.endDate = transitionDates[key];
+          previousBar.style.width = (pixels - previousBar.pixels) + 'px';
+          bars.push({
+            pixels: pixels,
+            startDate: transitionDates[key],
+            style: {
+              backgroundColor: group.transitions[key].color
+            }
+          });
+        }
+        i++;
+      });
+    } else {
+      bars[0].endDate = transitionDates.end;
+      bars[0].style.width = (transitionPixels.end - transitionPixels.end) + 'px';
+      bars[0].style.borderTopRightRadius = '10px';
+      bars[0].style.borderBottomRightRadius = '10px';
+    }
+    for(let i = 0; i < bars.length; i++) {
+      let bar = bars[i];
+      if (bar.startDate.isBefore(leftBoundDate)) {
+        bar.style.width = bars[i + 1] ? bars[i + 1].pixels + 'px' : transitionPixels.end + 'px';
+        bar.style.marginLeft = '0px';
+        bar.style.borderTopLeftRadius = '0px';
+        bar.style.borderBottomLeftRadius = '0px';
+      }
+      if (bar.endDate.isAfter(rightBoundDate)) {
+        for(let j = i + 1; j < bars.length; j++) {
+          let bar = bars[j];
+          bar.style.display = 'none';
+        }
+        bar.style.width = (timelinePixels - bar.pixels - 4) + 'px';
+        bar.style.borderTopRightRadius = '0px';
+        bar.style.borderBottomRightRadius = '0px';
+      }
+    }
+    console.log(bars);
+    let count = 0;
+    let renderedBars = _.map(bars, (bar) => {
+      count++;
+      return (<div key={count} style={_.assign({}, style.bar, bar.style)} />);
     });
     return(<div>
-      <div style={_.assign({}, style.bar, style.bar1)} />
-      <div style={_.assign({}, style.bar, style.bar2)} />
+      {renderedBars}
 		</div>);
 	}
 }

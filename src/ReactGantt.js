@@ -58,7 +58,6 @@ export default class ReactGantt extends Component {
       }
     };
     let marks = [];
-    let label = '';
     let options = this.props.options;
     let leftBoundDate = moment(options.leftBound);
     let rightBoundDate = moment(options.rightBound);
@@ -73,6 +72,7 @@ export default class ReactGantt extends Component {
     let leftoverPixels = leftoverTime / secondsPerPixel;
     marks.push(<td key={-1} style={{width: leftoverPixels + 'px'}}></td>);
     for(let i = 0; i < timespan.markersCount; i++) {
+      let label = '';
       let date = moment(adjustedDate);
       switch (timespan.type) {
         case 'years':
@@ -117,6 +117,7 @@ export default class ReactGantt extends Component {
   }
 
   render() {
+    console.log('************');
     let style = {
       table: {
         boder: '2px solid black',
@@ -133,7 +134,7 @@ export default class ReactGantt extends Component {
       }
     };
     let rows = this.props.rows.map((row) => {
-      return (<GanttRow key={row.title} row={row} options={this.props.options} timeline={this.timeline} />);
+      return (<GanttRow key={row.title} group={this.props.groups[row.group]} row={row} options={this.props.options} timeline={this.timeline} />);
     });
     return (<div>
       <table style={style.table}>
@@ -201,13 +202,13 @@ export default class ReactGantt extends Component {
 }
 
 ReactGantt.propTypes = {
-  groups: React.PropTypes.array,
+  groups: React.PropTypes.object,
   options: React.PropTypes.object,
   rows: React.PropTypes.array
 };
 
 ReactGantt.defaultProps = {
-  groups: [],
+  groups: {},
   options: {},
   rows: []
 };
