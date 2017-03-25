@@ -16,6 +16,7 @@ export default class ReactGantt extends Component {
   }
 
   componentWillMount() {
+    this.errors = this.validateProps();
     this.renderedTimeline = null;
   }
 
@@ -116,6 +117,20 @@ export default class ReactGantt extends Component {
     </div>);
   }
 
+  renderErrors() {
+    let style = {
+      h6: {
+        color: '#FF0000'
+      }
+    };
+    let renderedErrors = this.errors.map(err => {
+      return(<h6 style={style.h6}>{err.message}</h6>);
+    });
+    return (<div>
+      {renderedErrors}
+    </div>);
+  }
+
   render() {
     let style = {
       table: {
@@ -132,6 +147,7 @@ export default class ReactGantt extends Component {
         width: '100%'
       }
     };
+    if (this.errors.length > 0) return this.renderErrors();
     let rows = this.props.rows.map((row) => {
       return (<GanttRow key={row.title} group={this.props.groups[row.group]} row={row} options={this.props.options} timeline={this.timeline} />);
     });
@@ -186,6 +202,24 @@ export default class ReactGantt extends Component {
     timespan.interval = Math.round(timespan.value / timespan.markersCount);
     if (timespan.interval === 0) timespan.interval = 1;
     return timespan;
+  }
+
+  validateProps() {
+    let errors = [];
+    _.each(this.props.rows, (row) => {
+      let keys = _.keys(row.transitions);
+      if (keys[0] !== 'start') {
+        let err = new Error('\'transitions\' property in ' + row.title + ' must begin with \'start\' property');
+        errors.push(err);
+        console.error(err.message);
+      }
+      if (keys[keys.length - 1] !== 'end') {
+        let err = new Error('\'transitions\' property in ' + row.title + ' must finish with \'end\' property');
+        errors.push(err);
+        console.error(err.message);
+      }
+    });
+    return errors;
   }
 
   roundDate(date, type) {

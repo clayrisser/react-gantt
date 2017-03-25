@@ -20,7 +20,7 @@ class App extends Component {
 				title: 'Task 1',
         transitions: {
           start: moment().set({hour: 0, date: 9, month: 7, year: 2016}).toDate(),
-          climax: moment().set({hour: 0, date: 4, month: 8, year: 2016}).toDate(),
+          climax1: moment().set({hour: 0, date: 4, month: 8, year: 2016}).toDate(),
 				  end: moment().set({hour: 0, date: 17, month: 8, year: 2016}).toDate()
         },
 				group: 'myTasks',
@@ -30,7 +30,7 @@ class App extends Component {
 				title: 'Task 2',
         transitions: {
           start: moment().set({hour: 0, date: 27, month: 2, year: 2016}).toDate(),
-          climax: moment().set({hour: 0, date: 9, month: 7, year: 2016}).toDate(),
+          climax1: moment().set({hour: 0, date: 9, month: 7, year: 2016}).toDate(),
 				  end: moment().set({hour: 0, date: 22, month: 7, year: 2016}).toDate()
         },
 				group: 'myTasks',
@@ -40,8 +40,8 @@ class App extends Component {
 				title: 'Task 3',
         transitions: {
           start: moment().set({hour: 0, date: 12, month: 6, year: 2016}).toDate(),
-          climax: moment().set({hour: 0, date: 2, month: 7, year: 2016}).toDate(),
-          wow: moment().set({hour: 0, date: 2, month: 8, year: 2016}).toDate(),
+          climax1: moment().set({hour: 0, date: 2, month: 7, year: 2016}).toDate(),
+          climax2: moment().set({hour: 0, date: 2, month: 8, year: 2016}).toDate(),
 				  end: moment().set({hour: 0, date: 24, month: 8, year: 2016}).toDate()
         },
 				group: 'myTasks',
@@ -56,12 +56,12 @@ class App extends Component {
             name: 'Start',
             color: 'blue',
           },
-          climax: {
-            name: 'Climax',
+          climax1: {
+            name: 'Climax 1',
             color: 'green'
           },
-          wow: {
-            name: 'Wow',
+          climax2: {
+            name: 'Climax 2',
             color: 'red'
           },
           end: {

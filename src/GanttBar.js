@@ -79,11 +79,6 @@ export default class GanttBar extends Component {
       bars[0].style.borderTopRightRadius = '10px';
       bars[0].style.borderBottomRightRadius = '10px';
     }
-
-
-//         |            [      |                  |            ]           //
-
-
     for(let i = 0; i < bars.length; i++) {
       let bar = bars[i];
       if (bar.startDate.isBefore(leftBoundDate) && bar.endDate.isAfter(rightBoundDate)) {
