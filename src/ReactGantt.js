@@ -117,7 +117,6 @@ export default class ReactGantt extends Component {
   }
 
   render() {
-    console.log('************');
     let style = {
       table: {
         boder: '2px solid black',

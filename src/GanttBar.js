@@ -79,8 +79,26 @@ export default class GanttBar extends Component {
       bars[0].style.borderTopRightRadius = '10px';
       bars[0].style.borderBottomRightRadius = '10px';
     }
+
+
+//         |            [      |                  |            ]           //
+
+
     for(let i = 0; i < bars.length; i++) {
       let bar = bars[i];
+      if (bar.startDate.isBefore(leftBoundDate) && bar.endDate.isAfter(rightBoundDate)) {
+        for(let j = i + 1; j < bars.length; j++) {
+          let bar = bars[j];
+          bar.style.display = 'none';
+        }
+        bar.style.width = timelinePixels + 'px';
+        bar.style.marginLeft = '0px';
+        bar.style.borderTopLeftRadius = '0px';
+        bar.style.borderBottomLeftRadius = '0px';
+        bar.style.borderTopRightRadius = '0px';
+        bar.style.borderBottomRightRadius = '0px';
+        break;
+      }
       if (bar.startDate.isBefore(leftBoundDate)) {
         bar.style.width = bars[i + 1] ? bars[i + 1].pixels + 'px' : transitionPixels.end + 'px';
         bar.style.marginLeft = '0px';
@@ -97,7 +115,6 @@ export default class GanttBar extends Component {
         bar.style.borderBottomRightRadius = '0px';
       }
     }
-    console.log(bars);
     let count = 0;
     let renderedBars = _.map(bars, (bar) => {
       count++;

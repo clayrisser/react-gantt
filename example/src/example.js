@@ -39,9 +39,10 @@ class App extends Component {
 			{
 				title: 'Task 3',
         transitions: {
-          start: moment().set({hour: 0, date: 1, month: 2, year: 2016}).toDate(),
+          start: moment().set({hour: 0, date: 12, month: 6, year: 2016}).toDate(),
           climax: moment().set({hour: 0, date: 2, month: 7, year: 2016}).toDate(),
-				  end: moment().set({hour: 0, date: 4, month: 11, year: 2016}).toDate()
+          wow: moment().set({hour: 0, date: 2, month: 8, year: 2016}).toDate(),
+				  end: moment().set({hour: 0, date: 24, month: 8, year: 2016}).toDate()
         },
 				group: 'myTasks',
 				onClick: () => {console.log('the third one was clicked');}
@@ -58,6 +59,10 @@ class App extends Component {
           climax: {
             name: 'Climax',
             color: 'green'
+          },
+          wow: {
+            name: 'Wow',
+            color: 'red'
           },
           end: {
             name: 'End'
