@@ -40,6 +40,9 @@ export default class GanttTimeline extends Component {
     let style = {
       td: {
         borderLeft: '2px solid black'
+      },
+      leftoverTd: {
+        padding: '0px'
       }
     };
     let marks = [];
@@ -54,8 +57,11 @@ export default class GanttTimeline extends Component {
     let timespan = this.getTimespan(leftBoundDate, rightBoundDate, options.intervalWidth, rightBoundPixels);
     let adjustedDate = this.roundDate(leftBoundDate, timespan.type);
     let leftoverTime = adjustedDate.diff(leftBoundDate, 'seconds');
-    let leftoverPixels = leftoverTime / secondsPerPixel;
-    marks.push(<td key={-1} style={{width: leftoverPixels + 'px'}}></td>);
+    let leftoverPixels = Math.floor(leftoverTime / secondsPerPixel);
+    style.leftoverTd = _.assign({}, style.leftoverTd, {
+      width: leftoverPixels + 'px'
+    });
+    marks.push(<td key={-1} style={style.leftoverTd}></td>);
     for(let i = 0; i < timespan.markersCount; i++) {
       let label = '';
       let date = moment(adjustedDate);
@@ -159,11 +165,11 @@ export default class GanttTimeline extends Component {
   roundDate(date, type) {
     switch(type) {
       case 'year':
-        return moment().year(date.year() + (date.month() > 0 ? 1 : 0)).month('01').date('01');
+        return moment().year(date.year() + (date.month() > 0 ? 1 : 0)).month(0).date(1).hour(0);
       case 'month':
-        return moment().year(date.year()).month(date.month() + (date.date() > 0 ? 1 : 0)).date('01');
+        return moment().year(date.year()).month(date.month() + (date.date() > 0 ? 1 : 0)).date(1).hour(0);
       case 'days':
-        return moment().year(date.year()).month(date.month()).date(date.date() + (date.hour() > 0 ? 1 : 0));
+        return moment().year(date.year()).month(date.month()).date(date.date() + (date.hour() > 0 ? 1 : 0)).hour(0);
     }
   }
 

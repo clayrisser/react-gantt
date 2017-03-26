@@ -7,7 +7,7 @@ class App extends Component {
 
 	render() {
 		var options = {
-			leftBound: moment().set({hour: 0, date: 1, month: 6, year: 2016}).toDate(),
+			leftBound: moment().set({hour: 0, date: 30, month: 5, year: 2016}).toDate(),
 			rightBound: moment().set({hour: 0, date: 29, month: 8, year: 2016}).toDate(),
 			labelWidth: '120px',
 			bootstrapped: true,
@@ -19,7 +19,7 @@ class App extends Component {
 			{
 				title: 'Task 1',
         transitions: {
-          start: moment().set({hour: 0, date: 9, month: 7, year: 2016}).toDate(),
+          start: moment().set({hour: 0, date: 1, month: 6, year: 2016}).toDate(),
           climax1: moment().set({hour: 0, date: 4, month: 8, year: 2016}).toDate(),
 				  end: moment().set({hour: 0, date: 17, month: 8, year: 2016}).toDate()
         },
@@ -42,7 +42,7 @@ class App extends Component {
           start: moment().set({hour: 0, date: 12, month: 6, year: 2016}).toDate(),
           climax1: moment().set({hour: 0, date: 2, month: 7, year: 2016}).toDate(),
           climax2: moment().set({hour: 0, date: 2, month: 8, year: 2016}).toDate(),
-				  end: moment().set({hour: 0, date: 24, month: 8, year: 2016}).toDate()
+				  end: moment().set({hour: 0, date: 24, month: 9, year: 2016}).toDate()
         },
 				group: 'myTasks',
 				onClick: () => {console.log('the third one was clicked');}

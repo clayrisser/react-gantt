@@ -18,7 +18,7 @@ export default class GanttBar extends Component {
         height: '30px'
       }
     }
-    let calibration = 0.988;
+    let calibration = 0.987;
     let options = this.props.options;
     let row = this.props.row;
     let group = this.props.group;
