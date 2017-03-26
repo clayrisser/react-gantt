@@ -4,6 +4,10 @@ import ReactGantt from 'react-gantt';
 import moment from 'moment';
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
 
 	render() {
 		var options = {
@@ -24,7 +28,6 @@ class App extends Component {
 				  end: moment().set({hour: 0, date: 17, month: 8, year: 2016}).toDate()
         },
 				group: 'myTasks',
-				onClick: () => {console.log('the first one was clicked');}
 			},
 			{
 				title: 'Task 2',
