@@ -22,24 +22,20 @@ export default class ReactGantt extends Component {
 
   componentDidMount() {
     window.addEventListener('resize', () => {
+      this.timeline = null;
       this.forceUpdate();
-      setTimeout(() => {
-        this.forceUpdate();
-      }, 1000);
+      this.refs.ganttTimeline.onResize();
+      this.forceUpdate();
     });
     this.forceUpdate();
   }
 
   componentDidUpdate() {
     this.timelinePixels = this.refs.timeline.offsetWidth;
-    if (!this.timeline) {
-      this.forceUpdate();
-    } else {
-      if (!this.state.lifecycle.barsLoaded) {
-        this.setState({lifecycle: _.assign({}, this.state.lifecycle, {
-          barsLoaded: true
-        })});
-      }
+    if (this.timeline && !this.state.lifecycle.barsLoaded) {
+      this.setState({lifecycle: _.assign({}, this.state.lifecycle, {
+        barsLoaded: true
+      })});
     }
   }
 
@@ -88,7 +84,14 @@ export default class ReactGantt extends Component {
           <tr>
             <th style={_.assign({}, style.th, style.leftTh)} />
             <th style={_.assign({}, style.th, style.rightTh)} ref="timeline">
-              <GanttTimeline options={this.props.options} setTimeline={this.setTimeline.bind(this)} timelinePixels={this.timelinePixels} />
+              <GanttTimeline
+                ref="ganttTimeline"
+                options={this.props.options}
+                setTimeline={this.setTimeline.bind(this)}
+                timelinePixels={this.timelinePixels}
+                onTimelinePixelsReady={this.onTimelinePixelsReady.bind(this)}
+                onTimelineReady={this.onTimelineReady.bind(this)}
+              />
             </th>
           </tr>
         </thead>
@@ -99,8 +102,17 @@ export default class ReactGantt extends Component {
     </div>);
   }
 
+  onTimelinePixelsReady() {
+    this.forceUpdate();
+  }
+
   setTimeline(timeline) {
     this.timeline = timeline;
+    this.forceUpdate();
+  }
+
+  onTimelineReady() {
+    this.forceUpdate();
   }
 
   validateProps() {

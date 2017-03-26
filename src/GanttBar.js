@@ -9,6 +9,7 @@ export default class GanttBar extends Component {
 	}
 
 	render() {
+    if (!this.props.timeline) return(<div></div>);
     let style = {
       bar: {
        marginTop: '0px',

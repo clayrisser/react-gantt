@@ -9,7 +9,6 @@ export default class GanttRow extends Component {
 	}
 
 	render() {
-    if (!this.props.timeline) return(<tr></tr>);
     let style = {
       tr: {
         border: '2px solid black'

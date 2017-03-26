@@ -8,8 +8,39 @@ export default class GanttTimeline extends Component {
     this.state = {};
   }
 
+  componentWillMount() {
+    this.timeline = null;
+    this.timelinePixelsReady = false;
+    this.onTimelinePixelsReadyFired = false;
+    this.timelineReady = false;
+    this.onTimelineReadyFired = false;
+    this.onSetTimelineFired = false;
+  }
+
+  componentDidUpdate() {
+    if (this.timelinePixelsReady && !this.onTimelinePixelsReadyFired) {
+      this.props.onTimelinePixelsReady()
+      this.onTimelinePixelsReadyFired = true;
+      this.timelinePixelsReady = false;
+    }
+    if (this.timelineReady && !this.onTimelineReadyFired) {
+      this.props.onTimelineReady();
+      this.onTimelineReadyFired = true;
+      this.timelineReady = false;
+    }
+    if (this.setTimelineReady && !this.onSetTimelineFired) {
+      this.props.setTimeline(this.timeline);
+      this.onSetTimelineFired = true;
+      this.setTimelineReady = false;
+      this.timelineReady = true;
+    }
+  }
+
   render() {
-    if (!this.props.timelinePixels) return(<div></div>);
+    if (!this.props.timelinePixels)  {
+      this.timelinePixelsReady = true;
+      return(<div></div>);
+    }
     let style = {
       marks: {
         table: {
@@ -68,11 +99,12 @@ export default class GanttTimeline extends Component {
         {label}
       </td>);
     }
-    this.props.setTimeline({
+    this.timeline = {
       pixels: rightBoundPixels,
       time: rightBoundTime,
       secondsPerPixel: secondsPerPixel
-    });
+    };
+    this.setTimelineReady = true;
     return(<div>
       <table style={style.marks.table}>
         <tbody>
@@ -130,16 +162,26 @@ export default class GanttTimeline extends Component {
         return moment().year(date.year()).month(date.month()).date(date.date() + (date.hour() > 0 ? 1 : 0));
     }
   }
+
+  onResize() {
+    this.onTimelinePixelsReadyFired = false;
+    this.onTimelineReadyFired = false;
+    this.onSetTimelineFired = false;
+  }
 }
 
 GanttTimeline.propTypes = {
-  timelinePixels: React.PropTypes.number,
+  onTimelinePixelsReady: React.PropTypes.func,
+  onTimelineReady: React.PropTypes.func,
+  options: React.PropTypes.object,
   setTimeline: React.PropTypes.func,
-  options: React.PropTypes.object
+  timelinePixels: React.PropTypes.number
 };
 
 GanttTimeline.defaultProps = {
-  timelinePixels: 0,
+  onTimelinePixelsReady: function(){},
+  onTimelineReady: function(){},
+  options: {},
   setTimeline: function(){},
-  options: {}
+  timelinePixels: 0
 }
