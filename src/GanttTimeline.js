@@ -36,24 +36,10 @@ export default class GanttTimeline extends Component {
     }
   }
 
-  render() {
-    if (!this.props.timelinePixels)  {
-      this.timelinePixelsReady = true;
-      return(<div></div>);
-    }
+  renderMarks() {
     let style = {
-      marks: {
-        table: {
-          width: '100%',
-          height: '20px'
-        },
-        tr: {
-          padding: '0px',
-          margin: '0px'
-        },
-        td: {
-          borderLeft: '2px solid black'
-        }
+      td: {
+        borderLeft: '2px solid black'
       }
     };
     let marks = [];
@@ -95,7 +81,7 @@ export default class GanttTimeline extends Component {
           label = date.format('H:mm:ss');
           break;
       }
-      marks.push(<td key={i} style={style.marks.td}>
+      marks.push(<td key={i} style={style.td}>
         {label}
       </td>);
     }
@@ -104,12 +90,30 @@ export default class GanttTimeline extends Component {
       time: rightBoundTime,
       secondsPerPixel: secondsPerPixel
     };
+    return marks;
+  }
+
+  render() {
+    if (!this.props.timelinePixels)  {
+      this.timelinePixelsReady = true;
+      return(<div></div>);
+    }
+    let style = {
+      table: {
+        width: '100%',
+        height: '20px'
+      },
+      tr: {
+        padding: '0px',
+        margin: '0px'
+      }
+    };
     this.setTimelineReady = true;
     return(<div>
-      <table style={style.marks.table}>
+      <table style={style.table}>
         <tbody>
-          <tr style={style.marks.tr}>
-            {marks}
+          <tr style={style.tr}>
+            {this.renderMarks()}
           </tr>
         </tbody>
       </table>
