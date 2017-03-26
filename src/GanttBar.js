@@ -3,12 +3,12 @@ import _ from 'lodash';
 import moment from 'moment';
 
 export default class GanttBar extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {};
-	}
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
 
-	render() {
+  render() {
     if (!this.props.timeline) return(<div></div>);
     let style = {
       bar: {
@@ -118,8 +118,8 @@ export default class GanttBar extends Component {
     });
     return(<div>
       {renderedBars}
-		</div>);
-	}
+    </div>);
+  }
 }
 
 GanttBar.propTypes = {

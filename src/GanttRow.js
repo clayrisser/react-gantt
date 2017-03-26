@@ -3,12 +3,12 @@ import _ from 'lodash';
 import GanttBar from './GanttBar';
 
 export default class GanttRow extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {};
-	}
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
 
-	render() {
+  render() {
     let style = {
       tr: {
         border: '2px solid black'
@@ -24,15 +24,22 @@ export default class GanttRow extends Component {
         width: '100%'
       }
     };
-		return(<tr style={style.tr}>
+    if (this.props.row.onClick) {
+      style.tr.cursor = 'pointer';
+    }
+    return(<tr style={style.tr} onClick={this.rowClicked.bind(this)}>
       <td style={_.assign({}, style.td, style.leftTd)}>
         {this.props.row.title}
       </td>
       <td style={_.assign({}, style.td, style.rightTd)}>
         <GanttBar row={this.props.row} group={this.props.group} options={this.props.options} timeline={this.props.timeline} />
-		  </td>
+      </td>
     </tr>);
-	}
+  }
+
+  rowClicked() {
+    this.props.row.onClick();
+  }
 }
 
 GanttRow.propTypes = {
