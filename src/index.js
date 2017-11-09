@@ -19,7 +19,8 @@ export default class ReactGantt extends Component {
     rowStyle: PropTypes.object,
     style: PropTypes.object,
     labelStyle: PropTypes.object,
-    markerStyle: PropTypes.object
+    markerStyle: PropTypes.object,
+    popupStyle: PropTypes.object
   };
   static defaultProps = {
     dateFormat: '',
@@ -52,7 +53,10 @@ export default class ReactGantt extends Component {
       overlap: 0.1,
       width: '10px'
     },
-    style: {}
+    style: {},
+    popupStyle: {
+      width: '400px'
+    }
   };
 
   state = {
@@ -128,6 +132,7 @@ export default class ReactGantt extends Component {
                    barStyle={this.props.barStyle}
                    labelStyle={this.props.labelStyle}
                    markerStyle={this.props.markerStyle}
+                   popupStyle={this.props.popupStyle}
                  />
                );
             })}

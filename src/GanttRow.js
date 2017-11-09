@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
-import GanttBar from './GanttBar';
 import PropTypes from 'prop-types';
+import GanttBar from './GanttBar';
+import GanttPopup from './GanttPopup';
 
 export default class GanttRow extends Component {
   static propTypes = {
@@ -15,16 +16,17 @@ export default class GanttRow extends Component {
     barStyle: PropTypes.object.isRequired,
     style: PropTypes.object.isRequired,
     labelStyle: PropTypes.object.isRequired,
-    markerStyle: PropTypes.object.isRequired
+    markerStyle: PropTypes.object.isRequired,
+    popupStyle: PropTypes.object.isRequired
   };
 
   state = {
     active: false,
-    mouseX: 0
+    mouse: {}
   }
 
   render() {
-    const { markerStyle } = this.props;
+    const { markerStyle, popupStyle } = this.props;
     const barStyle = _.clone(this.props.barStyle);
     const margin = _.clone(barStyle.margin);
     const style = {
@@ -73,7 +75,7 @@ export default class GanttRow extends Component {
             height: `${parseInt(barStyle.height) + markerOverlap}px`,
             marginTop: `-${markerMargin + (markerOverlap / 2)}px`,
             marginBottom: `-${markerMargin + (markerOverlap / 2)}px`,
-            marginLeft: `${this.state.mouseX - (parseInt(markerStyle.width) / 2)}px`,
+            marginLeft: `${this.state.mouse.offsetX - (parseInt(markerStyle.width) / 2)}px`,
             opacity: this.state.active ? markerStyle.opacity : 0
           }} />
           <div
@@ -89,9 +91,33 @@ export default class GanttRow extends Component {
             onMouseEnter={this.handleMouseEnter.bind(this)}
             onMouseLeave={this.handleMouseLeave.bind(this)}
           />
+          <div style={{
+            position: 'absolute',
+            display: this.state.active ? 'inherit' : 'none',
+            left: this.getPopupPosition()
+          }}>
+            <GanttPopup
+              row={this.props.row}
+              templates={this.props.templates}
+              style={this.props.popupStyle}
+            />
+          </div>
         </td>
       </tr>
     );
+  }
+
+  getPopupPosition() {
+    const { popupStyle } = this.props;
+    const { clientWidth } = document.documentElement;
+    const mouseOffset = 60;
+    const x = this.state.mouse.x;
+    const width = parseInt(popupStyle.width);
+    let popupPosition = x - mouseOffset;
+    if ((x + width) > clientWidth) {
+      return clientWidth - width - mouseOffset;
+    }
+    return popupPosition || 0;
   }
 
   handleMouseEnter() {
@@ -108,7 +134,11 @@ export default class GanttRow extends Component {
 
   handleMouseMove(e) {
     if (this.state.active) {
-      this.setState({ mouseX: e.offsetX });
+      const { markerStyle, timelineWidth } = this.props;
+      if (e.offsetX > (parseInt(markerStyle.width) / 2)
+          && e.offsetX < timelineWidth - (parseInt(markerStyle.width) / 2)) {
+        this.setState({ mouse: e });
+      }
     }
   }
 }
