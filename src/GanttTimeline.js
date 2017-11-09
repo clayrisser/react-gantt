@@ -10,7 +10,8 @@ export default class GanttTimeline extends Component {
     rows: PropTypes.array.isRequired,
     timelineWidth: PropTypes.number.isRequired,
     minTickPadding: PropTypes.number.isRequired,
-    debug: PropTypes.bool.isRequired
+    debug: PropTypes.bool.isRequired,
+    style: PropTypes.object.isRequired
   };
 
   units = {
@@ -54,11 +55,11 @@ export default class GanttTimeline extends Component {
   }
 
   regularRender() {
+    const style = _.clone(this.props.style);
     const tick = this.getTick();
-    const style = {
-      borderWidth: 2,
-      paddingLeft: 4
-    }
+    const tickWidth = _.clone(parseInt(style.tickWidth)) || 2;
+    const paddingLeft = _.clone(parseInt(style.paddingLeft)) || 4;
+    delete style.paddingLeft;
     return (
       <div style={{
         display: 'flex',
@@ -67,14 +68,15 @@ export default class GanttTimeline extends Component {
         {_.map(_.range(tick.count), (index) => {
            return (
              <div key={`tick${index}`} style={{
+               ...style,
                height: '20px',
-               borderLeft: `${style.borderWidth}px solid black`,
-               width: `${tick.width - style.paddingLeft - style.borderWidth}px`,
+               borderLeft: `${tickWidth}px solid black`,
+               width: `${tick.width - paddingLeft - tickWidth}px`,
                float: 'left',
                margin: '0px',
                padding: '0px',
                textAlign: 'left',
-               paddingLeft: `${style.paddingLeft}px`
+               paddingLeft: `${paddingLeft}px`
              }}>
                {index + 1} {tick.unit}
              </div>

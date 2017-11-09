@@ -13,7 +13,11 @@ export default class ReactGantt extends Component {
     rows: PropTypes.array,
     templates: PropTypes.object,
     minTickPadding: PropTypes.number,
-    debug: PropTypes.bool
+    debug: PropTypes.bool,
+    timelineStyle: PropTypes.object,
+    barStyle: PropTypes.object,
+    rowStyle: PropTypes.object,
+    style: PropTypes.object
   };
   static defaultProps = {
     dateFormat: '',
@@ -22,7 +26,19 @@ export default class ReactGantt extends Component {
     rows: [],
     templates: {},
     minTickPadding: 80,
-    debug: false
+    debug: false,
+    timelineStyle: {
+      tickWidth: '2px',
+      paddingLeft: '4px'
+    },
+    barStyle: {
+      marginTop: '10px',
+      height: '30px'
+    },
+    rowStyle: {
+      borderLeft: '2px solid black'
+    },
+    style: {}
   };
 
   state = {
@@ -78,6 +94,7 @@ export default class ReactGantt extends Component {
                   timelineWidth={this.state.timelineWidth}
                   minTickPadding={this.props.minTickPadding}
                   debug={this.props.debug}
+                  style={this.props.timelineStyle}
                 />
               </th>
             </tr>
@@ -94,6 +111,8 @@ export default class ReactGantt extends Component {
                    rightBound={this.props.rightBound}
                    timelineWidth={this.state.timelineWidth}
                    debug={this.props.debug}
+                   style={this.props.rowStyle}
+                   barStyle={this.props.barStyle}
                  />
                );
             })}

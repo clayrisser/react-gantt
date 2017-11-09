@@ -11,7 +11,8 @@ export default class GanttBar extends Component {
     row: PropTypes.object.isRequired,
     templates: PropTypes.object.isRequired,
     timelineWidth: PropTypes.number.isRequired,
-    debug: PropTypes.bool.isRequired
+    debug: PropTypes.bool.isRequired,
+    style: PropTypes.object.isRequired
   };
 
   render() {
@@ -20,7 +21,7 @@ export default class GanttBar extends Component {
   }
 
   regularRender() {
-    const { dateFormat, leftBound, rightBound } = this.props;
+    const { dateFormat, leftBound, rightBound, style } = this.props;
     const steps = this.getSteps();
     let timelineTaken = 0;
     return(
@@ -29,7 +30,12 @@ export default class GanttBar extends Component {
            return (
              <div key={`reg${step.name}${index}`}>
                <div style={{
-                 height: '20px',
+                 height: '30px',
+                 ...style,
+                 borderTopLeftRadius: step.offTimelineLeft ? '6%' : '0%',
+                 borderBottomLeftRadius: step.offTimelineLeft ? '6%' : '0%',
+                 borderTopRightRadius: step.offTimelineRight ? '6%' : '0%',
+                 borderBottomRightRadius: step.offTimelineRight ? '6%' : '0%',
                  width: `${step.displayWidth}px`,
                  backgroundColor: step.color,
                  marginLeft: index === 0 ? `${step.startPixel}px` : '0px'
@@ -84,7 +90,7 @@ export default class GanttBar extends Component {
   }
 
   getStep(index) {
-    const { templates, row } = this.props;
+    const { templates, row, leftBound, rightBound } = this.props;
     const template = templates[this.props.row.template];
     const stepStartTime = row.steps[index];
     const stepEndTime = (template.steps.length > index) ? row.steps[index + 1] : null;
@@ -94,6 +100,14 @@ export default class GanttBar extends Component {
     const startPixel = this.timeToPixel(stepStartTime);
     const endPixel = this.timeToPixel(stepEndTime);
     const displayWidth = endPixel - startPixel;
+    let offTimelineLeft = false;
+    let offTimelineRight = false;
+    if (moment(stepStartTime).diff(moment(leftBound), 'seconds') < 0) {
+      offTimelineLeft = true;
+    }
+    if (moment(rightBound).diff(moment(stepEndTime), 'seconds') < 0) {
+      offTimelineRight = true;
+    }
     return {
       name: template.steps[index].name,
       color: template.steps[index].color,
@@ -102,6 +116,8 @@ export default class GanttBar extends Component {
       displayWidth,
       startPixel,
       endPixel,
+      offTimelineLeft,
+      offTimelineRight,
       startTime: stepStartTime,
       endTime: stepEndTime
     };
