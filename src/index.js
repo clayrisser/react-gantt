@@ -38,7 +38,8 @@ export default class ReactGantt extends Component {
       height: '40px'
     },
     rowStyle: {
-      borderLeft: '2px solid black'
+      borderLeft: '2px solid black',
+      backgroundColor: '#E6E6E6'
     },
     labelStyle: {
       padding: '10px',

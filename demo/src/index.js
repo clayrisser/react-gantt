@@ -46,25 +46,30 @@ class Demo extends Component {
         steps: [
           {
             name: 'Task Phase One',
-            color: 'blue'
+            color: '#399DF7'
           },
           {
             name: 'Task Phase Two',
-            color: 'green'
+            color: '#FFBA38'
           }
         ]
 			}
 		};
 		return (
 			<div>
-				<ReactGantt
-          templates={templates}
-          rows={rows}
-          leftBound={leftBound}
-          rightBound={rightBound}
-          dateFormat={dateFormat}
-          debug={false}
-        />
+        <div style={{textAlign: 'center'}}>
+          <h1>React Gantt Demo</h1>
+        </div>
+        <div style={{dispaly: 'flex', justifyContent: 'center', padding: '40px'}}>
+				  <ReactGantt
+            templates={templates}
+            rows={rows}
+            leftBound={leftBound}
+            rightBound={rightBound}
+            dateFormat={dateFormat}
+            debug={false}
+          />
+        </div>
 			</div>
 		);
 	}
