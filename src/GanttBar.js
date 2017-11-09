@@ -5,23 +5,18 @@ import moment from 'moment';
 
 export default class GanttBar extends Component {
   static propTypes = {
-    dateFormat: PropTypes.string,
-    leftBound: PropTypes.object,
-    rightBound: PropTypes.object,
-    row: PropTypes.object,
-    templates: PropTypes.object,
-    timelineWidth: PropTypes.number
-  };
-  static defaultProps = {
-    dateFormat: '',
-    leftBound: 0,
-    rightBound: 0,
-    row: {},
-    templates: {}
+    dateFormat: PropTypes.string.isRequired,
+    leftBound: PropTypes.object.isRequired,
+    rightBound: PropTypes.object.isRequired,
+    row: PropTypes.object.isRequired,
+    templates: PropTypes.object.isRequired,
+    timelineWidth: PropTypes.number.isRequired,
+    debug: PropTypes.bool.isRequired
   };
 
   render() {
-    return this.debugRender();
+    if (this.props.debug) return this.debugRender();
+    return this.regularRender();
   }
 
   regularRender() {

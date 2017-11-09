@@ -5,22 +5,14 @@ import PropTypes from 'prop-types';
 
 export default class GanttRow extends Component {
   static propTypes = {
-    dateFormat: PropTypes.string,
-    leftBound: PropTypes.object,
-    rightBound: PropTypes.object,
-    row: PropTypes.object,
-    templates: PropTypes.object,
+    dateFormat: PropTypes.string.isRequired,
+    leftBound: PropTypes.object.isRequired,
+    rightBound: PropTypes.object.isRequired,
+    row: PropTypes.object.isRequired,
+    templates: PropTypes.object.isRequired,
+    debug: PropTypes.bool.isRequired,
     timelineWidth: PropTypes.number.isRequired
   };
-  static defaultProps = {
-    dateFormat: '',
-    leftBound: 0,
-    rightBound: 0,
-    row: {},
-    templates: {}
-  };
-
-  state = {};
 
   render() {
     const style = {
@@ -51,6 +43,7 @@ export default class GanttRow extends Component {
             leftBound={this.props.leftBound}
             rightBound={this.props.rightBound}
             timelineWidth={this.props.timelineWidth}
+            debug={this.props.debug}
           />
         </td>
       </tr>

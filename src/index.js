@@ -11,14 +11,18 @@ export default class ReactGantt extends Component {
     leftBound: PropTypes.object,
     rightBound: PropTypes.object,
     rows: PropTypes.array,
-    templates: PropTypes.object
+    templates: PropTypes.object,
+    minTickPadding: PropTypes.number,
+    debug: PropTypes.bool
   };
   static defaultProps = {
     dateFormat: '',
     leftBound: 0,
     rightBound: 0,
     rows: [],
-    templates: {}
+    templates: {},
+    minTickPadding: 80,
+    debug: false
   };
 
   state = {
@@ -67,9 +71,13 @@ export default class ReactGantt extends Component {
               <th style={_.assign({}, style.th, style.leftTh)} />
               <th ref="timeline" style={_.assign({}, style.th, style.rightTh)}>
                 <GanttTimeline
-                   dateFormat={this.props.dateFormat}
-                   leftBound={this.props.leftBound}
-                   rightBound={this.props.rightBound}
+                  rows={this.props.rows}
+                  dateFormat={this.props.dateFormat}
+                  leftBound={this.props.leftBound}
+                  rightBound={this.props.rightBound}
+                  timelineWidth={this.state.timelineWidth}
+                  minTickPadding={this.props.minTickPadding}
+                  debug={this.props.debug}
                 />
               </th>
             </tr>
@@ -85,6 +93,7 @@ export default class ReactGantt extends Component {
                    leftBound={this.props.leftBound}
                    rightBound={this.props.rightBound}
                    timelineWidth={this.state.timelineWidth}
+                   debug={this.props.debug}
                  />
                );
             })}

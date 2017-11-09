@@ -63,6 +63,7 @@ class Demo extends Component {
           leftBound={leftBound}
           rightBound={rightBound}
           dateFormat={dateFormat}
+          debug={false}
         />
 			</div>
 		);
