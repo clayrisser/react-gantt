@@ -21,7 +21,10 @@ export default class GanttBar extends Component {
   }
 
   regularRender() {
-    const { dateFormat, leftBound, rightBound, style } = this.props;
+    const { dateFormat, leftBound, rightBound } = this.props;
+    const style = _.clone(this.props.style);
+    const margin = _.clone(style.margin);
+    delete style.margin;
     const steps = this.getSteps();
     let timelineTaken = 0;
     return(
@@ -36,6 +39,8 @@ export default class GanttBar extends Component {
                  borderBottomLeftRadius: step.offTimelineLeft ? '6%' : '0%',
                  borderTopRightRadius: step.offTimelineRight ? '6%' : '0%',
                  borderBottomRightRadius: step.offTimelineRight ? '6%' : '0%',
+                 marginTop: margin,
+                 marginBottom: margin,
                  width: `${step.displayWidth}px`,
                  backgroundColor: step.color,
                  marginLeft: index === 0 ? `${step.startPixel}px` : '0px'

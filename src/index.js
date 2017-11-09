@@ -17,7 +17,9 @@ export default class ReactGantt extends Component {
     timelineStyle: PropTypes.object,
     barStyle: PropTypes.object,
     rowStyle: PropTypes.object,
-    style: PropTypes.object
+    style: PropTypes.object,
+    labelStyle: PropTypes.object,
+    markerStyle: PropTypes.object
   };
   static defaultProps = {
     dateFormat: '',
@@ -28,15 +30,26 @@ export default class ReactGantt extends Component {
     minTickPadding: 80,
     debug: false,
     timelineStyle: {
-      tickWidth: '2px',
+      tickWidth: '1px',
       paddingLeft: '4px'
     },
     barStyle: {
-      marginTop: '10px',
-      height: '30px'
+      margin: '10px',
+      height: '40px'
     },
     rowStyle: {
       borderLeft: '2px solid black'
+    },
+    labelStyle: {
+      padding: '10px',
+      textAlgin: 'right',
+      borderBottom: '2px solid black',
+      fontWeight: 'bold'
+    },
+    markerStyle: {
+      opacity: 0.5,
+      overlap: 0.1,
+      width: '10px'
     },
     style: {}
   };
@@ -50,7 +63,6 @@ export default class ReactGantt extends Component {
 
   componentDidMount() {
     window.addEventListener('resize', e => this.handleResize(e));
-    window.addEventListener('mousemove', e => this.handleMouseMove(e));
     this.handleResize();
   }
 
@@ -113,6 +125,8 @@ export default class ReactGantt extends Component {
                    debug={this.props.debug}
                    style={this.props.rowStyle}
                    barStyle={this.props.barStyle}
+                   labelStyle={this.props.labelStyle}
+                   markerStyle={this.props.markerStyle}
                  />
                );
             })}
@@ -123,9 +137,7 @@ export default class ReactGantt extends Component {
   }
 
   handleResize(e) {
+    this.setState({ timelineWidth: 0 });
     this.setState({ timelineWidth: this.refs.timeline.offsetWidth });
-  }
-
-  handleMouseMove(e) {
   }
 }

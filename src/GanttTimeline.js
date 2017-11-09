@@ -23,7 +23,6 @@ export default class GanttTimeline extends Component {
     year: 31535965.4396976
   }
 
-
   render() {
     if (this.props.debug) return this.debugRender();
     return this.regularRender();
