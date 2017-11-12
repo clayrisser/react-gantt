@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import GanttBar from './GanttBar';
 import GanttPopup from './GanttPopup';
@@ -46,11 +47,34 @@ export default class GanttRow extends Component {
 
   state = {
     active: false,
-    mouse: {}
+    mouse: {},
+    activeStep: {},
+    markerTime: moment().toDate()
+  }
+
+  renderPopup() {
+    const { popupStyle, title } = this.props;
+    const { activeStep, markerTime, active } = this.state;
+    if (_.isEmpty(activeStep)) return (<div></div>);
+    return (
+      <div style={{
+        position: 'absolute',
+        left: `${this.state.mouse.offsetX}px`,
+        display: active ? 'inherit' : 'none'
+      }}>
+        <GanttPopup
+          style={popupStyle}
+          title={title}
+          activeStep={activeStep}
+          markerTime={markerTime}
+        />
+      </div>
+    );
   }
 
   render() {
-    const { title, markerStyle, popupStyle } = this.props;
+    const { title, markerStyle, templateName, steps } = this.props;
+    const { active } = this.state;
     const tdStyle = { whiteSpace: 'nowrap' };
     const { barStyle, barWrapperStyle } = this.calculateBarStyle(this.props.barStyle);
     return (
@@ -67,9 +91,9 @@ export default class GanttRow extends Component {
         }}>
           <div style={barWrapperStyle}>
             <GanttBar
-              title={this.props.title}
-              templateName={this.props.templateName}
-              steps={this.props.steps}
+              title={title}
+              templateName={templateName}
+              steps={steps}
               style={barStyle}
             />
             <div style={{
@@ -79,7 +103,7 @@ export default class GanttRow extends Component {
               position: 'relative',
               marginLeft: `${this.state.mouse.offsetX - (parseInt(markerStyle.width) / 2)}px`,
               zIndex: 0,
-              display: this.state.active ? 'inherit' : 'none'
+              display: active ? 'inherit' : 'none'
             }} />
             <div
               style={{
@@ -92,16 +116,7 @@ export default class GanttRow extends Component {
               onMouseLeave={this.handleMouseLeave.bind(this)}
             />
           </div>
-          <div style={{
-            position: 'absolute',
-            left: `${this.state.mouse.offsetX}px`,
-            display: this.state.active ? 'inherit' : 'none'
-          }}>
-            <GanttPopup
-              style={popupStyle}
-              title={title}
-            />
-          </div>
+          {this.renderPopup()}
         </td>
       </tr>
     );
@@ -122,8 +137,13 @@ export default class GanttRow extends Component {
   handleMouseMove(e) {
     if (this.state.active) {
       const { markerStyle } = this.props;
-      const { timelineWidth } = this.context;
-      this.setState({ mouse: e });
+      const { timelineWidth, leftBound } = this.context;
+      const markerTime = moment(leftBound).add(this.widthToDuration(e.offsetX), 'seconds').toDate();
+      this.setState({
+        mouse: e,
+        markerTime,
+        activeStep: this.getStepFromTime(markerTime)
+      });
     }
   }
 
@@ -173,5 +193,29 @@ export default class GanttRow extends Component {
       marginBottom,
       marginLeft
     }
+  }
+
+  widthToDuration(width) {
+    const { leftBound, rightBound, timelineWidth } = this.context;
+    const timelineDuration = moment(rightBound).diff(leftBound, 'seconds');
+    const pixelPerSecond = timelineDuration / timelineWidth
+    return pixelPerSecond * width;
+  }
+
+  getStepFromTime(time) {
+    const { steps, templateName } = this.props;
+    const { templates } = this.context;
+    let templateStep = {};
+    const templateSteps = templates[templateName].steps;
+    _.each(steps, (step, index) => {
+      if (
+        moment(time).isAfter(step)
+        && moment(time).isBefore(steps[index + 1])
+      ) {
+        templateStep = templateSteps[index];
+        return false;
+      }
+    });
+    return templateStep;
   }
 }
