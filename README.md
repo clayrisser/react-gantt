@@ -6,6 +6,8 @@
 
 Please note the the api for react gantt has changed. It is undergoing a major refactor.
 
+Refer to the [DEMO](https://github.com/jamrizzi/react-gantt/blob/master/demo/src/index.js) to see the API.
+
 [build-badge]: https://img.shields.io/travis/user/repo/master.png?style=flat-square
 [build]: https://travis-ci.org/user/repo
 
