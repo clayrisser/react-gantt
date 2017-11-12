@@ -4,14 +4,15 @@ import PropTypes from 'prop-types';
 
 export default class GanttTimeline extends Component {
   static propTypes = {
+    rows: PropTypes.node.isRequired,
+    style: PropTypes.object.isRequired
+  };
+  static contextTypes = {
+    dateFormat: PropTypes.string.isRequired,
+    debug: PropTypes.bool.isRequired,
     leftBound: PropTypes.object.isRequired,
     rightBound: PropTypes.object.isRequired,
-    dateFormat: PropTypes.string.isRequired,
-    rows: PropTypes.array.isRequired,
-    timelineWidth: PropTypes.number.isRequired,
-    minTickPadding: PropTypes.number.isRequired,
-    debug: PropTypes.bool.isRequired,
-    style: PropTypes.object.isRequired
+    timelineWidth: PropTypes.number.isRequired
   };
 
   units = {
@@ -24,12 +25,12 @@ export default class GanttTimeline extends Component {
   }
 
   render() {
-    if (this.props.debug) return this.debugRender();
-    return this.regularRender();
+    if (this.context.debug) return this.debugRender();
+    return this.defaultRender();
   }
 
   debugRender() {
-    const { leftBound, rightBound, dateFormat, timelineWidth } = this.props;
+    const { leftBound, rightBound, dateFormat, timelineWidth } = this.context;
     const tick = this.getTick();
     return (
       <div>
@@ -47,13 +48,13 @@ export default class GanttTimeline extends Component {
           Tick Count: {tick.count}
         </div>
         <div>
-          {this.regularRender()}
+          {this.defaultRender()}
         </div>
       </div>
     );
   }
 
-  regularRender() {
+  defaultRender() {
     const style = _.clone(this.props.style);
     const tick = this.getTick();
     const tickWidth = _.clone(parseInt(style.tickWidth)) || 2;
@@ -86,14 +87,14 @@ export default class GanttTimeline extends Component {
   }
 
   getTick(unit, timelineDuration) {
+    const { style } = this.props;
+    const { leftBound, rightBound, timelineWidth } = this.context;
     if (!unit) {
-      const { leftBound, rightBound } = this.props;
       timelineDuration = moment(rightBound).diff(moment(leftBound), 'seconds');
       unit = this.getTimespanUnit(timelineDuration)
     }
-    const { timelineWidth, minTickPadding } = this.props;
     let tickCount = Math.ceil(timelineDuration / this.units[unit]);
-    const maxTicks = Math.ceil(timelineWidth / minTickPadding);
+    const maxTicks = Math.ceil(timelineWidth / parseInt(style.minWidth));
     if (tickCount > maxTicks) {
       const unitKeys = _.keys(this.units);
       const nextUnitIndex = unitKeys.indexOf(unit) + 1;
@@ -120,7 +121,7 @@ export default class GanttTimeline extends Component {
   }
 
   durationToWidth(duration) {
-    const { leftBound, rightBound, timelineWidth } = this.props;
+    const { leftBound, rightBound, timelineWidth } = this.context;
     const timelineDuration = moment(rightBound).diff(leftBound, 'seconds');
     const percentage = duration > 0 ? duration / timelineDuration : 0;
     return timelineWidth * percentage;

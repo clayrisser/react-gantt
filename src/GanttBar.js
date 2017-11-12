@@ -1,32 +1,33 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
 import moment from 'moment';
 
 export default class GanttBar extends Component {
   static propTypes = {
+    title: PropTypes.string.isRequired,
+    templateName: PropTypes.string.isRequired,
+    steps: PropTypes.array.isRequired,
+    style: PropTypes.object.isRequired
+  }
+  static contextTypes = {
+    templates: PropTypes.object.isRequired,
     dateFormat: PropTypes.string.isRequired,
+    debug: PropTypes.bool.isRequired,
     leftBound: PropTypes.object.isRequired,
     rightBound: PropTypes.object.isRequired,
-    row: PropTypes.object.isRequired,
-    templates: PropTypes.object.isRequired,
     timelineWidth: PropTypes.number.isRequired,
-    debug: PropTypes.bool.isRequired,
-    style: PropTypes.object.isRequired
-  };
-
-  render() {
-    if (this.props.debug) return this.debugRender();
-    return this.regularRender();
+    activeRow: PropTypes.number
   }
 
-  regularRender() {
-    const { dateFormat, leftBound, rightBound } = this.props;
-    const style = _.clone(this.props.style);
-    const margin = _.clone(style.margin);
-    delete style.margin;
+  render() {
+    if (this.context.debug) return this.debugRender();
+    return this.defaultRender();
+  }
+
+  defaultRender() {
+    const { dateFormat, leftBound, rightBound } = this.context;
+    const { style } = this.props;
     const steps = this.getSteps();
-    let timelineTaken = 0;
     return(
       <div ref="bar" style={{display: 'flex'}}>
         {_.map(steps, (step, index) => {
@@ -34,13 +35,10 @@ export default class GanttBar extends Component {
              <div key={`reg${step.name}${index}`}>
                <div style={{
                  height: '30px',
-                 ...style,
                  borderTopLeftRadius: step.offTimelineLeft ? '6%' : '0%',
                  borderBottomLeftRadius: step.offTimelineLeft ? '6%' : '0%',
                  borderTopRightRadius: step.offTimelineRight ? '6%' : '0%',
                  borderBottomRightRadius: step.offTimelineRight ? '6%' : '0%',
-                 marginTop: margin,
-                 marginBottom: margin,
                  width: `${step.displayWidth}px`,
                  backgroundColor: step.color,
                  marginLeft: index === 0 ? `${step.startPixel}px` : '0px'
@@ -53,7 +51,7 @@ export default class GanttBar extends Component {
   }
 
   debugRender() {
-    const { dateFormat, leftBound, rightBound } = this.props;
+    const { dateFormat, leftBound, rightBound } = this.context;
     const steps = this.getSteps();
     return(
       <div ref="bar">
@@ -83,22 +81,25 @@ export default class GanttBar extends Component {
              </div>
            )
         })}
-        {this.regularRender()}
+        {this.defaultRender()}
       </div>
     );
   }
 
   getSteps() {
-    return _.map(this.props.templates[this.props.row.template].steps, (step, index) => {
-      return this.getStep(index);
+    const { templates } = this.context;
+    const { templateName } = this.props;
+    const template = templates[templateName];
+    return _.map(template.steps, (step, index) => {
+      return this.getStep(index, template);
     });
   }
 
-  getStep(index) {
-    const { templates, row, leftBound, rightBound } = this.props;
-    const template = templates[this.props.row.template];
-    const stepStartTime = row.steps[index];
-    const stepEndTime = (template.steps.length > index) ? row.steps[index + 1] : null;
+  getStep(index, template) {
+    const { templates, leftBound, rightBound } = this.context;
+    const { steps } = this.props;
+    const stepStartTime = steps[index];
+    const stepEndTime = (template.steps.length > index) ? steps[index + 1] : null;
     if (!stepEndTime) return null;
     const stepDuration = moment(stepEndTime).diff(stepStartTime, 'seconds');
     const theoreticalWidth = this.durationToWidth(stepDuration);
@@ -129,14 +130,14 @@ export default class GanttBar extends Component {
   }
 
   durationToWidth(duration) {
-    const { leftBound, rightBound, timelineWidth } = this.props;
+    const { leftBound, rightBound, timelineWidth } = this.context;
     const timelineDuration = moment(rightBound).diff(leftBound, 'seconds');
     const percentage = duration > 0 ? duration / timelineDuration : 0;
     return timelineWidth * percentage;
   }
 
   timeToPixel(time) {
-    const { leftBound, rightBound, timelineWidth } = this.props;
+    const { leftBound, rightBound, timelineWidth } = this.context;
     const leftBoundPixel = 0;
     const rightBoundPixel = timelineWidth;
     const timeDurationFromLeftBound = moment(time).diff(leftBound, 'seconds');

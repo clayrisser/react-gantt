@@ -14,11 +14,11 @@ class Demo extends Component {
               steps: [
                 {
                   name: 'Task Phase One',
-                  color: 'blue'
+                  color: '#0099FF'
                 },
                 {
                   name: 'Task Phase Two',
-                  color: 'green'
+                  color: '#FF9900'
                 }
               ]
 			      }
@@ -26,10 +26,11 @@ class Demo extends Component {
           leftBound={moment().set({hour: 0, date: 30, month: 5, year: 2016}).toDate()}
           rightBound={moment().set({hour: 0, date: 29, month: 8, year: 2016}).toDate()}
           dateFormat="YYYY-MM-DD HH:MM"
+          debug={false}
         >
           <GanttRow
             title="Task 1"
-            template="myTasks"
+            templateName="myTasks"
             steps={[
               moment().set({hour: 0, date: 1, month: 6, year: 2016}).toDate(),
               moment().set({hour: 0, date: 4, month: 8, year: 2016}).toDate(),
@@ -38,7 +39,7 @@ class Demo extends Component {
           />
           <GanttRow
             title="Task 2"
-            template="myTasks"
+            templateName="myTasks"
             steps={[
               moment().set({hour: 0, date: 27, month: 2, year: 2016}).toDate(),
               moment().set({hour: 0, date: 9, month: 7, year: 2016}).toDate(),
@@ -47,7 +48,7 @@ class Demo extends Component {
           />
           <GanttRow
             title="Task 3"
-            template="myTasks"
+            templateName="myTasks"
             steps={[
               moment().set({hour: 0, date: 12, month: 6, year: 2016}).toDate(),
               moment().set({hour: 0, date: 2, month: 7, year: 2016}).toDate(),

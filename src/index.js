@@ -2,60 +2,39 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import _ from 'lodash';
 import moment from 'moment';
-import GanttRow from './GanttRow';
-import GanttTimeline from './GanttTimeline.js';
+import GanttTimeline from './GanttTimeline';
+
+export GanttRow from './GanttRow';
 
 export default class ReactGantt extends Component {
   static propTypes = {
+    children: PropTypes.node.isRequired,
     dateFormat: PropTypes.string,
+    debug: PropTypes.bool,
     leftBound: PropTypes.object,
     rightBound: PropTypes.object,
-    rows: PropTypes.array,
-    templates: PropTypes.object,
-    minTickPadding: PropTypes.number,
-    debug: PropTypes.bool,
-    timelineStyle: PropTypes.object,
-    barStyle: PropTypes.object,
-    rowStyle: PropTypes.object,
     style: PropTypes.object,
-    labelStyle: PropTypes.object,
-    markerStyle: PropTypes.object,
-    popupStyle: PropTypes.object
+    templates: PropTypes.object,
+    timelineStyle: PropTypes.object
+  };
+  static childContextTypes = {
+    templates: PropTypes.object.isRequired,
+    dateFormat: PropTypes.string.isRequired,
+    debug: PropTypes.bool.isRequired,
+    leftBound: PropTypes.object.isRequired,
+    rightBound: PropTypes.object.isRequired,
+    timelineWidth: PropTypes.number.isRequired,
+    activeRow: PropTypes.number
   };
   static defaultProps = {
-    dateFormat: '',
-    leftBound: 0,
-    rightBound: 0,
-    rows: [],
-    templates: {},
-    minTickPadding: 80,
+    dateFormat: 'YYYY-MM-DD',
     debug: false,
-    timelineStyle: {
-      tickWidth: '1px',
-      paddingLeft: '4px'
-    },
-    barStyle: {
-      margin: '10px',
-      height: '40px'
-    },
-    rowStyle: {
-      borderLeft: '2px solid black',
-      backgroundColor: '#E6E6E6'
-    },
-    labelStyle: {
-      padding: '10px',
-      textAlgin: 'right',
-      borderBottom: '2px solid black',
-      fontWeight: 'bold'
-    },
-    markerStyle: {
-      opacity: 0.5,
-      overlap: 0.1,
-      width: '10px'
-    },
+    leftBound: moment().toDate(),
+    leftBound: moment().toDate(),
     style: {},
-    popupStyle: {
-      width: '400px'
+    templates: {},
+    timelineStyle: {
+      minWidth: '60px'
     }
   };
 
@@ -64,78 +43,45 @@ export default class ReactGantt extends Component {
     activeRow: null,
     timelineWidth: 0
   };
-  mounted = false;
 
   componentDidMount() {
     window.addEventListener('resize', e => this.handleResize(e));
     this.handleResize();
   }
 
+  getChildContext() {
+    return {
+      templates: this.props.templates,
+      dateFormat: this.props.dateFormat,
+      debug: this.props.debug,
+      leftBound: this.props.leftBound,
+      rightBound: this.props.rightBound,
+      timelineWidth: this.state.timelineWidth,
+      activeRow: this.state.activeRow
+    };
+  }
+
   render() {
-    const style = {
-      marker: {
-        backgroundColor: 'black',
-        width: '4px',
-        marginTop: '3px',
-        height: '26px',
-        position: 'fixed',
-        display: 'none'
-      },
-      table: {
-        boder: '2px solid black',
-        width: '100%'
-      },
-      th: {
-        whiteSpace: 'nowrap'
-      },
-      leftTh: {
-        width: '0px'
-      },
-      rightTh: {
-        width: '100%'
-      }
-    }
+    const thStyle = { whiteSpace: 'nowrap' };
     return (
-      <div>
-        <div ref="marker" style={style.marker}></div>
-        <table style={style.table} cellSpacing={0}>
+      <div style={this.props.style}>
+        <table style={{ width: '100%' }} cellSpacing={0}>
           <thead>
             <tr>
-              <th style={_.assign({}, style.th, style.leftTh)} />
-              <th ref="timeline" style={_.assign({}, style.th, style.rightTh)}>
-                <GanttTimeline
-                  rows={this.props.rows}
-                  dateFormat={this.props.dateFormat}
-                  leftBound={this.props.leftBound}
-                  rightBound={this.props.rightBound}
-                  timelineWidth={this.state.timelineWidth}
-                  minTickPadding={this.props.minTickPadding}
-                  debug={this.props.debug}
-                  style={this.props.timelineStyle}
-                />
+              <th style={{
+                ...thStyle,
+                width: '0px'
+              }} />
+              <th ref="timeline" style={{
+                ...thStyle,
+                width: '100%'
+              }}>
+                <GanttTimeline style={this.props.timelineStyle} rows={this.props.children} />
               </th>
             </tr>
           </thead>
           <tbody>
-            {this.props.rows.map((row) => {
-               return (
-                 <GanttRow
-                   key={row.title}
-                   row={row}
-                   templates={this.props.templates}
-                   dateFormat={this.props.dateFormat}
-                   leftBound={this.props.leftBound}
-                   rightBound={this.props.rightBound}
-                   timelineWidth={this.state.timelineWidth}
-                   debug={this.props.debug}
-                   style={this.props.rowStyle}
-                   barStyle={this.props.barStyle}
-                   labelStyle={this.props.labelStyle}
-                   markerStyle={this.props.markerStyle}
-                   popupStyle={this.props.popupStyle}
-                 />
-               );
-            })}
+            {this.props.children}
           </tbody>
         </table>
       </div>
