@@ -23,8 +23,7 @@ export default class ReactGantt extends Component {
     debug: PropTypes.bool.isRequired,
     leftBound: PropTypes.object.isRequired,
     rightBound: PropTypes.object.isRequired,
-    timelineWidth: PropTypes.number.isRequired,
-    activeRow: PropTypes.number
+    timelineWidth: PropTypes.number.isRequired
   };
   static defaultProps = {
     dateFormat: 'YYYY-MM-DD',
@@ -39,14 +38,16 @@ export default class ReactGantt extends Component {
   };
 
   state = {
-    mouse: {},
-    activeRow: null,
     timelineWidth: 0
   };
 
   componentDidMount() {
-    window.addEventListener('resize', e => this.handleResize(e));
+    this.resizeEventListener = window.addEventListener('resize', e => this.handleResize(e));
     this.handleResize();
+  }
+
+  componentWillUnmount() {
+    this.resizeEventListener.removeEventListener();
   }
 
   getChildContext() {
@@ -56,8 +57,7 @@ export default class ReactGantt extends Component {
       debug: this.props.debug,
       leftBound: this.props.leftBound,
       rightBound: this.props.rightBound,
-      timelineWidth: this.state.timelineWidth,
-      activeRow: this.state.activeRow
+      timelineWidth: this.state.timelineWidth
     };
   }
 

@@ -34,7 +34,7 @@ export default class GanttBar extends Component {
            return (
              <div key={`reg${step.name}${index}`}>
                <div style={{
-                 height: '30px',
+                 ...style,
                  borderTopLeftRadius: step.offTimelineLeft ? '6%' : '0%',
                  borderBottomLeftRadius: step.offTimelineLeft ? '6%' : '0%',
                  borderTopRightRadius: step.offTimelineRight ? '6%' : '0%',
