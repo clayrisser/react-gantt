@@ -6,6 +6,8 @@ A gantt chart for react
 
 [Live Demo](https://jamrizzi.github.io/react-gantt/)
 
+The API for v2 has undergone major changes
+
 ## Usage
 
 ```sh
