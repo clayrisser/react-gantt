@@ -1,15 +1,18 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import GanttBar from './GanttBar';
+import GanttPopup from './GanttPopup';
 
 export default class GanttRow extends Component {
   static propTypes = {
     barStyle: PropTypes.object,
+    popupStyle: PropTypes.object,
     markerStyle: PropTypes.object,
     steps: PropTypes.array.isRequired,
     style: PropTypes.object,
     templateName: PropTypes.string,
-    title: PropTypes.string
+    title: PropTypes.string,
+    children: PropTypes.node
   };
   static contextTypes = {
     templates: PropTypes.object.isRequired,
@@ -25,14 +28,20 @@ export default class GanttRow extends Component {
       marginTop: '10px',
       marginBottom: '10px'
     },
+    popupStyle: {
+      backgroundColor: '#FFFFFF',
+      padding: '20px',
+      boxShadow: '0px 0px 15px 0px rgba(0,0,0,0.75)'
+    },
     markerStyle: {
       width: '40px',
-      backgroundColor: 'black',
+      backgroundColor: '#000000',
       opacity: 0.5
     },
     style: {},
     templateName: 'default',
-    title: ''
+    title: '',
+    children: null
   };
 
   state = {
@@ -41,7 +50,7 @@ export default class GanttRow extends Component {
   }
 
   render() {
-    const { title, markerStyle } = this.props;
+    const { title, markerStyle, popupStyle } = this.props;
     const tdStyle = { whiteSpace: 'nowrap' };
     const { barStyle, barWrapperStyle } = this.calculateBarStyle(this.props.barStyle);
     return (
@@ -63,7 +72,7 @@ export default class GanttRow extends Component {
               steps={this.props.steps}
               style={barStyle}
             />
-            <div ref="marker" style={{
+            <div style={{
               ...markerStyle,
               height: barStyle.height,
               marginTop: `-${barStyle.height}`,
@@ -81,6 +90,16 @@ export default class GanttRow extends Component {
               }}
               onMouseEnter={this.handleMouseEnter.bind(this)}
               onMouseLeave={this.handleMouseLeave.bind(this)}
+            />
+          </div>
+          <div style={{
+            position: 'absolute',
+            left: `${this.state.mouse.offsetX}px`,
+            display: this.state.active ? 'inherit' : 'none'
+          }}>
+            <GanttPopup
+              style={popupStyle}
+              title={title}
             />
           </div>
         </td>
