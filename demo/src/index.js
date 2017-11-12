@@ -25,7 +25,7 @@ class Demo extends Component {
 		      }}
           leftBound={moment().set({hour: 0, date: 30, month: 5, year: 2016}).toDate()}
           rightBound={moment().set({hour: 0, date: 29, month: 8, year: 2016}).toDate()}
-          dateFormat="YYYY-MM-DD HH:MM"
+          dateFormat="YYYY-MM-DD"
           debug={false}
         >
           <GanttRow

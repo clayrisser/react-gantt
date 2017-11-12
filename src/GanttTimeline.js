@@ -9,6 +9,13 @@ export default class GanttTimeline extends Component {
   };
   static contextTypes = {
     dateFormat: PropTypes.string.isRequired,
+    timeFormat: PropTypes.string,
+    secondFormat: PropTypes.string,
+    hourFormat: PropTypes.string,
+    dayFormat: PropTypes.string,
+    weekFormat: PropTypes.string,
+    monthFormat: PropTypes.string,
+    yearFormat: PropTypes.string,
     debug: PropTypes.bool.isRequired,
     leftBound: PropTypes.object.isRequired,
     rightBound: PropTypes.object.isRequired,
@@ -78,7 +85,7 @@ export default class GanttTimeline extends Component {
                textAlign: 'left',
                paddingLeft: `${paddingLeft}px`
              }}>
-               {index + 1} {tick.unit}
+               {this.renderTickLabel(tick, index)}
              </div>
            );
         })}
@@ -125,5 +132,38 @@ export default class GanttTimeline extends Component {
     const timelineDuration = moment(rightBound).diff(leftBound, 'seconds');
     const percentage = duration > 0 ? duration / timelineDuration : 0;
     return timelineWidth * percentage;
+  }
+
+  widthToDuration(width) {
+    const { leftBound, rightBound, timelineWidth } = this.context;
+    const timelineDuration = moment(rightBound).diff(leftBound, 'seconds');
+    const pixelPerSecond = timelineDuration / timelineWidth
+    return pixelPerSecond * width;
+  }
+
+  renderTickLabel(tick, index) {
+    const { timelineWidth, leftBound, dateFormat } = this.context;
+    const tickTime = moment(leftBound).add(this.widthToDuration(tick.width) * index, 'seconds');
+    const format = this.getTimeFormat(tick.unit);
+    return tickTime.format(format);
+  }
+
+  getTimeFormat(unit) {
+    switch (unit) {
+      case 'second':
+        return this.context.secondFormat;
+      case 'minute':
+        return this.context.minuteFormat;
+      case 'hour':
+        return this.context.hourFormat;
+      case 'day':
+        return this.context.dayFormat;
+      case 'week':
+        return this.context.weekFormat;
+      case 'month':
+        return this.context.monthFormat;
+      case 'year':
+        return this.context.yearFormat;
+    }
   }
 }
