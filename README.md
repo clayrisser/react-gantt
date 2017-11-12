@@ -1,5 +1,6 @@
 # react-gantt
-[![npm](https://img.shields.io/npm/dt/express.svg?style=flat-square)](https://www.npmjs.com/package/react-gantt) [![npm](https://img.shields.io/npm/v/npm.svg?style=flat-square)](https://www.npmjs.com/package/react-gantt)
+
+[![npm](https://img.shields.io/npm/v/react-gantt.svg?style=flat-square)](https://www.npmjs.com/package/react-gantt) [![npm](https://img.shields.io/npm/dt/react-gantt.svg?style=flat-square)](https://www.npmjs.com/package/react-gantt)
 
 A gantt chart for react
 
