@@ -1,5 +1,7 @@
 # react-gantt
 
+[![npm](https://img.shields.io/npm/v/react-gantt.svg?style=flat-square)](https://www.npmjs.com/package/react-gantt)
+[![npm](https://img.shields.io/npm/dt/react-gantt.svg?style=flat-square)](https://www.npmjs.com/package/react-gantt)
 [![GitHub stars](https://img.shields.io/github/stars/codejamninja/react-gantt.svg?style=social&label=Stars)](https://github.com/codejamninja/react-gantt)
 
 > Gantt chart react component
