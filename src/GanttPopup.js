@@ -11,7 +11,7 @@ export default class GanttPopup extends Component {
   };
   static contextTypes = {
     dateFormat: PropTypes.string.isRequired
-  }
+  };
 
   render() {
     const { title, style, markerTime, activeStep } = this.props;

@@ -1,70 +1,91 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import _ from 'lodash';
 import moment from 'moment';
 import GanttTimeline from './GanttTimeline';
 
-export GanttRow from './GanttRow';
+export { default as GanttRow } from './GanttRow';
 
 export default class ReactGantt extends Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
     dateFormat: PropTypes.string,
-    timeFormat: PropTypes.string,
-    secondFormat: PropTypes.string,
-    hourFormat: PropTypes.string,
     dayFormat: PropTypes.string,
-    weekFormat: PropTypes.string,
-    monthFormat: PropTypes.string,
-    yearFormat: PropTypes.string,
     debug: PropTypes.bool,
+    hourFormat: PropTypes.string,
     leftBound: PropTypes.object,
+    minuteFormat: PropTypes.string,
+    monthFormat: PropTypes.string,
     rightBound: PropTypes.object,
+    secondFormat: PropTypes.string,
     style: PropTypes.object,
     templates: PropTypes.object,
-    timelineStyle: PropTypes.object
+    timeFormat: PropTypes.string,
+    timelineStyle: PropTypes.object,
+    weekFormat: PropTypes.string,
+    yearFormat: PropTypes.string
   };
   static childContextTypes = {
-    templates: PropTypes.object.isRequired,
     dateFormat: PropTypes.string.isRequired,
-    timeFormat: PropTypes.string,
-    secondFormat: PropTypes.string,
-    hourFormat: PropTypes.string,
     dayFormat: PropTypes.string,
-    weekFormat: PropTypes.string,
-    monthFormat: PropTypes.string,
-    yearFormat: PropTypes.string,
     debug: PropTypes.bool.isRequired,
+    hourFormat: PropTypes.string,
     leftBound: PropTypes.object.isRequired,
+    minuteFormat: PropTypes.string,
+    monthFormat: PropTypes.string,
     rightBound: PropTypes.object.isRequired,
-    timelineWidth: PropTypes.number.isRequired
+    secondFormat: PropTypes.string,
+    templates: PropTypes.object.isRequired,
+    timeFormat: PropTypes.string,
+    timelineWidth: PropTypes.number.isRequired,
+    weekFormat: PropTypes.string,
+    yearFormat: PropTypes.string
   };
   static defaultProps = {
     dateFormat: 'YY-MM-DD',
-    timeFormat: 'YY-MM-DD HH:MM',
-    secondFormat: 'HH:MM:SS',
-    minuteFormat: 'HH:MM',
-    hourFormat: 'HH',
     dayFormat: 'YY-MM-DD',
-    weekFormat: 'YY-MM-DD',
-    monthFormat: 'YY-MM-DD',
-    yearFormat: 'YY-MM-DD',
     debug: false,
+    hourFormat: 'HH',
     leftBound: moment().toDate(),
-    leftBound: moment().toDate(),
+    minuteFormat: 'HH:MM',
+    monthFormat: 'YY-MM-DD',
+    rightBound: moment().toDate(),
+    secondFormat: 'HH:MM:SS',
     style: {},
     templates: {},
-    timelineStyle: {
-      minWidth: '60px'
-    }
+    timeFormat: 'YY-MM-DD HH:MM',
+    timelineStyle: { minWidth: '60px' },
+    weekFormat: 'YY-MM-DD',
+    yearFormat: 'YY-MM-DD'
   };
 
   state = {
     timelineWidth: 0
   };
 
+  getChildContext() {
+    return {
+      dateFormat: this.props.dateFormat,
+      dayFormat: this.props.dayFormat,
+      debug: this.props.debug,
+      hourFormat: this.props.hourFormat,
+      leftBound: this.props.leftBound,
+      minuteFormat: this.props.minuteFormat,
+      monthFormat: this.props.monthFormat,
+      rightBound: this.props.rightBound,
+      secondFormat: this.props.secondFormat,
+      templates: this.props.templates,
+      timeFormat: this.props.timeFormat,
+      timelineWidth: this.state.timelineWidth,
+      weekFormat: this.props.weekFormat,
+      yearFormat: this.props.yearFormat
+    };
+  }
+
   componentDidMount() {
-    this.resizeEventListener = window.addEventListener('resize', e => this.handleResize(e));
+    // eslint-disable-next-line no-undef
+    this.resizeEventListener = window.addEventListener('resize', e =>
+      this.handleResize(e)
+    );
     this.handleResize();
   }
 
@@ -72,22 +93,9 @@ export default class ReactGantt extends Component {
     this.resizeEventListener.removeEventListener();
   }
 
-  getChildContext() {
-    return {
-      templates: this.props.templates,
-      dateFormat: this.props.dateFormat,
-      timeFormat: this.props.timeFormat,
-      secondFormat: this.props.secondFormat,
-      hourFormat: this.props.hourFormat,
-      dayFormat: this.props.dayFormat,
-      weekFormat: this.props.weekFormat,
-      monthFormat: this.props.monthFormat,
-      yearFormat: this.props.yearFormat,
-      debug: this.props.debug,
-      leftBound: this.props.leftBound,
-      rightBound: this.props.rightBound,
-      timelineWidth: this.state.timelineWidth
-    };
+  handleResize() {
+    this.setState({ timelineWidth: 0 });
+    this.setState({ timelineWidth: this.refs.timeline.offsetWidth });
   }
 
   render() {
@@ -97,28 +105,29 @@ export default class ReactGantt extends Component {
         <table style={{ width: '100%' }} cellSpacing={0}>
           <thead>
             <tr>
-              <th style={{
-                ...thStyle,
-                width: '0px'
-              }} />
-              <th ref="timeline" style={{
-                ...thStyle,
-                width: '100%'
-              }}>
-                <GanttTimeline style={this.props.timelineStyle} rows={this.props.children} />
+              <th
+                style={{
+                  ...thStyle,
+                  width: '0px'
+                }}
+              />
+              <th
+                ref="timeline"
+                style={{
+                  ...thStyle,
+                  width: '100%'
+                }}
+              >
+                <GanttTimeline
+                  style={this.props.timelineStyle}
+                  rows={this.props.children}
+                />
               </th>
             </tr>
           </thead>
-          <tbody>
-            {this.props.children}
-          </tbody>
+          <tbody>{this.props.children}</tbody>
         </table>
       </div>
-    )
-  }
-
-  handleResize(e) {
-    this.setState({ timelineWidth: 0 });
-    this.setState({ timelineWidth: this.refs.timeline.offsetWidth });
+    );
   }
 }

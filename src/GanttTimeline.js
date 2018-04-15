@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
+import _ from 'lodash';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 
 export default class GanttTimeline extends Component {
   static propTypes = {
-    rows: PropTypes.node.isRequired,
     style: PropTypes.object.isRequired
   };
   static contextTypes = {
@@ -22,86 +22,15 @@ export default class GanttTimeline extends Component {
     timelineWidth: PropTypes.number.isRequired
   };
 
-  units = {
-    minute: 60,
-    hour: 3600,
-    day: 86400,
-    week: 604800,
-    month: 2628000,
-    year: 31535965.4396976
-  }
-
-  render() {
-    if (this.context.debug) return this.debugRender();
-    return this.defaultRender();
-  }
-
-  debugRender() {
-    const { leftBound, rightBound, dateFormat, timelineWidth } = this.context;
-    const tick = this.getTick();
-    return (
-      <div>
-        <div>
-          Timeline Width: {timelineWidth}
-          <br />
-          Left Bound: {moment(leftBound).format(dateFormat)}
-          <br />
-          Right Bound: {moment(rightBound).format(dateFormat)}
-          <br />
-          Tick Unit: {tick.unit}
-          <br />
-          Tick Width: {tick.width}
-          <br />
-          Tick Count: {tick.count}
-        </div>
-        <div>
-          {this.defaultRender()}
-        </div>
-      </div>
-    );
-  }
-
-  defaultRender() {
-    const style = _.clone(this.props.style);
-    const tick = this.getTick();
-    const tickWidth = _.clone(parseInt(style.tickWidth)) || 2;
-    const paddingLeft = _.clone(parseInt(style.paddingLeft)) || 4;
-    delete style.paddingLeft;
-    return (
-      <div style={{
-        display: 'flex',
-        justifyContent: 'flex-start'
-      }}>
-        {_.map(_.range(tick.count), (index) => {
-           return (
-             <div key={`tick${index}`} style={{
-               ...style,
-               height: '20px',
-               borderLeft: `${tickWidth}px solid black`,
-               width: `${tick.width - paddingLeft - tickWidth}px`,
-               float: 'left',
-               margin: '0px',
-               padding: '0px',
-               textAlign: 'left',
-               paddingLeft: `${paddingLeft}px`
-             }}>
-               {this.renderTickLabel(tick, index)}
-             </div>
-           );
-        })}
-      </div>
-    );
-  }
-
   getTick(unit, timelineDuration) {
     const { style } = this.props;
     const { leftBound, rightBound, timelineWidth } = this.context;
     if (!unit) {
       timelineDuration = moment(rightBound).diff(moment(leftBound), 'seconds');
-      unit = this.getTimespanUnit(timelineDuration)
+      unit = this.getTimespanUnit(timelineDuration);
     }
-    let tickCount = Math.ceil(timelineDuration / this.units[unit]);
-    const maxTicks = Math.ceil(timelineWidth / parseInt(style.minWidth));
+    const tickCount = Math.ceil(timelineDuration / this.units[unit]);
+    const maxTicks = Math.ceil(timelineWidth / parseInt(style.minWidth, 10));
     if (tickCount > maxTicks) {
       const unitKeys = _.keys(this.units);
       const nextUnitIndex = unitKeys.indexOf(unit) + 1;
@@ -127,27 +56,6 @@ export default class GanttTimeline extends Component {
     return 'second';
   }
 
-  durationToWidth(duration) {
-    const { leftBound, rightBound, timelineWidth } = this.context;
-    const timelineDuration = moment(rightBound).diff(leftBound, 'seconds');
-    const percentage = duration > 0 ? duration / timelineDuration : 0;
-    return timelineWidth * percentage;
-  }
-
-  widthToDuration(width) {
-    const { leftBound, rightBound, timelineWidth } = this.context;
-    const timelineDuration = moment(rightBound).diff(leftBound, 'seconds');
-    const pixelPerSecond = timelineDuration / timelineWidth
-    return pixelPerSecond * width;
-  }
-
-  renderTickLabel(tick, index) {
-    const { timelineWidth, leftBound, dateFormat } = this.context;
-    const tickTime = moment(leftBound).add(this.widthToDuration(tick.width) * index, 'seconds');
-    const format = this.getTimeFormat(tick.unit);
-    return tickTime.format(format);
-  }
-
   getTimeFormat(unit) {
     switch (unit) {
       case 'second':
@@ -165,5 +73,104 @@ export default class GanttTimeline extends Component {
       case 'year':
         return this.context.yearFormat;
     }
+    return null;
+  }
+
+  units = {
+    minute: 60,
+    hour: 3600,
+    day: 86400,
+    week: 604800,
+    month: 2628000,
+    year: 31535965.4396976
+  };
+
+  durationToWidth(duration) {
+    const { leftBound, rightBound, timelineWidth } = this.context;
+    const timelineDuration = moment(rightBound).diff(leftBound, 'seconds');
+    const percentage = duration > 0 ? duration / timelineDuration : 0;
+    return timelineWidth * percentage;
+  }
+
+  widthToDuration(width) {
+    const { leftBound, rightBound, timelineWidth } = this.context;
+    const timelineDuration = moment(rightBound).diff(leftBound, 'seconds');
+    const pixelPerSecond = timelineDuration / timelineWidth;
+    return pixelPerSecond * width;
+  }
+
+  debugRender() {
+    const { leftBound, rightBound, dateFormat, timelineWidth } = this.context;
+    const tick = this.getTick();
+    return (
+      <div>
+        <div>
+          Timeline Width: {timelineWidth}
+          <br />
+          Left Bound: {moment(leftBound).format(dateFormat)}
+          <br />
+          Right Bound: {moment(rightBound).format(dateFormat)}
+          <br />
+          Tick Unit: {tick.unit}
+          <br />
+          Tick Width: {tick.width}
+          <br />
+          Tick Count: {tick.count}
+        </div>
+        <div>{this.defaultRender()}</div>
+      </div>
+    );
+  }
+
+  defaultRender() {
+    const style = _.clone(this.props.style);
+    const tick = this.getTick();
+    const tickWidth = _.clone(parseInt(style.tickWidth, 10)) || 2;
+    const paddingLeft = _.clone(parseInt(style.paddingLeft, 10)) || 4;
+    delete style.paddingLeft;
+    return (
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'flex-start'
+        }}
+      >
+        {_.map(_.range(tick.count), index => {
+          return (
+            <div
+              key={`tick${index}`}
+              style={{
+                ...style,
+                height: '20px',
+                borderLeft: `${tickWidth}px solid black`,
+                width: `${tick.width - paddingLeft - tickWidth}px`,
+                float: 'left',
+                margin: '0px',
+                padding: '0px',
+                textAlign: 'left',
+                paddingLeft: `${paddingLeft}px`
+              }}
+            >
+              {this.renderTickLabel(tick, index)}
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+
+  renderTickLabel(tick, index) {
+    const { leftBound } = this.context;
+    const tickTime = moment(leftBound).add(
+      this.widthToDuration(tick.width) * index,
+      'seconds'
+    );
+    const format = this.getTimeFormat(tick.unit);
+    return tickTime.format(format);
+  }
+
+  render() {
+    if (this.context.debug) return this.debugRender();
+    return this.defaultRender();
   }
 }

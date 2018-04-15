@@ -1,25 +1,49 @@
-## Prerequisites
+# Contributing
 
-[Node.js](http://nodejs.org/) >= v4 must be installed.
+We accept contributions of every kind: documentation, code, artwork. Any help is greatly
+appreciated. This document contains everything needed to get started with your first contribution.
 
-## Installation
 
-- Running `npm install` in the components's root directory will install everything you need for development.
+## Contributing Code
 
-## Demo Development Server
+We keep the source code on [GitHub](https://www.github.com) and take contributions through
+[GitHub pull requests](https://help.github.com/articles/using-pull-requests).
 
-- `npm start` will run a development server with the component's demo app at [http://localhost:3000](http://localhost:3000) with hot module reloading.
+For smaller patches and bug fixes just go ahead and either report an issue or submit a pull
+request.
 
-## Running Tests
+It is usually a good idea to discuss major changes with the developers, this will help us
+determine whether the contribution would be a good fit for the project and if it is likely to be
+accepted. There's nothing worse than seeing your hard work being rejected because it falls outside
+of the scope of the project.
 
-- `npm test` will run the tests once.
+Make sure your editor respects the [EditorConfig](http://editorconfig.org) configuration file we
+put at the root of the repository.
 
-- `npm run test:coverage` will run the tests and produce a coverage report in `coverage/`.
+We follow [GitHub Flow](http://scottchacon.com/2011/08/31/github-flow.html) as our git workflow of
+choice which boils down to:
 
-- `npm run test:watch` will run the tests on every change.
+* The `master` branch is always stable and deployable.
+* To work on something new, branch off `master` and give the new branch a descriptive name (e.g.:
+  `sort-packages-by-name`, `issue-32`, etc).
+* Regularly __rebase__ that branch against `master` and push your work to a branch with the same
+  name on the server.
+* When you need feedback, help or think you are ready,
+  [submit a pull request](https://help.github.com/articles/using-pull-requests).
+* Once the branch has been merged (or rebased) into `master`, delete it from both your local and
+  remote repository.
 
-## Building
+We invite you to follow
+[these guidelines](http://who-t.blogspot.de/2009/12/on-commit-messages.html) to write useful
+commit messages.
 
-- `npm run build` will build the component for publishing to npm and also bundle the demo app.
+Additionally, you don't need to add entries to the [CHANGELOG.md](CHANGELOG.md) file, this is our
+responsibility.
 
-- `npm run clean` will delete built resources.
+
+## Reading List
+
+* [GitHub Flow](http://scottchacon.com/2011/08/31/github-flow.html)
+* [Keep a Changelog](http://keepachangelog.com/)
+* [On Commit Messages](http://who-t.blogspot.de/2009/12/on-commit-messages.html)
+* [Semantic Versioning](http://semver.org/)
