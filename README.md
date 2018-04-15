@@ -91,7 +91,7 @@ Submit an [issue](https://github.com/codejamninja/react-gantt/issues/new)
 
 ## Screenshots
 
-[Contribute](https://github.com/codejamninja/react-gantt/blob/master/CONTRIBUTING.md) a screenshot
+![react-gantt](https://user-images.githubusercontent.com/6234038/38774107-70100ec8-4060-11e8-9c1b-672d1a2d8af3.jpg)
 
 
 ## Contributing
