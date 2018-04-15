@@ -62,9 +62,9 @@ export default class GanttRow extends Component {
         moment(time).isBefore(steps[index + 1])
       ) {
         templateStep = templateSteps[index];
-        return true;
+        return false;
       }
-      return false;
+      return true;
     });
     return templateStep;
   }
