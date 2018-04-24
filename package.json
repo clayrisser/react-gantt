@@ -1,6 +1,6 @@
 {
   "name": "react-gantt",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Gantt chart react component",
   "homepage": "https://github.com/codejamninja/react-gantt",
   "bugs": {
@@ -13,7 +13,10 @@
     "email": "jam@codejam.ninja",
     "url": "https://codejam.ninja"
   },
-  "main": "",
+  "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/codejamninja/react-gantt"
