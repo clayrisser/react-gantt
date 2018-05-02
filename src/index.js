@@ -90,7 +90,9 @@ export default class ReactGantt extends Component {
   }
 
   componentWillUnmount() {
-    this.resizeEventListener.removeEventListener();
+    if (this.resizeEventListener) {
+      this.resizeEventListener.removeEventListener();
+    }
   }
 
   handleResize() {
