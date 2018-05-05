@@ -7,19 +7,27 @@ export default class GanttPopup extends Component {
     style: PropTypes.object.isRequired,
     markerTime: PropTypes.object.isRequired,
     activeStep: PropTypes.object.isRequired,
-    title: PropTypes.string.isRequired
+    title: PropTypes.string.isRequired,
+    titleStyle: PropTypes.string
   };
   static contextTypes = {
     dateFormat: PropTypes.string.isRequired
   };
+  static defaultProps = {
+    titleStyle: {
+      display: 'block',
+      marginBottom: '10px',
+      fontWeight: 'bold',
+      borderBottom: '1px solid #cfcfcf'
+    }
+  };
 
   render() {
-    const { title, style, markerTime, activeStep } = this.props;
+    const { title, style, markerTime, activeStep, titleStyle } = this.props;
     const { dateFormat } = this.context;
     return (
       <div style={style}>
-        {title}
-        <br />
+        <span style={titleStyle}>{title}</span>
         {moment(markerTime).format(dateFormat)}
         <br />
         {activeStep.name}
