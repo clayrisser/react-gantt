@@ -8,7 +8,8 @@ export default class GanttPopup extends Component {
     markerTime: PropTypes.object.isRequired,
     activeStep: PropTypes.object.isRequired,
     title: PropTypes.string.isRequired,
-    titleStyle: PropTypes.string
+    titleStyle: PropTypes.string,
+    renderPopupDetails: PropTypes.func
   };
   static contextTypes = {
     dateFormat: PropTypes.string.isRequired
@@ -19,18 +20,25 @@ export default class GanttPopup extends Component {
       marginBottom: '10px',
       fontWeight: 'bold',
       borderBottom: '1px solid #cfcfcf'
+    },
+    renderPopupDetails: (stepName, markerTime) => {
+      return (
+        <span>
+          { markerTime }
+          <br />
+          { stepName }
+        </span>
+      );
     }
   };
 
   render() {
-    const { title, style, markerTime, activeStep, titleStyle } = this.props;
+    const { title, style, markerTime, activeStep, titleStyle, renderPopupDetails } = this.props;
     const { dateFormat } = this.context;
     return (
       <div style={style}>
         <span style={titleStyle}>{title}</span>
-        {moment(markerTime).format(dateFormat)}
-        <br />
-        {activeStep.name}
+        {renderPopupDetails(activeStep.name, moment(markerTime).format(dateFormat)) }
       </div>
     );
   }

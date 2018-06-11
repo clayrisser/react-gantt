@@ -22,7 +22,8 @@ export default class ReactGantt extends Component {
     timeFormat: PropTypes.string,
     timelineStyle: PropTypes.object,
     weekFormat: PropTypes.string,
-    yearFormat: PropTypes.string
+    yearFormat: PropTypes.string,
+    scalingFactor: PropTypes.number
   };
   static childContextTypes = {
     dateFormat: PropTypes.string.isRequired,
@@ -55,7 +56,8 @@ export default class ReactGantt extends Component {
     timeFormat: 'YY-MM-DD HH:MM',
     timelineStyle: { minWidth: '60px' },
     weekFormat: 'YY-MM-DD',
-    yearFormat: 'YY-MM-DD'
+    yearFormat: 'YY-MM-DD',
+    scalingFactor: 1.0
   };
 
   state = {
@@ -96,8 +98,7 @@ export default class ReactGantt extends Component {
   }
 
   handleResize() {
-    this.setState({ timelineWidth: 0 });
-    this.setState({ timelineWidth: this.refs.timeline.offsetWidth });
+    this.setState({ timelineWidth: this.timeline.offsetWidth });
   }
 
   render() {
@@ -114,7 +115,7 @@ export default class ReactGantt extends Component {
                 }}
               />
               <th
-                ref="timeline"
+                ref={c => { this.timeline = c }}
                 style={{
                   ...thStyle,
                   width: '100%'
@@ -122,6 +123,7 @@ export default class ReactGantt extends Component {
               >
                 <GanttTimeline
                   style={this.props.timelineStyle}
+                  scalingFactor={this.props.scalingFactor}
                   rows={this.props.children}
                 />
               </th>

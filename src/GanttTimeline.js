@@ -5,8 +5,14 @@ import PropTypes from 'prop-types';
 
 export default class GanttTimeline extends Component {
   static propTypes = {
-    style: PropTypes.object.isRequired
+    style: PropTypes.object.isRequired,
+    scalingFactor: PropTypes.number
   };
+
+  static defaultProps = {
+    scalingFactor: 1.0
+  }
+  
   static contextTypes = {
     dateFormat: PropTypes.string.isRequired,
     timeFormat: PropTypes.string,
@@ -23,13 +29,13 @@ export default class GanttTimeline extends Component {
   };
 
   getTick(unit, timelineDuration) {
-    const { style } = this.props;
+    const { style, scalingFactor } = this.props;
     const { leftBound, rightBound, timelineWidth } = this.context;
     if (!unit) {
       timelineDuration = moment(rightBound).diff(moment(leftBound), 'seconds');
       unit = this.getTimespanUnit(timelineDuration);
     }
-    const tickCount = Math.ceil(timelineDuration / this.units[unit]);
+    const tickCount = Math.ceil(timelineDuration / this.units[unit]) * scalingFactor;
     const maxTicks = Math.ceil(timelineWidth / parseInt(style.minWidth, 10));
     if (tickCount > maxTicks) {
       const unitKeys = _.keys(this.units);
@@ -87,9 +93,10 @@ export default class GanttTimeline extends Component {
 
   durationToWidth(duration) {
     const { leftBound, rightBound, timelineWidth } = this.context;
+    const { scalingFactor } = this.props;
     const timelineDuration = moment(rightBound).diff(leftBound, 'seconds');
     const percentage = duration > 0 ? duration / timelineDuration : 0;
-    return timelineWidth * percentage;
+    return timelineWidth * percentage / scalingFactor;
   }
 
   widthToDuration(width) {
