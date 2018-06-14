@@ -8,8 +8,8 @@
 
 Please ★ this repo if you found it useful ★ ★ ★
 
-Please [submit](https://github.com/codejamninja/react-gantt/issues/new) your ReactGantt use cases and
-I will feature them in the in the [Used By](#used-by) section
+[Submit](https://github.com/codejamninja/react-gantt/issues/new) your ReactGantt use cases and
+I will feature them in the in the [used by](#used-by) section
 
 
 ## Features
