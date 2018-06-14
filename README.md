@@ -179,6 +179,7 @@ Review the [changelog](https://github.com/codejamninja/react-gantt/blob/master/C
 
 ## Used By
 
+* [ModernGreek](https://moderngreek.us) - The next generation of fraternity and sorority apparel
 * [yerbaBuena](https://github.com/JAER12392/yerbaBuena) - a superpowered approach to electronic medical records
 * [TaskCluster](https://github.com/taskcluster/taskcluster-migration-DEPRECATED) - task execution framework that supports Mozilla's continuous integration and release processes
 
