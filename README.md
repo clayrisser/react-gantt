@@ -85,7 +85,63 @@ class Demo extends Component {
 }
 ```
 
+## Props
 
+#### ReactGantt
+
+| Prop Name     | Type      |  Behavior          |
+|---------------|-----------|--------------------|
+| children      | GanttRow  | Gantt Rows initialized by you|
+| dateFormat    | String    | String format to display dates          |
+| dayFormat     | String    | Format used when timeline is in 'day' window          |
+| debug         | Boolean   | Includes extra detailed outputs to show calculated values          |
+| hourFormat    | String    | Format used when timeline is in 'hourly' window |
+| leftBound     | Object    | Date representation of the chart 'beginning' (left-most) date |
+| minuteFormat  | String    | Format used when timeline is in 'minute' window |
+| monthFormat   | String    | Format used when timeline is in 'monthly' window |
+| rightBound    | Object    | Date representation of chart's ending (right-most) date |
+| secondFormat  | String    | Format used when timeline is in 'seconds' window |
+| style         | Object    | CSS object for chart customization |
+| templates   | Object      | Object with keys representing potential states and values for state title and style |
+| timeFormat  | String      | Is this used? |
+| timelineStyle | Object    | Object for styles to be used in timeline component, namely the allowed width between ticks |
+| weekFormat  | String      | Format used when timeline is in 'weekly' window |
+| yearFormat  | String      | Format used when timeline is in 'yearly' window |
+
+#### GanttTimeline
+
+| Prop Name     | Type      |  Behavior          |
+|---------------|-----------|--------------------|
+| style         | Object    | Customize the calculated appearance of the timeline. In pixels: tickWidth, paddingLeft, minWidth |
+| rows          | Array     | The parent's GanttRows (is this deprecated?) |
+| scalingFactor | Number    | Allows customization of the calculated # of ticks |
+
+#### GanttRow
+
+| Prop Name     | Type      |  Behavior          |
+|---------------|-----------|--------------------|
+| barStyle      | Object    | Style object for gantt bar |
+| popupStyle    | Object    | Style object for popup modal |
+| markerStyle   | Object    | Style object for cursor |
+| steps         | Array     | Array of steps that bar passes through (needs to exceed the templates steps by 1? Why?)                   |
+| templateName  | String    | Template name to load style and step titles |
+| title         | String    | Title to be displayed alongside bar         |
+
+#### GanttBar
+| Prop Name     | Type      |  Behavior          |
+|---------------|-----------|--------------------|
+| style         | Object    | CSS object for bar styles |
+| steps         | Array     | Array of steps that bar passes through (needs to exceed the templates steps by 1? Why?)                   |
+| templateName  | String    | Template name to load style and step titles |
+
+#### GanttPopup
+| Prop Name     | Type      |  Behavior          |
+|---------------|-----------|--------------------|
+| style         | Object    | CSS Object for popup style |
+| markerTime    | Object    | Time object represnting cursor position on parent GanttBar |
+| activeStep    | Object    | Object representing current step cursor is hovering on parent GanttBar |
+| title         | String    | Title (same as parent Gantt bar) |
+| titleStyle    | Object    | Style for title displayed on pop up |
 ## Support
 
 Submit an [issue](https://github.com/codejamninja/react-gantt/issues/new)
