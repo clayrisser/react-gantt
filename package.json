@@ -1,6 +1,6 @@
 {
   "name": "react-gantt",
-  "version": "2.1.4",
+  "version": "2.1.5",
   "description": "Gantt chart react component",
   "homepage": "https://github.com/codejamninja/react-gantt",
   "bugs": {
@@ -23,7 +23,7 @@
   },
   "scripts": {
     "build": "npm run build:demo && babel src -d lib",
-    "build:demo": "npm run clean && npm run test && parcel build demo/index.html -d demo/dist",
+    "build:demo": "npm run clean && parcel build demo/index.html -d demo/dist",
     "clean": "rm -rf .cache lib demo/dist",
     "lint": "eslint ./",
     "lint:fix": "eslint ./",
