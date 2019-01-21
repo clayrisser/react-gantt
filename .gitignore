@@ -50,3 +50,5 @@ idea/
 /lib
 /demo/dist
 .cache/
+yarn.lock
+package-lock.json
