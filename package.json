@@ -1,6 +1,6 @@
 {
   "name": "react-gantt",
-  "version": "2.1.4",
+  "version": "2.1.7",
   "description": "Gantt chart react component",
   "homepage": "https://github.com/codejamninja/react-gantt",
   "bugs": {
@@ -28,7 +28,8 @@
     "lint": "eslint ./",
     "lint:fix": "eslint ./",
     "start": "npm run lint && parcel demo/index.html -p 8888 --open -d demo/dist",
-    "test": "npm run lint"
+    "test": "npm run lint",
+    "prepublish": "npm run build"
   },
   "dependencies": {
     "autobind-decorator": "^2.1.0",
@@ -40,6 +41,7 @@
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
     "babel-eslint": "^8.2.3",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
@@ -52,8 +54,8 @@
     "eslint-plugin-import": "^2.11.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.7.0",
-    "node-sass": "^4.9.0",
-    "parcel-bundler": "^1.7.1"
+    "node-sass": "^4.9.3",
+    "parcel-bundler": "^1.10.2"
   },
   "engines": {
     "node": ">=4.0.0"

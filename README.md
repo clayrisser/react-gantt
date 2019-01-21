@@ -8,6 +8,9 @@
 
 Please ★ this repo if you found it useful ★ ★ ★
 
+[Submit](https://github.com/codejamninja/react-gantt/issues/new) your ReactGantt use cases and
+I will feature them in the in the [used by](#used-by) section
+
 
 ## Features
 
@@ -172,6 +175,13 @@ Review the [changelog](https://github.com/codejamninja/react-gantt/blob/master/C
 ## Credits
 
 * [Jam Risser](https://codejam.ninja) - Author
+
+
+## Used By
+
+* [ModernGreek](https://moderngreek.us) - The next generation of fraternity and sorority apparel
+* [yerbaBuena](https://github.com/JAER12392/yerbaBuena) - a superpowered approach to electronic medical records
+* [TaskCluster](https://github.com/taskcluster/taskcluster-migration-DEPRECATED) - task execution framework that supports Mozilla's continuous integration and release processes
 
 
 ## Support on Liberapay
