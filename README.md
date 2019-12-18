@@ -11,6 +11,11 @@ Please ★ this repo if you found it useful ★ ★ ★
 [Submit](https://github.com/codejamninja/react-gantt/issues/new) your ReactGantt use cases and
 I will feature them in the in the [used by](#used-by) section
 
+## Built by Silicon Hills LLC
+
+[![index](https://user-images.githubusercontent.com/6234038/71054254-f284ad80-2116-11ea-9013-d68306726854.jpeg)](https://nuevesolutions.com)
+
+Silicon Hills offers premium Node and React develpoment and support services. Get in touch at [nuevesolutions.com](https://nuevesolutions.com).
 
 ## Features
 
