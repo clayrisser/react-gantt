@@ -14,7 +14,8 @@ export default class GanttRow extends Component {
     markerStyle: PropTypes.object,
     steps: PropTypes.array.isRequired,
     templateName: PropTypes.string,
-    title: PropTypes.string
+    title: PropTypes.string,
+    renderPopupDetails: PropTypes.func
   };
   static contextTypes = {
     templates: PropTypes.object.isRequired,
@@ -22,7 +23,8 @@ export default class GanttRow extends Component {
     leftBound: PropTypes.object.isRequired,
     rightBound: PropTypes.object.isRequired,
     timelineWidth: PropTypes.number.isRequired,
-    debug: PropTypes.bool.isRequired
+    debug: PropTypes.bool.isRequired,
+    renderPopupDetails: PropTypes.func
   };
   static defaultProps = {
     barStyle: {
@@ -42,7 +44,8 @@ export default class GanttRow extends Component {
       opacity: 0.5
     },
     templateName: 'default',
-    title: ''
+    title: '',
+    renderPopupDetails: () => {}
   };
 
   state = {
@@ -158,9 +161,8 @@ export default class GanttRow extends Component {
   }
 
   renderPopup() {
-    const { popupStyle, title } = this.props;
+    const { popupStyle, title, renderPopupDetails } = this.props;
     const { activeStep, markerTime, active } = this.state;
-    if (_.isEmpty(activeStep)) return <div />;
     return (
       <div
         style={{
@@ -174,6 +176,7 @@ export default class GanttRow extends Component {
           title={title}
           activeStep={activeStep}
           markerTime={markerTime}
+          renderPopupDetails={renderPopupDetails}
         />
       </div>
     );
