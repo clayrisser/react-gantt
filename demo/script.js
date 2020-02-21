@@ -34,6 +34,7 @@ class Demo extends Component {
         >
           <GanttRow
             title="Task 1"
+            description="Task description 1"
             templateName="myTasks"
             steps={[
               moment()
@@ -49,6 +50,7 @@ class Demo extends Component {
           />
           <GanttRow
             title="Task 2"
+            description="Task description 2"
             templateName="myTasks"
             steps={[
               moment()
@@ -64,6 +66,7 @@ class Demo extends Component {
           />
           <GanttRow
             title="Task 3"
+            description="Task description 3"
             templateName="myTasks"
             steps={[
               moment()

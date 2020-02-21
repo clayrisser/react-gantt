@@ -14,7 +14,8 @@ export default class GanttRow extends Component {
     markerStyle: PropTypes.object,
     steps: PropTypes.array.isRequired,
     templateName: PropTypes.string,
-    title: PropTypes.string
+    title: PropTypes.string,
+    description: PropTypes.string
   };
   static contextTypes = {
     templates: PropTypes.object.isRequired,
@@ -42,7 +43,8 @@ export default class GanttRow extends Component {
       opacity: 0.5
     },
     templateName: 'default',
-    title: ''
+    title: '',
+    description: ''
   };
 
   state = {
@@ -95,6 +97,11 @@ export default class GanttRow extends Component {
         [, , marginBottom] = margin;
         [, , , marginLeft] = margin;
         break;
+      default:
+        [marginTop] = margin;
+        [marginRight] = margin;
+        [marginBottom] = margin;
+        [marginLeft] = margin;
     }
     return {
       marginTop,
@@ -104,20 +111,20 @@ export default class GanttRow extends Component {
     };
   }
 
-  handleMouseEnter() {
+  handleMouseEnter = () => {
     this.setState({ active: true });
     // eslint-disable-next-line no-undef
     this.mouseEventListener = window.addEventListener('mousemove', e =>
       this.handleMouseMove(e)
     );
-  }
+  };
 
-  handleMouseLeave() {
+  handleMouseLeave = () => {
     this.setState({ active: false });
     if (this.mouseEventListener) {
       this.mouseEventListener.removeEventListener();
     }
-  }
+  };
 
   handleMouseMove(e) {
     if (this.state.active) {
@@ -158,7 +165,7 @@ export default class GanttRow extends Component {
   }
 
   renderPopup() {
-    const { popupStyle, title } = this.props;
+    const { popupStyle, title, description } = this.props;
     const { activeStep, markerTime, active } = this.state;
     if (_.isEmpty(activeStep)) return <div />;
     return (
@@ -172,6 +179,7 @@ export default class GanttRow extends Component {
         <GanttPopup
           style={popupStyle}
           title={title}
+          description={description}
           activeStep={activeStep}
           markerTime={markerTime}
         />
