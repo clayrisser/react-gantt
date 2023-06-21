@@ -159,12 +159,22 @@ export default class GanttTimeline extends Component {
     );
   }
 
-  renderTickLabel(tick, index) {
+  getTickTime(tick, index) {
     const { leftBound } = this.context;
-    const tickTime = moment(leftBound).add(
+    if(tick.unit === 'month'){
+      return moment(leftBound).add(
+        index,
+        'months'
+      );
+    }
+    return moment(leftBound).add(
       this.widthToDuration(tick.width) * index,
       'seconds'
     );
+  }
+
+  renderTickLabel(tick, index) {
+    const tickTime = this.getTickTime(tick, index);
     const format = this.getTimeFormat(tick.unit);
     return tickTime.format(format);
   }
