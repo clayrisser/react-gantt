@@ -17,6 +17,8 @@ I will feature them in the in the [used by](#used-by) section
 
 Silicon Hills offers premium Node and React develpoment and support services. Get in touch at [nuevesolutions.com](https://nuevesolutions.com).
 
+![](assets/react-gantt.png)
+
 ## Features
 
 * Multiple steps
