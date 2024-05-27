@@ -27,7 +27,7 @@ Silicon Hills offers premium Node and React develpoment and support services. Ge
 
 ## Demo
 
-See a [demo](https://codejamninja.github.io/react-gantt)
+See a [demo](https://clayrisser.github.io/react-gantt)
 
 
 ## Installation
