@@ -2,200 +2,140 @@
 
 [![npm](https://img.shields.io/npm/v/react-gantt.svg?style=flat-square)](https://www.npmjs.com/package/react-gantt)
 [![npm](https://img.shields.io/npm/dt/react-gantt.svg?style=flat-square)](https://www.npmjs.com/package/react-gantt)
-[![GitHub stars](https://img.shields.io/github/stars/codejamninja/react-gantt.svg?style=social&label=Stars)](https://github.com/codejamninja/react-gantt)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
 
 > Gantt chart react component
-
-Please ★ this repo if you found it useful ★ ★ ★
-
-[Submit](https://github.com/codejamninja/react-gantt/issues/new) your ReactGantt use cases and
-I will feature them in the in the [used by](#used-by) section
-
-## Built by Silicon Hills LLC
-
-[![index](https://user-images.githubusercontent.com/6234038/71054254-f284ad80-2116-11ea-9013-d68306726854.jpeg)](https://nuevesolutions.com)
-
-Silicon Hills offers premium Node and React develpoment and support services. Get in touch at [nuevesolutions.com](https://nuevesolutions.com).
 
 ![](assets/react-gantt.png)
 
 ## Features
 
-* Multiple steps
-* Custom styles
-* Dynamic bounds
-
-## Demo
-
-See a [demo](https://clayrisser.github.io/react-gantt)
-
+- Multiple steps
+- Custom styles
+- Dynamic bounds
+- TypeScript types included
+- Works with React 18 and 19
 
 ## Installation
 
 ```sh
-npm install --save react-gantt
+pnpm add react-gantt
 ```
-
-
-## Dependencies
-
-* [NodeJS](https://nodejs.org)
-* [React](https://reactjs.org)
-* [React DOM](https://reactjs.org/docs/react-dom.html)
-
 
 ## Usage
 
-```js
+```tsx
 import ReactGantt, { GanttRow } from 'react-gantt';
 
-class Demo extends Component {
-  render() {
-    return (
-      <ReactGantt
-        templates={{
-          myTasks: {
-            title: 'My Tasks',
-            steps: [
-              {
-                name: 'Task Phase One',
-                color: '#0099FF'
-              },
-              {
-                name: 'Task Phase Two',
-                color: '#FF9900'
-              }
-            ]
-          }
-        }}
-        leftBound={moment().set({hour: 0, date: 30, month: 5, year: 2016}).toDate()}
-        rightBound={moment().set({hour: 0, date: 29, month: 8, year: 2016}).toDate()}
-      >
-        <GanttRow
-          title="Task 1"
-          templateName="myTasks"
-          steps={[
-            moment().set({hour: 0, date: 1, month: 6, year: 2016}).toDate(),
-            moment().set({hour: 0, date: 4, month: 8, year: 2016}).toDate(),
-            moment().set({hour: 0, date: 17, month: 8, year: 2016}).toDate()
-          ]}
-        />
-        <GanttRow
-          title="Task 1"
-          templateName="myTasks"
-          steps={[
-            moment().set({hour: 0, date: 27, month: 2, year: 2016}).toDate(),
-            moment().set({hour: 0, date: 9, month: 7, year: 2016}).toDate(),
-            moment().set({hour: 0, date: 22, month: 7, year: 2016}).toDate()
-          ]}
-        />
-      </ReactGantt>
-    );
-  }
+function Demo() {
+  return (
+    <ReactGantt
+      templates={{
+        myTasks: {
+          title: 'My Tasks',
+          steps: [
+            {
+              name: 'Task Phase One',
+              color: '#0099FF',
+            },
+            {
+              name: 'Task Phase Two',
+              color: '#FF9900',
+            },
+          ],
+        },
+      }}
+      leftBound={new Date(2016, 5, 30)}
+      rightBound={new Date(2016, 8, 29)}
+    >
+      <GanttRow
+        title="Task 1"
+        templateName="myTasks"
+        steps={[new Date(2016, 6, 1), new Date(2016, 8, 4), new Date(2016, 8, 17)]}
+      />
+      <GanttRow
+        title="Task 2"
+        templateName="myTasks"
+        steps={[new Date(2016, 2, 27), new Date(2016, 7, 9), new Date(2016, 7, 22)]}
+      />
+    </ReactGantt>
+  );
 }
 ```
+
+Each row's `steps` array holds the boundary times of the template's steps, so
+it needs exactly one more entry than the template has steps (start of the
+first step, each boundary between steps, end of the last step).
 
 ## Props
 
 #### ReactGantt
 
-| Prop Name     | Type      |  Behavior          |
-|---------------|-----------|--------------------|
-| children      | GanttRow  | Gantt Rows initialized by you|
-| dateFormat    | String    | String format to display dates          |
-| dayFormat     | String    | Format used when timeline is in 'day' window          |
-| debug         | Boolean   | Includes extra detailed outputs to show calculated values          |
-| hourFormat    | String    | Format used when timeline is in 'hourly' window |
-| leftBound     | Object    | Date representation of the chart 'beginning' (left-most) date |
-| minuteFormat  | String    | Format used when timeline is in 'minute' window |
-| monthFormat   | String    | Format used when timeline is in 'monthly' window |
-| rightBound    | Object    | Date representation of chart's ending (right-most) date |
-| secondFormat  | String    | Format used when timeline is in 'seconds' window |
-| style         | Object    | CSS object for chart customization |
-| templates   | Object      | Object with keys representing potential states and values for state title and style |
-| timeFormat  | String      | Is this used? |
-| timelineStyle | Object    | Object for styles to be used in timeline component, namely the allowed width between ticks |
-| weekFormat  | String      | Format used when timeline is in 'weekly' window |
-| yearFormat  | String      | Format used when timeline is in 'yearly' window |
-
-#### GanttTimeline
-
-| Prop Name     | Type      |  Behavior          |
-|---------------|-----------|--------------------|
-| style         | Object    | Customize the calculated appearance of the timeline. In pixels: tickWidth, paddingLeft, minWidth |
-| rows          | Array     | The parent's GanttRows (is this deprecated?) |
-| scalingFactor | Number    | Allows customization of the calculated # of ticks |
+| Prop Name     | Type     | Behavior                                                                                                               |
+| ------------- | -------- | ---------------------------------------------------------------------------------------------------------------------- |
+| children      | GanttRow | Gantt rows initialized by you                                                                                          |
+| dateFormat    | String   | Format to display dates (popup and debug output)                                                                       |
+| dayFormat     | String   | Format used when timeline is in 'day' window                                                                           |
+| debug         | Boolean  | Includes extra detailed outputs to show calculated values                                                              |
+| hourFormat    | String   | Format used when timeline is in 'hour' window                                                                          |
+| leftBound     | Date     | Date of the chart's beginning (left-most) bound                                                                        |
+| minuteFormat  | String   | Format used when timeline is in 'minute' window                                                                        |
+| monthFormat   | String   | Format used when timeline is in 'month' window                                                                         |
+| rightBound    | Date     | Date of the chart's ending (right-most) bound                                                                          |
+| secondFormat  | String   | Format used when timeline is in 'second' window                                                                        |
+| style         | Object   | CSS object for chart customization                                                                                     |
+| templates     | Object   | Object with keys representing template names and values holding the steps                                              |
+| timelineStyle | Object   | Styles used by the timeline, namely the allowed width between ticks (`minWidth`, `tickWidth`, `paddingLeft` in pixels) |
+| weekFormat    | String   | Format used when timeline is in 'week' window                                                                          |
+| yearFormat    | String   | Format used when timeline is in 'year' window                                                                          |
 
 #### GanttRow
 
-| Prop Name     | Type      |  Behavior          |
-|---------------|-----------|--------------------|
-| barStyle      | Object    | Style object for gantt bar |
-| popupStyle    | Object    | Style object for popup modal |
-| markerStyle   | Object    | Style object for cursor |
-| steps         | Array     | Array of steps that bar passes through (needs to exceed the templates steps by 1? Why?)                   |
-| templateName  | String    | Template name to load style and step titles |
-| title         | String    | Title to be displayed alongside bar         |
+| Prop Name    | Type   | Behavior                                                 |
+| ------------ | ------ | -------------------------------------------------------- |
+| barStyle     | Object | Style object for gantt bar                               |
+| popupStyle   | Object | Style object for popup modal                             |
+| markerStyle  | Object | Style object for cursor                                  |
+| steps        | Date[] | Step boundary times (one more entry than template steps) |
+| templateName | String | Template name to load style and step titles              |
+| title        | String | Title to be displayed alongside bar                      |
+| description  | String | Description displayed in the popup                       |
 
-#### GanttBar
-| Prop Name     | Type      |  Behavior          |
-|---------------|-----------|--------------------|
-| style         | Object    | CSS object for bar styles |
-| steps         | Array     | Array of steps that bar passes through (needs to exceed the templates steps by 1? Why?)                   |
-| templateName  | String    | Template name to load style and step titles |
+## Development
 
-#### GanttPopup
-| Prop Name     | Type      |  Behavior          |
-|---------------|-----------|--------------------|
-| style         | Object    | CSS Object for popup style |
-| markerTime    | Object    | Time object represnting cursor position on parent GanttBar |
-| activeStep    | Object    | Object representing current step cursor is hovering on parent GanttBar |
-| title         | String    | Title (same as parent Gantt bar) |
-| titleStyle    | Object    | Style for title displayed on pop up |
+```sh
+make prepare   # one-time setup (asdf toolchain + pnpm install)
+make build     # build the library to lib/
+make test      # run tests with coverage
+make lint      # oxlint + oxfmt --check + tsc --noEmit
+make format    # format with oxfmt
+pnpm start     # run the demo dev server on port 8888
+```
+
 ## Support
 
-Submit an [issue](https://github.com/codejamninja/react-gantt/issues/new)
-
-
-## Screenshots
-
-![react-gantt](https://user-images.githubusercontent.com/6234038/38774126-a5e7a830-4060-11e8-9e24-400248048105.jpg)
-
+Submit an [issue](https://gitlab.com/bitspur/misc/react-gantt/-/issues)
 
 ## Contributing
 
-Review the [guidelines for contributing](https://github.com/codejamninja/react-gantt/blob/master/CONTRIBUTING.md)
-
+Review the [guidelines for contributing](CONTRIBUTING.md)
 
 ## License
 
-[MIT License](https://github.com/codejamninja/react-gantt/blob/master/LICENSE)
+[MIT License](LICENSE)
 
-[Jam Risser](https://codejam.ninja) © 2018
-
-
-## Changelog
-
-Review the [changelog](https://github.com/codejamninja/react-gantt/blob/master/CHANGELOG.md)
-
+[Clay Risser](https://clayrisser.com) © 2018-2026
 
 ## Credits
 
-* [Jam Risser](https://codejam.ninja) - Author
+- [Clay Risser](https://clayrisser.com) - Author
 
+## Changelog
+
+Review the [changelog](CHANGELOG.md)
 
 ## Used By
 
-* [ModernGreek](https://moderngreek.us) - The next generation of fraternity and sorority apparel
-* [yerbaBuena](https://github.com/JAER12392/yerbaBuena) - a superpowered approach to electronic medical records
-* [TaskCluster](https://github.com/taskcluster/taskcluster-migration-DEPRECATED) - task execution framework that supports Mozilla's continuous integration and release processes
-
-
-## Support on Liberapay
-
-A ridiculous amount of coffee ☕ ☕ ☕ was consumed in the process of building this project.
-
-[Add some fuel](https://liberapay.com/codejamninja/donate) if you'd like to keep me going!
-
-[![Liberapay receiving](https://img.shields.io/liberapay/receives/codejamninja.svg?style=flat-square)](https://liberapay.com/codejamninja/donate)
-[![Liberapay patrons](https://img.shields.io/liberapay/patrons/codejamninja.svg?style=flat-square)](https://liberapay.com/codejamninja/donate)
+- [ModernGreek](https://moderngreek.us) - The next generation of fraternity and sorority apparel
+- [yerbaBuena](https://github.com/JAER12392/yerbaBuena) - a superpowered approach to electronic medical records
+- [TaskCluster](https://github.com/taskcluster/taskcluster-migration-DEPRECATED) - task execution framework that supports Mozilla's continuous integration and release processes
