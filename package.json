@@ -1,68 +1,77 @@
 {
   "name": "react-gantt",
-  "version": "2.1.8",
+  "version": "3.0.0",
   "description": "Gantt chart react component",
-  "homepage": "https://github.com/codejamninja/react-gantt",
+  "homepage": "https://gitlab.com/bitspur/misc/react-gantt",
   "bugs": {
-    "url": "https://github.com/codejamninja/react-gantt/issues",
-    "email": "jam@codejam.ninja"
+    "url": "https://gitlab.com/bitspur/misc/react-gantt/-/issues"
   },
   "license": "MIT",
   "author": {
-    "name": "Jam Risser",
-    "email": "jam@codejam.ninja",
-    "url": "https://codejam.ninja"
+    "name": "Clay Risser",
+    "email": "clayrisser@gmail.com",
+    "url": "https://clayrisser.com"
   },
-  "main": "lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/bitspur/misc/react-gantt"
+  },
   "files": [
     "lib"
   ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/codejamninja/react-gantt"
+  "type": "module",
+  "sideEffects": false,
+  "main": "lib/index.cjs",
+  "module": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./lib/index.d.ts",
+        "default": "./lib/index.js"
+      },
+      "require": {
+        "types": "./lib/index.d.cts",
+        "default": "./lib/index.cjs"
+      }
+    }
   },
   "scripts": {
-    "build": "npm run build:demo && babel src -d lib",
-    "build:demo": "npm run clean && npm run test && parcel build demo/index.html -d demo/dist",
-    "clean": "rm -rf .cache lib demo/dist",
-    "lint": "eslint ./",
-    "lint:fix": "eslint ./",
-    "start": "npm run lint && parcel demo/index.html -p 8888 --open -d demo/dist",
-    "test": "npm run lint",
-    "prepublish": "npm run build"
+    "build": "tsup",
+    "build:demo": "vite build",
+    "clean": "rm -rf lib demo/dist coverage",
+    "format": "oxfmt .",
+    "lint": "oxlint && oxfmt --check .",
+    "prepublishOnly": "pnpm build",
+    "start": "vite --open",
+    "test": "vitest run --coverage --coverage.reporter=text --coverage.reporter=lcov",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "autobind-decorator": "^2.1.0",
-    "lodash": "^4.17.10",
-    "moment": "^2.22.1",
-    "prop-types": "^15.6.1",
-    "react": "^16.3.2",
-    "react-dom": "^16.3.2"
+    "moment": "^2.30.1"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.3",
-    "babel-eslint": "^8.2.3",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-plugin-transform-decorators-legacy": "^1.3.4",
-    "babel-preset-env": "^1.6.1",
-    "babel-preset-react": "^6.24.1",
-    "babel-preset-stage-2": "^6.24.1",
-    "eslint": "^4.19.1",
-    "eslint-config-airbnb": "^16.1.0",
-    "eslint-config-prettier": "^2.9.0",
-    "eslint-plugin-import": "^2.11.0",
-    "eslint-plugin-jsx-a11y": "^6.0.3",
-    "eslint-plugin-react": "^7.7.0",
-    "node-sass": "^4.9.3",
-    "parcel-bundler": "^1.10.2"
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/react": "^16.3.2",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "@vitejs/plugin-react": "^6.0.5",
+    "@vitest/coverage-v8": "^4.1.10",
+    "jsdom": "^30.0.1",
+    "oxfmt": "^0.63.0",
+    "oxlint": "^1.78.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3",
+    "vite": "^8.2.1",
+    "vitest": "^4.1.10"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0"
   },
   "engines": {
-    "node": ">=4.0.0"
+    "node": ">=20.0.0"
   },
-  "eslintIgnore": [
-    "demo/dist",
-    ".cache",
-    "lib"
-  ]
+  "packageManager": "pnpm@10.22.0"
 }
