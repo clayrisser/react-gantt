@@ -1,0 +1,7 @@
+{
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn"
+  },
+  "ignorePatterns": ["lib", "demo/dist", "coverage"]
+}

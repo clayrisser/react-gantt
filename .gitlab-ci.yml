@@ -1,0 +1,36 @@
+image: node:26
+
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+variables:
+  PNPM_VERSION: 10.22.0
+
+default:
+  before_script:
+    - wget -qO /usr/local/bin/pnpm "https://github.com/pnpm/pnpm/releases/download/v${PNPM_VERSION}/pnpm-linuxstatic-x64"
+    - chmod +x /usr/local/bin/pnpm
+    - pnpm config set store-dir .pnpm-store
+    - pnpm install --frozen-lockfile
+  cache:
+    key:
+      files:
+        - pnpm-lock.yaml
+    paths:
+      - .pnpm-store
+
+ci:
+  stage: test
+  script:
+    - pnpm lint
+    - pnpm typecheck
+    - pnpm test
+    - pnpm build
+    - pnpm build:demo
+  coverage: '/Lines\s*:\s*([\d.]+)%/'
+  artifacts:
+    when: always
+    paths:
+      - coverage/lcov.info
